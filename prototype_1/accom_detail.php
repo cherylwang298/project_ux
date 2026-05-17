@@ -263,11 +263,15 @@
                     </div>
                 </div>
 
-                <button class="book-btn">
-                    Booking Sekarang
-                </button>
+              <button class="book-btn" onclick="goBooking('${villa.id}')">
+                Booking Sekarang
+            </button>
             </div>
         `;
+    }
+
+    function goBooking(id){
+    window.location.href = `booking.php?id=${id}`;
     }
 </script>
 
