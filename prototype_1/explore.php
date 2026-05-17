@@ -187,65 +187,15 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .card-details {
-            padding: 16px;
-        }
-
-        .property-type {
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: #008170;
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        .property-name {
-            font-size: 15px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 4px;
-        }
-
-        .property-location {
-            font-size: 12px;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 12px;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 12px;
-        }
-
-        .facilities-summary {
-            font-size: 11px;
-            color: #64748b;
-            display: flex;
-            gap: 8px;
-        }
-
-        .price-box {
-            text-align: right;
-        }
-
-        .final-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: #008170;
-        }
-
-        .tax-inclusive {
-            font-size: 9px;
-            color: #94a3b8;
-            margin-top: 2px;
-        }
+        .card-details { padding: 16px; }
+        .property-type { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #008170; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .property-name { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+        .property-location { font-size: 12px; color: #64748b; display: flex; align-items: center; gap: 4px; margin-bottom: 12px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+        .facilities-summary { display: flex; gap: 8px; font-size: 11px; color: #64748b; }
+        .price-box { text-align: right; }
+        .final-price { font-size: 16px; font-weight: 700; color: #008170; }
+        .tax-inclusive { font-size: 9px; color: #94a3b8; margin-top: 2px; }
 
         /* BOTTOM NAV */
         .nav-bar {
@@ -263,83 +213,194 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             z-index: 100;
         }
-        
         .nav-item { text-align: center; font-size: 9px; color: #aaa; text-decoration: none; }
         .nav-item.active { color: #008170; font-weight: bold; }
+
+        /* ========================================== */
+        /* COMPONENT: ADVANCED FILTER BOTTOM SHEET */
+        /* ========================================== */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6); /* Backdrop buram */
+            z-index: 200;
+            display: none;
+        }
+
+        .filter-drawer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            z-index: 201;
+            padding: 24px 20px 30px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 75%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        /* State trigger via Class JavaScript */
+        .phone-frame.modal-open .modal-overlay { display: block; }
+        .phone-frame.modal-open .filter-drawer { transform: translateY(0); }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .drawer-title { font-size: 16px; font-weight: 700; color: #1e293b; }
+        .close-drawer { font-size: 20px; color: #94a3b8; cursor: pointer; border: none; background: transparent; }
+
+        .drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .drawer-body::-webkit-scrollbar { display: none; }
+
+        .filter-group { margin-bottom: 20px; }
+        .group-label { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 10px; }
+        
+        /* Styled Input Elements */
+        .custom-select, .custom-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            font-size: 13px;
+            color: #334155;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Checkbox disamarkan jadi pills visual yang clean agar tidak padat */
+        .facility-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #475569;
+            cursor: pointer;
+            background: #f8fafc;
+        }
+        .facility-option input { cursor: pointer; }
+
+        .drawer-footer {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-reset {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+        }
+        .btn-apply {
+            flex: 2;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: #008170;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 129, 112, 0.2);
+        }
     </style>
 </head>
 <body>
 
-    <div class="phone-frame">
+    <div class="phone-frame" id="app-frame">
         <div class="phone-notch"></div> 
         
         <div class="search-header">
             <div class="search-bar-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" value="Batu, Malang" placeholder="Cari lokasi atau nama villa...">
+                <input type="text" class="search-input" id="search-keyword" placeholder="Cari kota (Batu / Bali / Bandung)...">
             </div>
         </div>
 
         <div class="filter-container">
-            <div class="filter-pill active">💰 < Rp 1 Juta</div>
-            <div class="filter-pill">👥 2 Tamu</div>
-            <div class="filter-pill">🏊‍♂️ Kolam Renang</div>
-            <div class="filter-pill">📍 Dekat Wisata</div>
-            <div class="filter-pill more">⚡ Filter Lainnya</div>
+            <div class="filter-pill" id="pill-budget" onclick="quickFilterPrice()">💰 < Rp 1 Juta</div>
+            <div class="filter-pill" id="pill-pool" onclick="quickFilterPool()">🏊‍♂️ Pool Only</div>
+            <div class="filter-pill more" id="open-filter-btn">⚡ Filter Lainnya</div>
         </div>
 
         <div class="content-area">
             <div class="result-meta">
-                <h3 class="result-title">Villa Populer di Batu</h3>
-                <span class="result-count">Found 24 properties</span>
+                <h3 class="result-title">Eksplorasi Villa</h3>
+                <span class="result-count" id="total-results">Found 0 properties</span>
             </div>
 
-            <div class="explore-card">
-                <div class="card-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500" alt="Villa">
-                    <div class="rating-badge">⭐ 4.8</div>
+            <div id="villa-container"></div>
+        </div>
+
+        /* PANEL LAUNCHER: MODAL BOTTOM DRAWER */
+        <div class="modal-overlay" id="modal-backdrop"></div>
+        <div class="filter-drawer">
+            <div class="drawer-header">
+                <h3 class="drawer-title">Filter Pencarian</h3>
+                <button class="close-drawer" id="close-filter-btn">✕</button>
+            </div>
+            
+            <div class="drawer-body">
+                <div class="filter-group">
+                    <p class="group-label">Destinasi / Lokasi</p>
+                    <select class="custom-select" id="filter-city">
+                        <option value="">Semua Kota</option>
+                        <option value="Batu">Batu</option>
+                        <option value="Bali">Bali</option>
+                        <option value="Bandung">Bandung</option>
+                    </select>
                 </div>
-                <div class="card-details">
-                    <p class="property-type">Villa & Balcony</p>
-                    <h4 class="property-name">Sky View Private Villa</h4>
-                    <p class="property-location">📍 Oro-Oro Ombo, Batu (500m dari Jatim Park 2)</p>
-                    
-                    <div class="card-footer">
-                        <div class="facilities-summary">
-                            <span>🏊‍♂️ Pool</span>
-                            <span>🌅 Balcony</span>
-                            <span>📶 Wifi</span>
-                        </div>
-                        <div class="price-box">
-                            <p class="final-price">Rp 850.000</p>
-                            <p class="tax-inclusive">Harga sudah termasuk pajak</p>
-                        </div>
+
+                <div class="filter-group">
+                    <p class="group-label">Budget Maksimal (Per Malam)</p>
+                    <input type="number" class="custom-input" id="filter-budget" placeholder="Contoh: 1000000">
+                </div>
+
+                <div class="filter-group">
+                    <p class="group-label">Fasilitas Unggulan</p>
+                    <div class="checkbox-container">
+                        <label class="facility-option">
+                            <input type="checkbox" name="facility" value="🏊‍♂️ Pool"> 🏊‍♂️ Pool
+                        </label>
+                        <label class="facility-option">
+                            <input type="checkbox" name="facility" value="🌅 Balcony"> 🌅 Balcony
+                        </label>
+                        <label class="facility-option">
+                            <input type="checkbox" name="facility" value="📶 Wifi"> 📶 Wifi
+                        </label>
+                        <label class="facility-option">
+                            <input type="checkbox" name="facility" value="🌳 Garden"> 🌳 Garden
+                        </label>
                     </div>
                 </div>
             </div>
 
-            <div class="explore-card">
-                <div class="card-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" alt="Villa">
-                    <div class="rating-badge">⭐ 4.6</div>
-                </div>
-                <div class="card-details">
-                    <p class="property-type">Villa Rumah</p>
-                    <h4 class="property-name">Green Pine Family Homestay</h4>
-                    <p class="property-location">📍 Songgokerto, Batu</p>
-                    
-                    <div class="card-footer">
-                        <div class="facilities-summary">
-                            <span>👪 Fam Room</span>
-                            <span>🌳 Garden</span>
-                            <span>📶 Wifi</span>
-                        </div>
-                        <div class="price-box">
-                            <p class="final-price">Rp 620.000</p>
-                            <p class="tax-inclusive">Harga sudah termasuk pajak</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="drawer-footer">
+                <button class="btn-reset" onclick="resetAdvancedFilter()">Reset</button>
+                <button class="btn-apply" onclick="applyAdvancedFilter()">Terapkan Filter</button>
             </div>
         </div>
 
@@ -351,5 +412,112 @@
         </nav>
     </div>
 
+    <script src="db.js"></script>
+
+    <script>
+        const frame = document.getElementById('app-frame');
+        
+        // --- LOGIKA MENGATUR VISIBILITAS DRAWER MODAL ---
+        document.getElementById('open-filter-btn').addEventListener('click', () => frame.classList.add('modal-open'));
+        document.getElementById('close-filter-btn').addEventListener('click', () => frame.classList.remove('modal-open'));
+        document.getElementById('modal-backdrop').addEventListener('click', () => frame.classList.remove('modal-open'));
+
+        // --- RENDER COMPONENT UTAMA VILLA ---
+        function renderVillas(villas) {
+            const container = document.getElementById('villa-container');
+            const totalText = document.getElementById('total-results');
+            totalText.innerText = `Found ${villas.length} properties`;
+            container.innerHTML = "";
+            
+            if (villas.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:#94a3b8; margin-top:40px; font-size:13px;">Villa tidak ditemukan. Coba ganti pengaturan filter.</p>`;
+                return;
+            }
+
+            villas.forEach(villa => {
+                const facilitiesHtml = villa.facilities.map(f => `<span>${f}</span>`).join('');
+                const formattedPrice = new Intl.NumberFormat('id-ID', {
+                    style: 'currency', currency: 'IDR', maximumFractionDigits: 0
+                }).format(villa.pricePerNight);
+
+                container.innerHTML += `
+                    <div class="explore-card">
+                        <div class="card-image-wrapper">
+                            <img src="${villa.imageUrl}" alt="${villa.name}">
+                            <div class="rating-badge">⭐ ${villa.rating}</div>
+                        </div>
+                        <div class="card-details">
+                            <p class="property-type">${villa.type}</p>
+                            <h4 class="property-name">${villa.name}</h4>
+                            <p class="property-location">📍 ${villa.locationDetail}</p>
+                            <div class="card-footer">
+                                <div class="facilities-summary">${facilitiesHtml}</div>
+                                <div class="price-box">
+                                    <p class="final-price">${formattedPrice}</p>
+                                    <p class="tax-inclusive">Harga sudah termasuk pajak</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- LOGIKA PENGOPERASIAN FILTER LANJUTAN (Advanced) ---
+        function applyAdvancedFilter() {
+            const selectedCity = document.getElementById('filter-city').value;
+            const maxBudget = document.getElementById('filter-budget').value;
+            
+            // Ambil seluruh check-list fasilitas
+            const checkedBoxes = document.querySelectorAll('input[name="facility"]:checked');
+            const selectedFacilities = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Penyaringan Array data utama db.js
+            const filteredData = villaDatabase.filter(villa => {
+                if (selectedCity && villa.city !== selectedCity) return false;
+                if (maxBudget && villa.pricePerNight > parseInt(maxBudget)) return false;
+                if (selectedFacilities.length > 0) {
+                    const matchAll = selectedFacilities.every(f => villa.facilities.includes(f));
+                    if (!matchAll) return false;
+                }
+                return true;
+            });
+
+            renderVillas(filteredData);
+            frame.classList.remove('modal-open'); // Tutup drawer otomatis setelah diterapkan
+        }
+
+        function resetAdvancedFilter() {
+            document.getElementById('filter-city').value = "";
+            document.getElementById('filter-budget').value = "";
+            document.querySelectorAll('input[name="facility"]').forEach(cb => cb.checked = false);
+            renderVillas(villaDatabase);
+        }
+
+        // --- LOGIKA QUICK FILTER (Pills Cepat Di Atas) ---
+        let budgetActive = false;
+        function quickFilterPrice() {
+            budgetActive = !budgetActive;
+            document.getElementById('pill-budget').classList.toggle('active', budgetActive);
+            executeCombinedQuickFilters();
+        }
+
+        let poolActive = false;
+        function quickFilterPool() {
+            poolActive = !poolActive;
+            document.getElementById('pill-pool').classList.toggle('active', poolActive);
+            executeCombinedQuickFilters();
+        }
+
+        function executeCombinedQuickFilters() {
+            let result = [...villaDatabase];
+            if (budgetActive) result = result.filter(v => v.pricePerNight < 1000000);
+            if (poolActive) result = result.filter(v => v.facilities.includes("🏊‍♂️ Pool"));
+            renderVillas(result);
+        }
+
+        // Jalankan render awal saat document selesai dimuat
+        window.onload = () => renderVillas(villaDatabase);
+    </script>
 </body>
 </html>
