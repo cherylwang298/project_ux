@@ -211,9 +211,9 @@
 
     <div class="content" id="booking-content"></div>
 
-    <button class="book-btn">
-        Continue Booking
-    </button>
+    <button class="book-btn" onclick="goToPayment()">
+    Continue Booking
+</button>
 </div>
 
 <script src="db.js"></script>
@@ -371,6 +371,35 @@
         }
 
     });
+
+    function goToPayment() {
+
+    const checkin =
+        document.getElementById('checkin-date').value;
+
+    const checkout =
+        document.getElementById('checkout-date').value;
+
+    const guest =
+        document.getElementById('guest-count').value;
+
+    const total =
+        document.getElementById('total-price')
+        .innerText
+        .replace(/[^\d]/g, '');
+
+    if (!checkin || !checkout) {
+        alert("Pilih tanggal terlebih dahulu");
+        return;
+    }
+
+    window.location.href =
+        `payment.php?id=${villa.id}
+        &checkin=${checkin}
+        &checkout=${checkout}
+        &guest=${guest}
+        &total=${total}`;
+}
 </script>
 
 </body>

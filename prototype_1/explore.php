@@ -326,6 +326,10 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 129, 112, 0.2);
         }
+           a{
+    text-decoration: none;
+    color: inherit;
+}
     </style>
 </head>
 <body>
@@ -405,9 +409,9 @@
         </div>
 
         <nav class="nav-bar">
-            <div class="nav-item">🏠<br>Awal</div>
+            <div class="nav-item">🏠<br><a href="home.php">Awal</a></div>
             <div class="nav-item active">🔍<br>Explore</div>
-            <div class="nav-item">📅<br>Pesanan</div>
+            <div class="nav-item">📅<br><a href="pesanan.php">Pesanan</a></div>
             <div class="nav-item">👤<br>Profil</div>
         </nav>
     </div>

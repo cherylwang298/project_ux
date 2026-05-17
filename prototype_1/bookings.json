@@ -1,0 +1,13 @@
+[
+    {
+        "villaId": "v-003",
+        "villaName": "Canggu Bliss Luxury Villa",
+        "imageUrl": "https:\/\/images.unsplash.com\/photo-1537996194471-e657df975ab4?w=500",
+        "checkin": "2026-07-21",
+        "checkout": "2026-07-25",
+        "guest": "5 Guests",
+        "total": "7475000",
+        "paymentMethod": "Credit Card",
+        "bookedAt": "2026-05-17T17:30:39.480Z"
+    }
+]

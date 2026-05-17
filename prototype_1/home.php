@@ -131,6 +131,11 @@
         
         .nav-item { text-align: center; font-size: 9px; color: #aaa; }
         .nav-item.active { color: #008170; font-weight: bold; }
+
+        a{
+    text-decoration: none;
+    color: inherit;
+}
     </style>
 </head>
 <body>
@@ -187,7 +192,7 @@
         <nav class="nav-bar">
             <div class="nav-item active">🏠<br>Awal</div>
             <div class="nav-item">🔍<br><a href="explore.php">Explore</a> </div>
-            <div class="nav-item">📅<br>Pesanan</div>
+            <div class="nav-item">📅<br><a href="pesanan.php">Pesanan</a></div>
             <div class="nav-item">👤<br>Profil</div>
         </nav>
     </div>
