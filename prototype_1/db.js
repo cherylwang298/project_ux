@@ -14,7 +14,7 @@ const villaDatabase = [
   {
     id: "v-002",
     name: "Green Pine Family Homestay",
-    type: "Villa Rumah",
+    type: "Villa Rumah",  
     city: "Batu",
     locationDetail: "Songgokerto, Batu",
     pricePerNight: 620000,

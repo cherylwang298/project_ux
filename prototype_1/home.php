@@ -186,7 +186,7 @@
 
         <nav class="nav-bar">
             <div class="nav-item active">🏠<br>Awal</div>
-            <div class="nav-item">🔍<br>Explore</div>
+            <div class="nav-item">🔍<br><a href="explore.php">Explore</a> </div>
             <div class="nav-item">📅<br>Pesanan</div>
             <div class="nav-item">👤<br>Profil</div>
         </nav>

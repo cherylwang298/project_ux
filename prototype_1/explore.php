@@ -355,7 +355,7 @@
             <div id="villa-container"></div>
         </div>
 
-        /* PANEL LAUNCHER: MODAL BOTTOM DRAWER */
+        <!-- /* PANEL LAUNCHER: MODAL BOTTOM DRAWER */ -->
         <div class="modal-overlay" id="modal-backdrop"></div>
         <div class="filter-drawer">
             <div class="drawer-header">
@@ -441,7 +441,7 @@
                 }).format(villa.pricePerNight);
 
                 container.innerHTML += `
-                    <div class="explore-card">
+                   <div class="explore-card" onclick="openDetail('${villa.id}')">
                         <div class="card-image-wrapper">
                             <img src="${villa.imageUrl}" alt="${villa.name}">
                             <div class="rating-badge">⭐ ${villa.rating}</div>
@@ -515,6 +515,36 @@
             if (poolActive) result = result.filter(v => v.facilities.includes("🏊‍♂️ Pool"));
             renderVillas(result);
         }
+
+        function openDetail(id) {
+            window.location.href = `accom_detail.php?id=${id}`;
+        }
+
+    // --- LIVE SEARCH ---
+    document.getElementById('search-keyword').addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+
+        let result = [...villaDatabase];
+
+        // kombinasi dengan quick filter
+        if (budgetActive) {
+            result = result.filter(v => v.pricePerNight < 1000000);
+        }
+
+        if (poolActive) {
+            result = result.filter(v => v.facilities.includes("🏊‍♂️ Pool"));
+        }
+
+        // live search
+        result = result.filter(villa =>
+            villa.name.toLowerCase().includes(keyword) ||
+            villa.city.toLowerCase().includes(keyword) ||
+            villa.locationDetail.toLowerCase().includes(keyword)
+        );
+
+        renderVillas(result);
+    });
+
 
         // Jalankan render awal saat document selesai dimuat
         window.onload = () => renderVillas(villaDatabase);
