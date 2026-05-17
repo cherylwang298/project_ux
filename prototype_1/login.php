@@ -724,7 +724,7 @@
                     Welcome Back
                 </div>
 
-                <form>
+                <form action="home.php">
 
                     <div class="input-group">
 
@@ -787,7 +787,7 @@
                 <div class="signup">
 
                     Don't have an account?
-                    <a href="#">
+                    <a href="signUp.php">
                         Sign Up
                     </a>
 

@@ -753,7 +753,7 @@
                     Create Account
                 </div>
 
-                <form>
+                <form action="home.php">
 
                     <!-- FULL NAME -->
                     <div class="input-group">
@@ -855,7 +855,7 @@
                 <div class="signup">
 
                     Already have an account?
-                    <a href="#">
+                    <a href="login.php">
                         Login
                     </a>
 
