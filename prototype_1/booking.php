@@ -393,12 +393,15 @@
         return;
     }
 
-    window.location.href =
-        `payment.php?id=${villa.id}
-        &checkin=${checkin}
-        &checkout=${checkout}
-        &guest=${guest}
-        &total=${total}`;
+    const params = new URLSearchParams({
+        id: villa.id,
+        checkin,
+        checkout,
+        guest,
+        total
+    });
+
+    window.location.href = `payment.php?${params.toString()}`;
 }
 </script>
 

@@ -9,7 +9,8 @@ const villaDatabase = [
     pricePerNight: 850000, // Harga transparan sudah termasuk pajak
     rating: 4.8,
     facilities: ["🏊‍♂️ Pool", "🌅 Balcony", "📶 Wifi"],
-    imageUrl: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500"
+    imageUrl: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+    mapPosition: { top: '22%', left: '30%' }
   },
   {
     id: "v-002",
@@ -20,7 +21,8 @@ const villaDatabase = [
     pricePerNight: 620000,
     rating: 4.6,
     facilities: ["👪 Fam Room", "🌳 Garden", "📶 Wifi"],
-    imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500"
+    imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500",
+    mapPosition: { top: '58%', left: '22%' }
   },
   {
     id: "v-003",
@@ -31,6 +33,7 @@ const villaDatabase = [
     pricePerNight: 1850000,
     rating: 4.9,
     facilities: ["🏊‍♂️ Pool", "🌅 Balcony", "📶 Wifi"],
-    imageUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500"
+    imageUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500",
+    mapPosition: { top: '34%', left: '68%' }
   }
 ];

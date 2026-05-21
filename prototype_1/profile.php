@@ -5,109 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agoda Redesign - Profile Page</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             margin: 0;
             padding: 0;
         }
 
         body {
-            background-color: #cbd5e1; 
+            background: #b8cfe8;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px 16px;
         }
 
-        /* =========================
-           PHONE FRAME (Smooth Gradient Blue to White)
-        ========================== */
         .phone-frame {
-            width: 375px; 
-            height: 812px; 
-            border-radius: 45px; 
-            border: 10px solid #111; 
+            width: 375px;
+            height: 812px;
+            border-radius: 44px;
+            border: 9px solid #18181b;
             position: relative;
-            
-            background: linear-gradient(
-                180deg,
-                #93C6F9 0%,
-                #C2E0FD 25%,
-                #EAF4FF 50%,
-                #FFFFFF 100%
+            background: linear-gradient(165deg,
+                #1e57b8 0%,
+                #2563eb 18%,
+                #4a90d9 36%,
+                #82b8f0 54%,
+                #c5deff 72%,
+                #ebf4ff 88%,
+                #f5f9ff 100%
             );
-            overflow: hidden; 
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 35px 70px rgba(0, 0, 0, .30), inset 0 0 0 1px rgba(255, 255, 255, .08);
+            box-shadow: 0 40px 80px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.12);
         }
 
         .phone-notch {
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 110px;
-            height: 28px;
-            background: #111;
-            border-radius: 20px;
-            z-index: 1000;
+            width: 100px;
+            height: 26px;
+            background: #18181b;
+            border-radius: 14px;
+            z-index: 500;
         }
 
-        /* =========================
-           ANIMATED BLOBS
-        ========================== */
         .blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(8px);
-            opacity: 0.6; 
-            z-index: 0;
+            pointer-events: none;
         }
         .blob-top {
-            width: 420px;
-            height: 420px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
-            top: -150px;
-            right: -100px;
-            animation: blobMove 10s ease-in-out infinite;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(255,255,255,.22) 0%, transparent 70%);
+            top: -80px;
+            right: -80px;
+            opacity: .7;
         }
 
-        @keyframes blobMove {
-            0%, 100% { transform: rotate(0deg) scale(1); border-radius: 42% 58% 63% 37% / 45% 40% 60% 55%; }
-            50% { transform: rotate(10deg) scale(1.05); border-radius: 58% 42% 37% 63% / 50% 60% 40% 50%; }
-        }
-
-        /* =========================
-           CONTENT AREA
-        ========================== */
         .content-area {
             flex: 1;
-            overflow-y: auto; 
-            scrollbar-width: none; 
-            padding-bottom: 120px; 
+            overflow-y: auto;
+            scrollbar-width: none;
+            padding-bottom: 120px;
             position: relative;
             z-index: 10;
         }
         .content-area::-webkit-scrollbar { display: none; }
 
-        /* =========================
-           PROFILE HEADER - Glassmorphism
-        ========================== */
         .profile-header {
-            margin: 70px 20px 20px;
+            margin: 68px 20px 20px;
             padding: 24px 20px;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255,255,255,.42);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 30px rgba(120, 170, 220, 0.15);
+            border: 1px solid rgba(255,255,255,.75);
+            box-shadow: 0 14px 30px rgba(0,0,0,.12);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -120,42 +102,43 @@
         }
 
         .avatar-img {
-            width: 86px;
-            height: 86px;
+            width: 88px;
+            height: 88px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(255,255,255,0.9);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid rgba(255,255,255,.95);
+            box-shadow: 0 10px 24px rgba(0,0,0,.12);
         }
 
         .edit-avatar-btn {
             position: absolute;
             bottom: 0;
             right: 0;
-            background: #16324f;
-            color: white;
-            width: 28px;
-            height: 28px;
+            background: #ffffff;
+            color: #1d4ed8;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 12px;
-            border: 2px solid white;
+            font-size: 14px;
+            border: 2px solid rgba(37,99,235,.18);
             cursor: pointer;
         }
 
         .user-name {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: #16324f;
+            color: #0c2461;
             margin-bottom: 4px;
+            font-family: 'Playfair Display', serif;
         }
 
         .user-email {
             font-size: 13px;
             font-weight: 500;
-            color: rgba(22,50,79,0.7);
+            color: rgba(12,36,97,.72);
             margin-bottom: 16px;
         }
 
@@ -168,49 +151,46 @@
 
         .stat-box {
             flex: 1;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.8);
+            background: rgba(255,255,255,.55);
+            padding: 14px 12px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.82);
         }
 
         .stat-value {
             font-size: 16px;
             font-weight: 700;
-            color: #AEE2FF;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #1D4ED8;
         }
 
         .stat-label {
             font-size: 10px;
             font-weight: 600;
-            color: #16324f;
+            color: #0c2461;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 5px;
+            letter-spacing: .4px;
         }
 
-        /* =========================
-           MENU LIST - Glassmorphism
-        ========================== */
         .menu-section {
             margin: 0 20px 24px;
         }
 
         .menu-section-title {
             font-size: 14px;
-            font-weight: 600;
-            color: #16324f;
+            font-weight: 700;
+            color: #0c2461;
             margin-bottom: 12px;
             padding-left: 8px;
         }
 
         .menu-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255,255,255,.42);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255,255,255,.75);
+            box-shadow: 0 10px 26px rgba(0,0,0,.08);
             overflow: hidden;
         }
 
@@ -220,15 +200,16 @@
             justify-content: space-between;
             padding: 16px 20px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background .2s ease, transform .2s ease;
         }
 
         .menu-item:not(:last-child) {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: 1px solid rgba(255,255,255,.65);
         }
 
         .menu-item:hover {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255,255,255,.8);
+            transform: translateY(-1px);
         }
 
         .menu-item-left {
@@ -239,38 +220,37 @@
 
         .menu-icon {
             font-size: 20px;
-            background: rgba(147, 198, 249, 0.3);
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 12px;
+            border-radius: 14px;
+            background: rgba(37,99,235,.14);
+            color: #1D4ED8;
         }
 
         .menu-text {
             font-size: 14px;
             font-weight: 500;
-            color: #16324f;
+            color: #0c2461;
         }
 
         .menu-arrow {
             font-size: 14px;
-            color: #7DA0C4;
+            color: rgba(12,36,97,.6);
         }
 
         .logout-text {
             color: #e63946;
-            font-weight: 600;
+            font-weight: 700;
         }
         
         .logout-icon {
-            background: rgba(230, 57, 70, 0.1);
+            background: rgba(230,57,70,.12);
+            color: #e63946;
         }
 
-        /* =========================
-           FLOATING GLASS NAVBAR
-        ========================== */
         .nav-bar {
             position: absolute;
             bottom: 24px;
@@ -278,11 +258,11 @@
             right: 24px;
             height: 74px;
             border-radius: 28px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255,255,255,.85);
             backdrop-filter: blur(22px);
             -webkit-backdrop-filter: blur(22px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,.9);
+            box-shadow: 0 20px 45px rgba(0,0,0,.1);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -306,10 +286,10 @@
         }
 
         .nav-item.active {
-            color: #16324f;
-            font-weight: 600;
+            color: #1D4ED8;
+            font-weight: 700;
             transform: translateY(-2px);
-            background: rgba(147, 198, 249, 0.2);
+            background: rgba(37,99,235,.18);
         }
 
         .nav-icon { font-size: 20px; }
@@ -327,7 +307,12 @@
             <div class="profile-header">
                 <div class="avatar-container">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500" alt="Profile" class="avatar-img">
-                    <div class="edit-avatar-btn">✏️</div>
+                    <button class="edit-avatar-btn" aria-label="Edit profile photo">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/>
+                        </svg>
+                    </button>
                 </div>
                 <h2 class="user-name">Jessica Gabriel</h2>
                 <p class="user-email">c14240045@john.petra.ac.id</p>
@@ -349,24 +334,55 @@
                 <div class="menu-card">
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon">👤</div>
+                            <div class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="3.5" />
+                                    <path d="M5.5 20.5c0-3.5 2.9-6.5 6.5-6.5s6.5 3 6.5 6.5" />
+                                </svg>
+                            </div>
                             <span class="menu-text">Informasi Pribadi</span>
                         </div>
-                        <div class="menu-arrow">❯</div>
+                        <div class="menu-arrow">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon">📝</div>
+                            <div class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+                                    <path d="M9 7h6" />
+                                    <path d="M9 11h6" />
+                                    <path d="M9 15h4" />
+                                </svg>
+                            </div>
                             <span class="menu-text">Data Penumpang Tersimpan</span>
                         </div>
-                        <div class="menu-arrow">❯</div>
+                        <div class="menu-arrow">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon">💳</div>
+                            <div class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="7" width="18" height="10" rx="2" />
+                                    <path d="M3 11h18" />
+                                    <path d="M7 7v-1" />
+                                    <path d="M17 7v-1" />
+                                </svg>
+                            </div>
                             <span class="menu-text">Metode Pembayaran</span>
                         </div>
-                        <div class="menu-arrow">❯</div>
+                        <div class="menu-arrow">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -376,21 +392,45 @@
                 <div class="menu-card">
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon">⚙️</div>
+                            <div class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+                                </svg>
+                            </div>
                             <span class="menu-text">Pengaturan Aplikasi</span>
                         </div>
-                        <div class="menu-arrow">❯</div>
+                        <div class="menu-arrow">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon">🎧</div>
+                            <div class="menu-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 15v-3a8 8 0 0 1 16 0v3" />
+                                    <path d="M8 15v5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-5" />
+                                </svg>
+                            </div>
                             <span class="menu-text">Pusat Bantuan</span>
                         </div>
-                        <div class="menu-arrow">❯</div>
+                        <div class="menu-arrow">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-left">
-                            <div class="menu-icon logout-icon">🚪</div>
+                            <div class="menu-icon logout-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <path d="M16 17l5-5-5-5" />
+                                    <path d="M21 12H9" />
+                                </svg>
+                            </div>
                             <span class="menu-text logout-text">Keluar (Log Out)</span>
                         </div>
                         <div class="menu-arrow"></div>
@@ -403,24 +443,38 @@
         <nav class="nav-bar">
             <div class="nav-item">
                 <a href="home.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <span class="nav-icon">🏠</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" />
+                        <path d="M9 21V12h6v9" />
+                    </svg>
                     <span>Awal</span>
                 </a>
             </div>
             <div class="nav-item">
                 <a href="explore.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <span class="nav-icon">🔍</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
                     <span>Explore</span>
                 </a>
             </div>
             <div class="nav-item">
                 <a href="pesanan.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <span class="nav-icon">📅</span>
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <path d="M16 2v4" />
+                        <path d="M8 2v4" />
+                        <path d="M3 10h18" />
+                    </svg>
                     <span>Pesanan</span>
                 </a>
             </div>
             <div class="nav-item active">
-                <span class="nav-icon">👤</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
                 <span>Profil</span>
             </div>
         </nav>

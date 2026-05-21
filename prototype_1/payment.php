@@ -237,11 +237,11 @@
 
     const params = new URLSearchParams(window.location.search);
 
-    const villaId = params.get('id').trim();
-    const checkin = params.get('checkin').trim();
-    const checkout = params.get('checkout').trim();
-    const guest = params.get('guest').trim();
-    const total = params.get('total').trim();
+    const villaId = params.get('id') || '';
+    const checkin = params.get('checkin') || '';
+    const checkout = params.get('checkout') || '';
+    const guest = params.get('guest') || '';
+    const total = params.get('total') || '';
 
     const villa =
         villaDatabase.find(v => v.id === villaId);
@@ -254,7 +254,7 @@
         </h2>
     `;
 
-    throw new Error("Villa not found");
+    return;
 
 }
     const formattedTotal =
