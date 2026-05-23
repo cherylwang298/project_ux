@@ -13,6 +13,7 @@ $plab=$picons[$o['payment_method']]??$o['payment_method'];
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Detail Pesanan — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 <?=header_bar('Detail Pesanan','orders.php')?>
 <div class="page-content">
   <!-- Status -->

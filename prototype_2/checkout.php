@@ -6,8 +6,11 @@ require '_head.php';
 $id       = (int)($_GET['id']??1);
 $hidx     = array_search($id,array_column($HOTELS,'id'));
 $h        = $HOTELS[$hidx];
+$today    = date('Y-m-d');
 $checkin  = $_GET['checkin']  ?? date('Y-m-d',strtotime('+1 day'));
 $checkout = $_GET['checkout'] ?? date('Y-m-d',strtotime('+3 days'));
+if ($checkin < $today) $checkin = $today;
+if ($checkout <= $checkin) $checkout = date('Y-m-d', strtotime($checkin . ' +1 day'));
 $nights   = (int)($_GET['nights']??2);
 $total    = (float)($_GET['total']??0);
 $guest    = $_SESSION['saved_guest'] ?? ['name'=>'','email'=>'','phone'=>''];
@@ -51,6 +54,7 @@ if($_SERVER['REQUEST_METHOD']==='POST' && !isset($_POST['add_contact'])){
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Checkout — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 
 <?=header_bar('Checkout','hotel.php?id='.$id.'&checkin='.$checkin.'&checkout='.$checkout)?>
 

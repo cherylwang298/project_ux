@@ -15,6 +15,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'&&$o){
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Batalkan Booking — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 <?=header_bar('Batalkan Booking','javascript:history.back()')?>
 <div class="cancel-page">
   <?php if(!$o): ?>

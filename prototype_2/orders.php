@@ -14,6 +14,7 @@ $orders=array_reverse($_SESSION['orders']);
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Pesanan Saya — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 
 <?=header_bar('Pesanan Saya')?>
 

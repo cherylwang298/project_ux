@@ -1,7 +1,7 @@
 <?php
 /* ============================================
    AGODA CLONE — _data.php
-   Data: Hotels, Flights, Activities, Cities
+   Data: Hotels, Flights, Activities
    ============================================ */
 
 $HOTELS = [
@@ -27,57 +27,6 @@ $ACTIVITIES = [
   ['id'=>204,'name'=>'Escape Room Surabaya','location'=>'Surabaya Pusat','category'=>'Hiburan Indoor','rating'=>9.0,'reviews'=>876,'price'=>95000,'duration'=>'60 menit','img_emoji'=>'🔐','grad'=>'linear-gradient(135deg,#6A1B9A,#AB47BC)','badge'=>'Fun','desc'=>'Uji kecerdasan dan kerja sama tim dalam escape room bertema misteri paling populer di Surabaya.','includes'=>['1 sesi permainan','Locker','Sertifikat']],
 ];
 
-// Data kota di Indonesia untuk autocomplete penerbangan
-$INDONESIA_CITIES = [
-  ['code' => 'SUB', 'city' => 'Surabaya', 'airport' => 'Juanda International Airport', 'popular' => true],
-  ['code' => 'CGK', 'city' => 'Jakarta', 'airport' => 'Soekarno-Hatta International Airport', 'popular' => true],
-  ['code' => 'DPS', 'city' => 'Bali', 'airport' => 'Ngurah Rai International Airport', 'popular' => true],
-  ['code' => 'JOG', 'city' => 'Yogyakarta', 'airport' => 'Yogyakarta International Airport', 'popular' => true],
-  ['code' => 'BDJ', 'city' => 'Banjarmasin', 'airport' => 'Syamsudin Noor Airport', 'popular' => false],
-  ['code' => 'BPN', 'city' => 'Balikpapan', 'airport' => 'Sultan Aji Muhammad Sulaiman Airport', 'popular' => false],
-  ['code' => 'BDO', 'city' => 'Bandung', 'airport' => 'Husein Sastranegara Airport', 'popular' => true],
-  ['code' => 'PLM', 'city' => 'Palembang', 'airport' => 'Sultan Mahmud Badaruddin II Airport', 'popular' => false],
-  ['code' => 'PDG', 'city' => 'Padang', 'airport' => 'Minangkabau International Airport', 'popular' => false],
-  ['code' => 'PKU', 'city' => 'Pekanbaru', 'airport' => 'Sultan Syarif Kasim II Airport', 'popular' => false],
-  ['code' => 'BTJ', 'city' => 'Banda Aceh', 'airport' => 'Sultan Iskandar Muda Airport', 'popular' => false],
-  ['code' => 'KNO', 'city' => 'Medan', 'airport' => 'Kualanamu International Airport', 'popular' => true],
-  ['code' => 'UPG', 'city' => 'Makassar', 'airport' => 'Sultan Hasanuddin Airport', 'popular' => true],
-  ['code' => 'MDC', 'city' => 'Manado', 'airport' => 'Sam Ratulangi Airport', 'popular' => false],
-  ['code' => 'LOP', 'city' => 'Lombok', 'airport' => 'Lombok International Airport', 'popular' => true],
-  ['code' => 'KOE', 'city' => 'Kupang', 'airport' => 'El Tari Airport', 'popular' => false],
-  ['code' => 'LBJ', 'city' => 'Labuan Bajo', 'airport' => 'Komodo Airport', 'popular' => true],
-  ['code' => 'SRG', 'city' => 'Semarang', 'airport' => 'Ahmad Yani Airport', 'popular' => false],
-  ['code' => 'MLG', 'city' => 'Malang', 'airport' => 'Abdul Rachman Saleh Airport', 'popular' => false],
-  ['code' => 'TKG', 'city' => 'Bandar Lampung', 'airport' => 'Radin Inten II Airport', 'popular' => false],
-  ['code' => 'PNK', 'city' => 'Pontianak', 'airport' => 'Supadio Airport', 'popular' => false],
-  ['code' => 'DJJ', 'city' => 'Jayapura', 'airport' => 'Sentani Airport', 'popular' => false],
-  ['code' => 'SOQ', 'city' => 'Sorong', 'airport' => 'Domine Eduard Osok Airport', 'popular' => false],
-  ['code' => 'TIM', 'city' => 'Timika', 'airport' => 'Mozes Kilangin Airport', 'popular' => false],
-  ['code' => 'BKS', 'city' => 'Bengkulu', 'airport' => 'Fatmawati Soekarno Airport', 'popular' => false],
-  ['code' => 'DJB', 'city' => 'Jambi', 'airport' => 'Sultan Thaha Airport', 'popular' => false],
-  ['code' => 'PGK', 'city' => 'Pangkal Pinang', 'airport' => 'Depati Amir Airport', 'popular' => false],
-  ['code' => 'TJQ', 'city' => 'Tanjung Pandan', 'airport' => 'HAS Hanandjoeddin Airport', 'popular' => false],
-  ['code' => 'BTH', 'city' => 'Batam', 'airport' => 'Hang Nadim Airport', 'popular' => true],
-  ['code' => 'TAN', 'city' => 'Tanjung Pinang', 'airport' => 'Raja Haji Fisabilillah Airport', 'popular' => false],
-  ['code' => 'GTO', 'city' => 'Gorontalo', 'airport' => 'Jalaluddin Airport', 'popular' => false],
-  ['code' => 'PLW', 'city' => 'Palu', 'airport' => 'Mutiara SIS Al-Jufrie Airport', 'popular' => false],
-  ['code' => 'KDI', 'city' => 'Kendari', 'airport' => 'Haluoleo Airport', 'popular' => false],
-  ['code' => 'TTE', 'city' => 'Ternate', 'airport' => 'Sultan Babullah Airport', 'popular' => false],
-  ['code' => 'MKW', 'city' => 'Manokwari', 'airport' => 'Rendani Airport', 'popular' => false],
-  ['code' => 'AMQ', 'city' => 'Ambon', 'airport' => 'Pattimura Airport', 'popular' => false],
-  ['code' => 'BIK', 'city' => 'Biak', 'airport' => 'Frans Kaisiepo Airport', 'popular' => false],
-  ['code' => 'MKQ', 'city' => 'Merauke', 'airport' => 'Mopah Airport', 'popular' => false],
-  ['code' => 'WMX', 'city' => 'Wamena', 'airport' => 'Wamena Airport', 'popular' => false],
-  ['code' => 'LLO', 'city' => 'Palopo', 'airport' => 'Bua Airport', 'popular' => false],
-  ['code' => 'MJU', 'city' => 'Mamuju', 'airport' => 'Tampa Padang Airport', 'popular' => false],
-  ['code' => 'PSJ', 'city' => 'Poso', 'airport' => 'Kasiguncu Airport', 'popular' => false],
-  ['code' => 'LUW', 'city' => 'Luwuk', 'airport' => 'Bubung Airport', 'popular' => false],
-  ['code' => 'KBL', 'city' => 'Kolaka', 'airport' => 'Sangia Nibandera Airport', 'popular' => false],
-  ['code' => 'RGT', 'city' => 'Rengat', 'airport' => 'Japura Airport', 'popular' => false],
-  ['code' => 'DUM', 'city' => 'Dumai', 'airport' => 'Pinang Kampai Airport', 'popular' => false],
-  ['code' => 'TJB', 'city' => 'Tanjung Balai', 'airport' => 'Sei Pakning Airport', 'popular' => false],
-];
-
 function rp($n){return 'Rp '.number_format($n,0,',','.');}
 function fd($d){return date('d M Y',strtotime($d));}
 function fds($d){return date('d M',strtotime($d));}
@@ -88,4 +37,3 @@ function rating_label($r){
   if($r>=8.0) return 'Bagus';
   return 'Cukup Bagus';
 }
-?>

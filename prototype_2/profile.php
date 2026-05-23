@@ -16,6 +16,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Profil — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 
 <?=header_bar('Profil')?>
 

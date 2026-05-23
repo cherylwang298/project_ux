@@ -3,8 +3,12 @@ session_start();
 require '_data.php';
 require '_head.php';
 $location = $_GET['location'] ?? 'Surabaya';
+$today    = date('Y-m-d');
 $checkin  = $_GET['checkin']  ?? date('Y-m-d', strtotime('+1 day'));
 $checkout = $_GET['checkout'] ?? date('Y-m-d', strtotime('+3 days'));
+// Enforce dates
+if ($checkin < $today) $checkin = $today;
+if ($checkout <= $checkin) $checkout = date('Y-m-d', strtotime($checkin . ' +1 day'));
 $nights   = max(1, (strtotime($checkout)-strtotime($checkin))/86400);
 $sort     = $_GET['sort']       ?? 'recommended';
 $budget   = (int)($_GET['budget']    ?? 0);
@@ -21,6 +25,7 @@ if($sort === 'rating')     usort($list, fn($a,$b) => $b['rating'] <=> $a['rating
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Hasil Pencarian — agoda</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 
 <header class="app-header">
   <div class="header-inner">

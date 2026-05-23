@@ -2,215 +2,132 @@
 session_start();
 require '_data.php';
 require '_head.php';
-
 $from = $_GET['from'] ?? 'Surabaya';
 $to   = $_GET['to']   ?? 'Jakarta';
 $dep  = $_GET['dep_date'] ?? date('Y-m-d', strtotime('+1 day'));
 $sort = $_GET['sort'] ?? 'recommended';
+$today = date('Y-m-d');
+// Enforce dep date not in past
+if ($dep < $today) $dep = $today;
 
-// Filter flights based on selected cities
-$list = array_filter($FLIGHTS, function($f) use ($from, $to) {
-    return ($f['from_city'] === $from || $f['from'] === $from) && 
-           ($f['to_city'] === $to || $f['to'] === $to);
-});
-
+$list = $FLIGHTS;
 if($sort === 'price_asc')  usort($list, fn($a,$b) => $a['price'] - $b['price']);
 if($sort === 'price_desc') usort($list, fn($a,$b) => $b['price'] - $a['price']);
-
-// Get popular cities
-$popularCities = array_filter($INDONESIA_CITIES, fn($c) => isset($c['popular']) && $c['popular'] === true);
 ?>
 <!DOCTYPE html><html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Cari Penerbangan — Agoda</title><?=$font?><?=$css?>
-<style>
-/* Autocomplete styles */
-.search-field {
-    position: relative;
-}
-
-.autocomplete-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    border-radius: var(--r-md);
-    border: 1px solid var(--c-border);
-    max-height: 280px;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top: 4px;
-    box-shadow: var(--sh-lg);
-    display: none;
-}
-
-.autocomplete-list.show {
-    display: block;
-}
-
-.autocomplete-item {
-    padding: 12px 16px;
-    cursor: pointer;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    transition: background 0.1s;
-    display: flex;
-    flex-direction: column;
-}
-
-.autocomplete-item:last-child {
-    border-bottom: none;
-}
-
-.autocomplete-item:hover,
-.autocomplete-item.selected {
-    background: var(--a-soft);
-}
-
-.autocomplete-city {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--c-text);
-}
-
-.autocomplete-code {
-    font-size: 10px;
-    color: var(--c-text3);
-    font-weight: 600;
-    margin-top: 2px;
-}
-
-/* Date picker styling */
-input[type="date"] {
-    cursor: pointer;
-    position: relative;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    background: var(--a-grad);
-    border-radius: 50%;
-    padding: 4px;
-    cursor: pointer;
-    opacity: 1;
-}
-
-/* Select styling */
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23E84393' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    padding-right: 24px;
-}
-
-/* Modal sheet for city selection */
-.modal-sheet {
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.city-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: var(--a-soft);
-    border: 1px solid var(--c-border);
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--c-text);
-    cursor: pointer;
-    transition: all 0.1s;
-}
-
-.city-chip:active {
-    transform: scale(0.96);
-    background: var(--a-grad);
-    color: white;
-}
-</style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Cari Penerbangan — agoda</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 
 <header class="app-header">
   <div class="header-inner">
     <a href="index.php" class="hb-back">←</a>
     <div style="text-align:center;">
-      <div style="font-size:14px;font-weight:800;letter-spacing:-0.3px;" id="routeDisplay"><?=htmlspecialchars($from)?> → <?=htmlspecialchars($to)?></div>
-      <div style="font-size:10px;color:var(--c-text3);" id="dateDisplay"><?=date('d M Y', strtotime($dep))?> · <span id="flightCount"><?=count($list)?></span> penerbangan</div>
+      <div style="font-size:14px;font-weight:800;letter-spacing:-0.3px;"><?=htmlspecialchars($from)?> → <?=htmlspecialchars($to)?></div>
+      <div style="font-size:10px;color:var(--c-text3);"><?=fd($dep)?> · <?=count($list)?> penerbangan</div>
     </div>
     <button class="icon-btn" onclick="toggleModal('filterSheet')">⚙️</button>
   </div>
 </header>
 
 <div class="page-content">
-  <div class="filter-chips" style="padding:0 0 14px;">
-    <a href="#" data-sort="recommended" class="chip sort-chip <?=$sort==='recommended'?'active':''?>">✦ Terbaik</a>
-    <a href="#" data-sort="price_asc" class="chip sort-chip <?=$sort==='price_asc'?'active':''?>">💰 Termurah</a>
-    <a href="#" data-sort="price_desc" class="chip sort-chip <?=$sort==='price_desc'?'active':''?>">💸 Termahal</a>
+  <!-- Search edit bar -->
+  <div class="glass" style="border-radius:var(--r-lg);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="toggleModal('editSearchModal')">
+    <span style="font-size:18px;">✈️</span>
+    <div style="flex:1;">
+      <div style="font-size:13px;font-weight:700;"><?=htmlspecialchars($from)?> → <?=htmlspecialchars($to)?></div>
+      <div style="font-size:11px;color:var(--c-text3);"><?=fd($dep)?></div>
+    </div>
+    <span style="font-size:11px;color:var(--c-accent);font-weight:700;">Ubah →</span>
   </div>
 
-  <div style="font-size:12px;color:var(--c-text2);font-weight:600;margin-bottom:14px;" id="resultCount"><?=count($list)?> penerbangan ditemukan</div>
+  <!-- Sort chips -->
+  <div class="filter-chips" style="padding:0 0 14px;">
+    <a href="?from=<?=urlencode($from)?>&to=<?=urlencode($to)?>&dep_date=<?=$dep?>&sort=recommended" class="chip <?=$sort==='recommended'?'active':''?>">✦ Terbaik</a>
+    <a href="?from=<?=urlencode($from)?>&to=<?=urlencode($to)?>&dep_date=<?=$dep?>&sort=price_asc" class="chip <?=$sort==='price_asc'?'active':''?>">💰 Termurah</a>
+    <a href="?from=<?=urlencode($from)?>&to=<?=urlencode($to)?>&dep_date=<?=$dep?>&sort=price_desc" class="chip <?=$sort==='price_desc'?'active':''?>">💸 Termahal</a>
+  </div>
 
-  <div id="flightList">
-  <?php if(count($list) > 0): ?>
-    <?php foreach($list as $f): ?>
-    <div class="flight-card" onclick="bookFlight(<?=$f['id']?>)">
-      <div class="flight-head">
+  <div style="font-size:12px;color:var(--c-text2);font-weight:600;margin-bottom:14px;"><?=count($list)?> penerbangan ditemukan</div>
+
+  <?php foreach($list as $f): ?>
+  <div class="flight-card" onclick="bookFlight(<?=$f['id']?>,<?=htmlspecialchars(json_encode($f),ENT_QUOTES)?>)">
+    <div class="flight-head">
+      <div>
+        <div class="airline-name"><?=$f['logo']?> <?=$f['airline']?></div>
+        <div class="flight-class"><?=$f['airline_code']?> · <?=$f['class']?></div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;"><?=fd($dep)?></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.65);margin-top:1px;"><?=$f['stops']?></div>
+      </div>
+    </div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="route-end">
+          <div class="code"><?=$f['from']?></div>
+          <div class="city"><?=$f['from_city']?></div>
+          <div class="time"><?=$f['dep']?></div>
+        </div>
+        <div class="route-mid">
+          <div class="route-line">
+            <div class="route-dot"></div>
+            <div class="route-dash"></div>
+            <div class="route-plane">✈</div>
+            <div class="route-dash"></div>
+            <div class="route-dot"></div>
+          </div>
+          <div class="route-dur"><?=$f['duration']?></div>
+          <div class="route-stops"><?=$f['stops']?></div>
+        </div>
+        <div class="route-end" style="text-align:right;">
+          <div class="code"><?=$f['to']?></div>
+          <div class="city"><?=$f['to_city']?></div>
+          <div class="time"><?=$f['arr']?></div>
+        </div>
+      </div>
+      <div class="flight-footer">
         <div>
-          <div class="airline-name"><?=$f['logo']?> <?=$f['airline']?></div>
-          <div class="flight-class"><?=$f['airline_code']?> · <?=$f['class']?></div>
+          <div class="flight-seats">🔥 <?=$f['seats']?> kursi tersisa</div>
+          <div style="font-size:10px;color:var(--c-green);font-weight:700;margin-top:2px;">✓ Bagasi 20kg</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;"><?=date('d M', strtotime($dep))?></div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.65);margin-top:1px;"><?=$f['stops']?></div>
-        </div>
-      </div>
-      <div class="flight-body">
-        <div class="flight-route">
-          <div class="route-end">
-            <div class="code"><?=$f['from']?></div>
-            <div class="city"><?=$f['from_city']?></div>
-            <div class="time"><?=$f['dep']?></div>
-          </div>
-          <div class="route-mid">
-            <div class="route-line">
-              <div class="route-dot"></div>
-              <div class="route-dash"></div>
-              <div class="route-plane">✈</div>
-              <div class="route-dash"></div>
-              <div class="route-dot"></div>
-            </div>
-            <div class="route-dur"><?=$f['duration']?></div>
-            <div class="route-stops"><?=$f['stops']?></div>
-          </div>
-          <div class="route-end" style="text-align:right;">
-            <div class="code"><?=$f['to']?></div>
-            <div class="city"><?=$f['to_city']?></div>
-            <div class="time"><?=$f['arr']?></div>
-          </div>
-        </div>
-        <div class="flight-footer">
-          <div>
-            <div class="flight-seats">🔥 <?=$f['seats']?> kursi tersisa</div>
-            <div style="font-size:10px;color:var(--c-green);font-weight:700;margin-top:2px;">✓ Bagasi 20kg</div>
-          </div>
-          <div style="text-align:right;">
-            <div class="flight-price"><?=rp($f['price'])?></div>
-            <div class="flight-price-sub">per orang · sudah incl. pajak</div>
-          </div>
+          <div class="flight-price"><?=rp($f['price'])?></div>
+          <div class="flight-price-sub">per orang · sudah incl. pajak</div>
         </div>
       </div>
     </div>
-    <?php endforeach; ?>
-  <?php else: ?>
-    <div style="text-align:center;padding:40px 20px;">
-      <div style="font-size:48px;margin-bottom:16px;">✈️</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">Tidak ada penerbangan langsung</div>
-      <div style="font-size:12px;color:var(--c-text2);">Coba cari rute lain atau tanggal berbeda</div>
-    </div>
-  <?php endif; ?>
+  </div>
+  <?php endforeach; ?>
+</div>
+
+<!-- Edit Search Modal -->
+<div class="modal-overlay" id="editSearchModal" onclick="closeModal('editSearchModal')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Ubah Pencarian</div>
+    <form method="GET" id="editFlightForm">
+      <div class="search-field" onclick="openCityModal('flight_from')" style="cursor:pointer;margin-bottom:10px;background:rgba(255,255,255,0.65);border:1.5px solid rgba(255,255,255,0.85);border-radius:14px;padding:12px 14px;">
+        <span class="field-icon">🛫</span>
+        <div class="field-content"><label>Dari</label>
+          <input type="text" name="from" id="flightFrom" value="<?=htmlspecialchars($from)?>" readonly style="cursor:pointer;background:transparent;border:none;outline:none;font-family:var(--f);font-weight:600;">
+        </div>
+      </div>
+      <div class="search-field" onclick="openCityModal('flight_to')" style="cursor:pointer;margin-bottom:10px;background:rgba(255,255,255,0.65);border:1.5px solid rgba(255,255,255,0.85);border-radius:14px;padding:12px 14px;">
+        <span class="field-icon">🛬</span>
+        <div class="field-content"><label>Ke</label>
+          <input type="text" name="to" id="flightTo" value="<?=htmlspecialchars($to)?>" readonly style="cursor:pointer;background:transparent;border:none;outline:none;font-family:var(--f);font-weight:600;">
+        </div>
+      </div>
+      <input type="hidden" name="from_code" id="flightFromCode" value="">
+      <input type="hidden" name="to_code" id="flightToCode" value="">
+      <div style="margin-bottom:10px;background:rgba(255,255,255,0.65);border:1.5px solid rgba(255,255,255,0.85);border-radius:14px;padding:12px 14px;">
+        <label style="font-size:10px;color:var(--c-text3);font-weight:700;display:block;margin-bottom:4px;">Tanggal Berangkat</label>
+        <input type="date" name="dep_date" value="<?=$dep?>" min="<?=$today?>" style="width:100%;border:none;background:transparent;font-family:var(--f);font-size:14px;font-weight:600;outline:none;">
+      </div>
+      <button type="submit" class="btn-primary">Cari Penerbangan</button>
+    </form>
   </div>
 </div>
 
@@ -219,286 +136,243 @@ select {
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-title">Filter Penerbangan</div>
-    <form method="GET" id="filterForm">
-      <input type="hidden" name="from" id="filterFrom" value="<?=htmlspecialchars($from)?>">
-      <input type="hidden" name="to" id="filterTo" value="<?=htmlspecialchars($to)?>">
-      <input type="hidden" name="dep_date" id="filterDepDate" value="<?=$dep?>">
+    <form method="GET">
+      <input type="hidden" name="from" value="<?=htmlspecialchars($from)?>">
+      <input type="hidden" name="to" value="<?=htmlspecialchars($to)?>">
+      <input type="hidden" name="dep_date" value="<?=$dep?>">
       <div class="filter-group">
         <div class="filter-group-title">Urutkan</div>
-        <label class="sort-opt"><input type="radio" name="sort" value="recommended" <?=$sort==='recommended'?'checked':''?>> ✦ Terbaik</label>
-        <label class="sort-opt"><input type="radio" name="sort" value="price_asc" <?=$sort==='price_asc'?'checked':''?>> 💰 Harga Termurah</label>
-        <label class="sort-opt"><input type="radio" name="sort" value="price_desc" <?=$sort==='price_desc'?'checked':''?>> 💸 Harga Termahal</label>
+        <?php foreach(['recommended'=>'✦ Terbaik','price_asc'=>'💰 Harga Termurah','price_desc'=>'💸 Harga Termahal'] as $v=>$l): ?>
+        <label class="sort-opt"><input type="radio" name="sort" value="<?=$v?>" <?=$sort===$v?'checked':''?>><?=$l?></label>
+        <?php endforeach; ?>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Maskapai</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <?php foreach(array_unique(array_column($FLIGHTS,'airline')) as $al): ?>
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r-md);border:1.5px solid rgba(0,0,0,0.08);background:rgba(255,255,255,0.60);cursor:pointer;font-size:13px;font-weight:700;">
+            <input type="checkbox" name="airline[]" value="<?=$al?>" checked style="accent-color:var(--a-red);"> <?=$al?>
+          </label>
+          <?php endforeach; ?>
+        </div>
       </div>
       <button type="submit" class="btn-primary">Terapkan Filter</button>
     </form>
   </div>
 </div>
 
-<!-- City Selection Modal -->
-<div class="modal-overlay" id="cityModal" onclick="closeCityModal()">
-  <div class="modal-sheet" style="border-radius: 28px;" onclick="event.stopPropagation()">
+<!-- Flight Checkout Modal -->
+<div class="modal-overlay" id="flightCheckoutModal" onclick="closeModal('flightCheckoutModal')">
+  <div class="modal-sheet" onclick="event.stopPropagation()" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="cityModalTitle">Pilih Kota Asal</div>
-    
-    <!-- Search input -->
-    <div class="search-field" style="margin-bottom: 16px;">
-      <span class="field-icon" id="cityModalIcon">🛫</span>
-      <div class="field-content" style="position: relative;">
-        <label id="cityModalLabel">Cari kota atau bandara</label>
-        <input type="text" id="citySearchInput" placeholder="Ketik nama kota atau kode bandara..." autocomplete="off" 
-               style="width:100%;background:none;border:none;outline:none;color:var(--c-text);font-family:var(--f);font-size:13px;font-weight:700;padding:0;">
-        <div id="autocompleteResults" class="autocomplete-list"></div>
-      </div>
-    </div>
-    
-    <!-- Popular cities -->
-    <div style="margin-top: 8px;">
-      <div style="font-size: 11px; color: var(--c-text3); font-weight: 700; margin-bottom: 12px; padding: 0 4px;">✈️ Kota Populer</div>
-      <div id="popularCities" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <?php foreach($popularCities as $city): ?>
-        <div class="city-chip" data-city="<?=htmlspecialchars($city['city'])?>" data-code="<?=$city['code']?>">
-          <?=$city['city']?> (<?=$city['code']?>)
+    <div class="modal-title">Pesan Tiket Pesawat</div>
+
+    <!-- Flight summary -->
+    <div class="glass" id="fcSummary" style="border-radius:var(--r-lg);padding:14px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:800;" id="fcAirline">-</div>
+          <div style="font-size:10px;color:var(--c-text3);" id="fcClass">-</div>
         </div>
-        <?php endforeach; ?>
+        <div style="font-size:20px;" id="fcLogo">✈️</div>
       </div>
-    </div>
-    
-    <!-- All cities list -->
-    <div style="margin-top: 20px;">
-      <div style="font-size: 11px; color: var(--c-text3); font-weight: 700; margin-bottom: 12px; padding: 0 4px;">🌍 Semua Kota</div>
-      <div id="allCitiesList" style="max-height: 300px; overflow-y: auto;">
-        <?php foreach($INDONESIA_CITIES as $city): ?>
-        <div class="autocomplete-item" data-city="<?=htmlspecialchars($city['city'])?>" data-code="<?=$city['code']?>" 
-             style="cursor:pointer; padding: 10px 12px;">
-          <div class="autocomplete-city"><?=$city['city']?></div>
-          <div class="autocomplete-code"><?=$city['code']?> · <?=$city['airport']?></div>
+      <div class="flight-route" style="margin-bottom:8px;">
+        <div class="route-end">
+          <div class="code" id="fcFrom">-</div>
+          <div class="city" id="fcFromCity">-</div>
+          <div class="time" id="fcDep">-</div>
         </div>
-        <?php endforeach; ?>
+        <div class="route-mid">
+          <div class="route-line"><div class="route-dot"></div><div class="route-dash"></div><div class="route-plane">✈</div><div class="route-dash"></div><div class="route-dot"></div></div>
+          <div class="route-dur" id="fcDur">-</div>
+        </div>
+        <div class="route-end" style="text-align:right;">
+          <div class="code" id="fcTo">-</div>
+          <div class="city" id="fcToCity">-</div>
+          <div class="time" id="fcArr">-</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(0,0,0,0.06);padding-top:10px;display:flex;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--c-text2);font-weight:600;" id="fcDate">-</span>
+        <span style="font-size:16px;font-weight:700;color:var(--a-main2);" id="fcPrice">-</span>
       </div>
     </div>
+
+    <!-- Passenger data -->
+    <form method="POST" action="confirm_flight.php" id="fcForm">
+      <input type="hidden" name="flight_id" id="fcFlightId">
+      <input type="hidden" name="dep_date" value="<?=$dep?>">
+      <div class="form-sec-label">Data Penumpang</div>
+      <div class="form-card glass" style="border-radius:var(--r-lg);overflow:hidden;margin-bottom:16px;">
+        <div class="form-group">
+          <div class="form-label-row">Nama Lengkap</div>
+          <input class="form-input" type="text" name="pax_name" id="fcName" placeholder="Nama sesuai KTP/Paspor" required>
+        </div>
+        <div class="form-group">
+          <div class="form-label-row">Email</div>
+          <input class="form-input" type="email" name="pax_email" id="fcEmail" placeholder="email@kamu.com" required>
+        </div>
+        <div class="form-group" style="border-bottom:none;">
+          <div class="form-label-row">Nomor HP</div>
+          <input class="form-input" type="tel" name="pax_phone" id="fcPhone" placeholder="+62 8xx-xxxx-xxxx" required>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="form-sec-label">Metode Pembayaran</div>
+      <div class="payment-options glass" style="border-radius:var(--r-lg);margin-bottom:16px;">
+        <div class="payment-option selected" onclick="selectPayment(this)">
+          <input type="radio" name="payment_method" value="ovo" checked>
+          <div class="pay-icon" style="background:rgba(98,0,234,.1)">💜</div>
+          <div><div class="pay-name">OVO</div><div class="pay-desc">Bayar dengan saldo OVO</div></div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+          <input type="radio" name="payment_method" value="gopay">
+          <div class="pay-icon" style="background:rgba(0,170,79,.1)">💚</div>
+          <div><div class="pay-name">GoPay</div><div class="pay-desc">Bayar dengan saldo GoPay</div></div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+          <input type="radio" name="payment_method" value="transfer_bca">
+          <div class="pay-icon" style="background:rgba(0,82,165,.1)">🏦</div>
+          <div><div class="pay-name">Transfer BCA</div><div class="pay-desc">Virtual Account otomatis</div></div>
+        </div>
+        <div class="payment-option" style="border-bottom:none;" onclick="selectPayment(this)">
+          <input type="radio" name="payment_method" value="credit_card">
+          <div class="pay-icon" style="background:rgba(255,149,0,.1)">💳</div>
+          <div><div class="pay-name">Kartu Kredit/Debit</div><div class="pay-desc">Visa, Mastercard, JCB</div></div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="checkout-summary glass" style="border-radius:var(--r-lg);margin-bottom:16px;">
+        <div class="cs-row"><span class="l">Harga tiket</span><span class="r" id="fcTotalDisp">-</span></div>
+        <div class="cs-row"><span class="l">Pajak & biaya</span><span class="r">Sudah termasuk</span></div>
+        <div class="cs-total"><span class="l">Total</span><span class="r" id="fcGrandTotal">-</span></div>
+        <div class="cs-incl">✓ Harga sudah termasuk semua pajak</div>
+      </div>
+      <button type="submit" class="btn-primary">Konfirmasi Pemesanan →</button>
+    </form>
   </div>
 </div>
 
-<?=nav('flights')?>
+<!-- City picker modal (shared) -->
+<div class="modal-overlay" id="cityModal" onclick="closeCityModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()" style="max-height:85vh;display:flex;flex-direction:column;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="cityModalTitle">Pilih Kota</div>
+    <div style="padding:0 0 12px;">
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.7);border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:10px 14px;">
+        <svg width="16" height="16" fill="none" stroke="var(--c-text3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="citySearch" placeholder="Cari kota..." oninput="filterCities()"
+          style="border:none;background:transparent;outline:none;width:100%;font-size:14px;font-family:var(--f);font-weight:500;color:var(--c-text);">
+      </div>
+    </div>
+    <div id="cityList" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:4px;padding-right:2px;"></div>
+  </div>
+</div>
+
+<?=nav('')?>
 <script src="assets/app.js"></script>
 <script>
-// Data kota dari PHP
-const indonesiaCities = <?= json_encode($INDONESIA_CITIES) ?>;
+const CITIES_FLIGHT = [
+  {name:'Surabaya',sub:'Jawa Timur',code:'SUB'},
+  {name:'Jakarta',sub:'DKI Jakarta',code:'CGK'},
+  {name:'Bali',sub:'Bali',code:'DPS'},
+  {name:'Bandung',sub:'Jawa Barat',code:'BDO'},
+  {name:'Yogyakarta',sub:'DI Yogyakarta',code:'JOG'},
+  {name:'Medan',sub:'Sumatera Utara',code:'KNO'},
+  {name:'Makassar',sub:'Sulawesi Selatan',code:'UPG'},
+  {name:'Semarang',sub:'Jawa Tengah',code:'SRG'},
+  {name:'Palembang',sub:'Sumatera Selatan',code:'PLM'},
+  {name:'Manado',sub:'Sulawesi Utara',code:'MDC'},
+  {name:'Balikpapan',sub:'Kalimantan Timur',code:'BPN'},
+  {name:'Lombok',sub:'Nusa Tenggara Barat',code:'LOP'},
+  {name:'Batam',sub:'Kepulauan Riau',code:'BTH'},
+  {name:'Solo',sub:'Jawa Tengah',code:'SOC'},
+  {name:'Malang',sub:'Jawa Timur',code:'MLG'},
+];
 
-let currentSearchType = 'from';
-let selectedFrom = '<?= htmlspecialchars($from) ?>';
-let selectedTo = '<?= htmlspecialchars($to) ?>';
-let selectedDate = '<?= $dep ?>';
+let cityModalTarget = null;
+let allCities = CITIES_FLIGHT;
 
-// Sort chips
-document.querySelectorAll('.sort-chip').forEach(chip => {
-    chip.addEventListener('click', function(e) {
-        e.preventDefault();
-        const sort = this.dataset.sort;
-        const url = new URL(window.location.href);
-        url.searchParams.set('sort', sort);
-        window.location.href = url.toString();
+function openCityModal(target) {
+  cityModalTarget = target;
+  const titles = {flight_from:'Pilih Kota Asal', flight_to:'Pilih Kota Tujuan'};
+  document.getElementById('cityModalTitle').textContent = titles[target] || 'Pilih Kota';
+  document.getElementById('citySearch').value = '';
+  renderCities(CITIES_FLIGHT);
+  toggleModal('cityModal');
+}
+function closeCityModal() { closeModal('cityModal'); }
+function renderCities(cities) {
+  const list = document.getElementById('cityList');
+  list.innerHTML = cities.map(c => {
+    return `<div onclick='selectCity(${JSON.stringify(c)})' style="display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,0.65);border:1.5px solid rgba(255,255,255,0.85);cursor:pointer;" ontouchstart="this.style.background='rgba(168,216,200,0.35)'" ontouchend="this.style.background='rgba(255,255,255,0.65)'">
+      <div>
+        <div style="font-size:14px;font-weight:700;">${c.name}</div>
+        <div style="font-size:11px;color:var(--c-text3);">${c.sub}</div>
+      </div>
+      <span style="font-size:12px;font-weight:800;color:var(--a-main2);background:rgba(123,159,212,0.15);padding:3px 8px;border-radius:8px;">${c.code}</span>
+    </div>`;
+  }).join('');
+}
+function filterCities() {
+  const q = document.getElementById('citySearch').value.toLowerCase();
+  renderCities(CITIES_FLIGHT.filter(c => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)));
+}
+function selectCity(c) {
+  if (cityModalTarget === 'flight_from') {
+    document.getElementById('flightFrom').value = c.code + ' - ' + c.name;
+    document.getElementById('flightFromCode').value = c.code;
+  } else {
+    document.getElementById('flightTo').value = c.code + ' - ' + c.name;
+    document.getElementById('flightToCode').value = c.code;
+  }
+  closeCityModal();
+}
+
+// Flight booking checkout modal
+function bookFlight(id, f) {
+  document.getElementById('fcFlightId').value = id;
+  document.getElementById('fcAirline').textContent = f.logo + ' ' + f.airline;
+  document.getElementById('fcClass').textContent = f.airline_code + ' · ' + f.flight_class;
+  document.getElementById('fcLogo').textContent = f.logo;
+  document.getElementById('fcFrom').textContent = f.from;
+  document.getElementById('fcFromCity').textContent = f.from_city;
+  document.getElementById('fcDep').textContent = f.dep;
+  document.getElementById('fcTo').textContent = f.to;
+  document.getElementById('fcToCity').textContent = f.to_city;
+  document.getElementById('fcArr').textContent = f.arr;
+  document.getElementById('fcDur').textContent = f.duration;
+  document.getElementById('fcDate').textContent = '<?=fd($dep)?>';
+  const priceStr = 'Rp ' + f.price.toLocaleString('id-ID');
+  document.getElementById('fcPrice').textContent = priceStr;
+  document.getElementById('fcTotalDisp').textContent = priceStr;
+  document.getElementById('fcGrandTotal').textContent = priceStr;
+
+  // Prefill from session if available
+  <?php if(isset($_SESSION['saved_guest'])): ?>
+  document.getElementById('fcName').value = '<?=addslashes($_SESSION['saved_guest']['name'])?>';
+  document.getElementById('fcEmail').value = '<?=addslashes($_SESSION['saved_guest']['email'])?>';
+  document.getElementById('fcPhone').value = '<?=addslashes($_SESSION['saved_guest']['phone'])?>';
+  <?php endif; ?>
+
+  toggleModal('flightCheckoutModal');
+}
+
+// Handle flight form submission → store booking in session via confirm_flight.php
+document.getElementById('fcForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fd = new FormData(this);
+  fetch('confirm_flight.php', { method:'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) window.location.href = 'confirm.php?type=flight&booking_id=' + data.booking_id;
+      else alert('Terjadi kesalahan, silakan coba lagi.');
+    }).catch(() => {
+      // Fallback: submit normally
+      this.submit();
     });
 });
-
-function openCityModal(type) {
-    currentSearchType = type;
-    const modal = document.getElementById('cityModal');
-    const title = document.getElementById('cityModalTitle');
-    const icon = document.getElementById('cityModalIcon');
-    const label = document.getElementById('cityModalLabel');
-    
-    if (type === 'from') {
-        title.innerHTML = 'Pilih Kota Asal';
-        icon.innerHTML = '🛫';
-        label.innerHTML = 'Dari';
-    } else {
-        title.innerHTML = 'Pilih Kota Tujuan';
-        icon.innerHTML = '🛬';
-        label.innerHTML = 'Ke';
-    }
-    
-    document.getElementById('citySearchInput').value = '';
-    document.getElementById('autocompleteResults').classList.remove('show');
-    modal.classList.add('open');
-    setTimeout(() => document.getElementById('citySearchInput').focus(), 100);
-}
-
-function closeCityModal() {
-    document.getElementById('cityModal').classList.remove('open');
-}
-
-function selectCity(cityName, cityCode) {
-    if (currentSearchType === 'from') {
-        selectedFrom = cityName;
-        document.querySelector('#tab-flight input[name="from"]').value = cityName;
-    } else {
-        selectedTo = cityName;
-        document.querySelector('#tab-flight input[name="to"]').value = cityName;
-    }
-    closeCityModal();
-    updateRouteDisplay();
-    performSearch();
-}
-
-function updateRouteDisplay() {
-    document.getElementById('routeDisplay').innerHTML = `${selectedFrom} → ${selectedTo}`;
-}
-
-function performSearch() {
-    const form = document.querySelector('#tab-flight .search-form');
-    if (form) {
-        form.submit();
-    }
-}
-
-function filterCities(searchTerm) {
-    const results = indonesiaCities.filter(city => 
-        city.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        city.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        city.airport.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    const container = document.getElementById('autocompleteResults');
-    
-    if (results.length === 0 && searchTerm.length > 0) {
-        container.innerHTML = '<div class="autocomplete-item" style="color: var(--c-text3); text-align:center;">Tidak ditemukan</div>';
-        container.classList.add('show');
-        return;
-    }
-    
-    if (searchTerm.length === 0) {
-        container.classList.remove('show');
-        return;
-    }
-    
-    container.innerHTML = results.slice(0, 10).map(city => `
-        <div class="autocomplete-item" onclick="selectCity('${city.city.replace(/'/g, "\\'")}', '${city.code}')">
-            <div class="autocomplete-city">${city.city}</div>
-            <div class="autocomplete-code">${city.code} · ${city.airport}</div>
-        </div>
-    `).join('');
-    
-    container.classList.add('show');
-}
-
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Replace form with enhanced version
-    const flightTab = document.getElementById('tab-flight');
-    if (flightTab) {
-        flightTab.innerHTML = `
-            <form class="search-form" method="GET" action="flights.php" id="flightSearchForm">
-                <div class="search-row">
-                    <div class="search-field half" onclick="openCityModal('from')" style="cursor: pointer;">
-                        <span class="field-icon">🛫</span>
-                        <div class="field-content">
-                            <label>Dari</label>
-                            <input type="text" name="from" placeholder="SUB - Surabaya" value="${selectedFrom.replace(/'/g, "\\'")}" readonly style="background:transparent;cursor:pointer;font-weight:700;">
-                        </div>
-                    </div>
-                    <div class="search-field half" onclick="openCityModal('to')" style="cursor: pointer;">
-                        <span class="field-icon">🛬</span>
-                        <div class="field-content">
-                            <label>Ke</label>
-                            <input type="text" name="to" placeholder="CGK - Jakarta" value="${selectedTo.replace(/'/g, "\\'")}" readonly style="background:transparent;cursor:pointer;font-weight:700;">
-                        </div>
-                    </div>
-                </div>
-                <div class="search-row">
-                    <div class="search-field half">
-                        <span class="field-icon">📅</span>
-                        <div class="field-content">
-                            <label>Berangkat</label>
-                            <input type="date" name="dep_date" value="${selectedDate}" onchange="updateDate(this.value)">
-                        </div>
-                    </div>
-                    <div class="search-field half">
-                        <span class="field-icon">👤</span>
-                        <div class="field-content">
-                            <label>Penumpang</label>
-                            <select name="pax">
-                                <option>1 Dewasa</option>
-                                <option>2 Dewasa</option>
-                                <option>3 Dewasa</option>
-                                <option>4 Dewasa</option>
-                                <option>5 Dewasa</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    Cari Penerbangan
-                </button>
-            </form>
-        `;
-    }
-    
-    // Setup search input for autocomplete
-    const searchInput = document.getElementById('citySearchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            filterCities(e.target.value);
-        });
-        
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const firstItem = document.querySelector('#autocompleteResults .autocomplete-item');
-                if (firstItem && firstItem.onclick) {
-                    firstItem.click();
-                }
-            }
-        });
-    }
-    
-    // Setup popular city chips
-    document.querySelectorAll('.city-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-            const city = this.dataset.city;
-            const code = this.dataset.code;
-            selectCity(city, code);
-        });
-    });
-    
-    // Setup all cities list items
-    document.querySelectorAll('#allCitiesList .autocomplete-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const city = this.dataset.city;
-            const code = this.dataset.code;
-            selectCity(city, code);
-        });
-    });
-    
-    // Close autocomplete when clicking outside
-    document.addEventListener('click', function(e) {
-        const container = document.getElementById('autocompleteResults');
-        const input = document.getElementById('citySearchInput');
-        if (container && input && !container.contains(e.target) && e.target !== input) {
-            container.classList.remove('show');
-        }
-    });
-});
-
-function updateDate(date) {
-    selectedDate = date;
-    const dateObj = new Date(date);
-    const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById('dateDisplay').innerHTML = formattedDate + ' · ' + document.getElementById('flightCount').innerText + ' penerbangan';
-}
-
-function bookFlight(id) {
-    alert('Pemesanan tiket pesawat ID #' + id + '\n\nFitur ini akan mengarahkan ke halaman checkout pesawat.');
-}
-
-function toggleModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.toggle('open');
-}
-
-function closeModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.remove('open');
-}
 </script>
 </body></html>

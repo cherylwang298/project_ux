@@ -7,6 +7,7 @@ $bid=$_GET['id']??'';
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Pembatalan Berhasil — StayEase</title><?=$font?><?=$css?>
 </head><body>
+<?=$blobs?>
 <?=header_bar('Pembatalan')?>
 <div style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
   <div style="width:80px;height:80px;border-radius:50%;background:var(--c-red-soft);border:2px solid var(--c-red-border);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:36px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;">✕</div>
