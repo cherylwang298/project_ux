@@ -346,23 +346,33 @@
     </nav>
 </div>
 
+<script src="db.js"></script>
 <script>
-async function loadBookings() {
-    try {
-        const response = await fetch('bookings.json');
-        
-        // Cek kalau fetch gagal (misal file gak ada)
-        if (!response.ok) throw new Error('File tidak ditemukan');
-        
-        const bookings = await response.json();
-        const container = document.getElementById('booking-container');
+function loadBookings() {
+    // 1. Cek apakah sudah ada data pemesanan di localStorage
+    let storedData = localStorage.getItem('agoda_bookings');
+    
+    // 2. Jika kosong (baru pertama kali buka web), tarik data dari db.js lalu simpan ke localStorage
+    if (!storedData) {
+        localStorage.setItem('agoda_bookings', JSON.stringify(initialDummyBookings));
+        storedData = JSON.stringify(initialDummyBookings);
+    }
+    
+    const bookings = JSON.parse(storedData);
+    const container = document.getElementById('booking-container');
 
-        if (bookings.length === 0) {
-            showEmptyState(container);
-            return;
-        }
+    // 3. Tampilkan empty state jika benar-benar kosong (misal tester menghapus semua pesanan nanti)
+    if (bookings.length === 0) {
+        showEmptyState(container);
+        return;
+    }
 
-        bookings.reverse().forEach(booking => {
+    // 4. Render kartu pesanan
+    bookings.reverse().forEach(booking => {
+        // Cocokkan villaId dengan database di db.js
+        const villaDetail = villaDatabase.find(v => v.id === booking.villaId);
+        
+        if (villaDetail) {
             const formattedTotal = new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
@@ -371,11 +381,11 @@ async function loadBookings() {
 
             container.innerHTML += `
                 <div class="booking-card">
-                    <img src="${booking.imageUrl}" class="booking-image" alt="Villa Image">
+                    <img src="${villaDetail.imageUrl}" class="booking-image" alt="Villa Image">
                     
                     <div class="booking-detail">
                         <p class="villa-type">📍 Berhasil Dipesan</p>
-                        <h2 class="villa-name">${booking.villaName}</h2>
+                        <h2 class="villa-name">${villaDetail.name}</h2>
                         <p class="villa-location">📅 ${booking.checkin} → ${booking.checkout}</p>
                         
                         <div class="divider"></div>
@@ -400,12 +410,8 @@ async function loadBookings() {
                     </div>
                 </div>
             `;
-        });
-    } catch (error) {
-        // Tampilkan empty state kalau json belum dibuat/error
-        const container = document.getElementById('booking-container');
-        showEmptyState(container);
-    }
+        }
+    });
 }
 
 function showEmptyState(container) {
@@ -419,6 +425,7 @@ function showEmptyState(container) {
     `;
 }
 
+// Jalankan fungsi saat halaman dimuat
 loadBookings();
 </script>
 

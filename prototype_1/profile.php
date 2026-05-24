@@ -126,6 +126,7 @@
             object-fit: cover;
             border: 3px solid rgba(255,255,255,0.9);
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: white; /* Biar pinggirannya bersih */
         }
 
         .edit-avatar-btn {
@@ -221,6 +222,7 @@
             padding: 16px 20px;
             cursor: pointer;
             transition: background 0.2s ease;
+            text-decoration: none; /* Penting untuk tag a */
         }
 
         .menu-item:not(:last-child) {
@@ -326,10 +328,10 @@
 
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500" alt="Profile" class="avatar-img">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Profile" class="avatar-img">
                     <div class="edit-avatar-btn">✏️</div>
                 </div>
-                <h2 class="user-name">Jessica Gabriel</h2>
+                <h2 class="user-name" id="display-name">Jessica Gabriel</h2>
                 <p class="user-email">c14240045@john.petra.ac.id</p>
                 
                 <div class="stats-row">
@@ -347,13 +349,15 @@
             <div class="menu-section">
                 <h3 class="menu-section-title">Akun Saya</h3>
                 <div class="menu-card">
-                    <div class="menu-item">
+                    
+                    <a href="edit_profile.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">👤</div>
                             <span class="menu-text">Informasi Pribadi</span>
                         </div>
                         <div class="menu-arrow">❯</div>
-                    </div>
+                    </a>
+
                     <div class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">📝</div>
@@ -426,5 +430,13 @@
         </nav>
     </div>
 
+    <script>
+        window.onload = () => {
+            const savedName = localStorage.getItem('agoda_user_name');
+            if(savedName) {
+                document.getElementById('display-name').innerText = savedName;
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,8 +1,6 @@
 [
     {
         "villaId": "v-003",
-        "villaName": "Canggu Bliss Luxury Villa",
-        "imageUrl": "https:\/\/images.unsplash.com\/photo-1537996194471-e657df975ab4?w=500",
         "checkin": "2026-07-21",
         "checkout": "2026-07-25",
         "guest": "5 Guests",
@@ -12,8 +10,6 @@
     },
     {
         "villaId": "v-002",
-        "villaName": "Green Pine Family Homestay",
-        "imageUrl": "https:\/\/images.unsplash.com\/photo-1512917774080-9991f1c4c750?w=500",
         "checkin": "2026-07-20",
         "checkout": "2026-07-23",
         "guest": "3 Guests",
@@ -23,8 +19,6 @@
     },
     {
         "villaId": "v-003",
-        "villaName": "Canggu Bliss Luxury Villa",
-        "imageUrl": "https:\/\/images.unsplash.com\/photo-1537996194471-e657df975ab4?w=500",
         "checkin": "2026-07-20",
         "checkout": "2026-07-22",
         "guest": "3 Guests",
