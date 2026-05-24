@@ -411,10 +411,18 @@
                 <div class="filter-group">
                     <p class="group-label">Fasilitas Utama</p>
                     <div class="checkbox-container">
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Wifi"> 📶 WiFi</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Pool"> 🏊‍♂️ Pool</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Garden"> 🌳 Garden</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Gym"> 🏋️‍♂️ Gym</label>
+<label class="facility-option"><input type="checkbox" name="facility" value="Wifi"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12.55a11 11 0 0114.08 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M1.42 9a16 16 0 0121.16 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M8.53 16.11a6 6 0 016.95 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="20" r="0.5"/></svg>
+                            WiFi</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Pool"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 17c2 2 4 2 6 0s4-2 6 0 4 2 6 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M3 10c2-2 4-2 6 0s4 2 6 0 4-2 6 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="6" r="1.5" fill="#0c2461"/></svg>
+                            Pool</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Garden"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 21s-7-4.6-7-11a5 5 0 0110 0c0-1.5 1.6-3 3-3 1.8 0 3 1.6 3 3 0 6.4-9 11-9 11z" fill="none" stroke="#0c2461" stroke-width="2" stroke-linejoin="round"/></svg>
+                            Garden</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Gym"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 10h3m12 0h3" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M6 7v10m12-10v10" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M8 9h8" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/></svg>
+                            Gym</label>
                     </div>
                 </div>
             </div>

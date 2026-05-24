@@ -192,6 +192,30 @@
       font-weight: 700;
     }
 
+    /* ── HERO SLIDER ── */
+    .hero-slide {
+      min-width: 100%;
+      height: 148px;
+      position: relative;
+      flex-shrink: 0;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+    .hero-slide img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-slide-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(13,40,120,.55), rgba(30,87,185,.25));
+      padding: 18px 20px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hero-dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: rgba(12,36,97,0.2); transition: all 0.3s; cursor: pointer;
+    }
+    .hero-dot.active { width: 18px; background: #1D4ED8; }
+
     /* ── HERO BANNER ── */
     .hero {
       margin: 16px 16px 0;
@@ -494,6 +518,189 @@
     .stack-group:hover .sc:nth-child(2) {
       transform: rotate(1deg) translateY(-2px);
       transition: transform .2s .04s;
+    }
+
+    /* ── PROMO SLIDER ── */
+    .promo-slider-wrap {
+      margin: 0 16px;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .promo-track {
+      display: flex;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .promo-slide {
+      min-width: 100%;
+      height: 130px;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .promo-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .promo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(12,36,97,0.78) 0%, rgba(12,36,97,0.25) 70%, transparent 100%);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .promo-badge {
+      display: inline-block;
+      background: #F59E0B;
+      color: #0c2461;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      width: fit-content;
+    }
+
+    .promo-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .promo-sub {
+      font-size: 10px;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .promo-dots {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .promo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(12,36,97,0.2);
+      transition: all 0.3s;
+    }
+
+    .promo-dot.active {
+      width: 18px;
+      background: #1D4ED8;
+    }
+
+    /* ── PROMO DETAIL MODAL ── */
+    .promo-modal {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(12,36,97,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 450;
+      align-items: flex-end;
+    }
+
+    .promo-modal.active { display: flex; }
+
+    .promo-sheet {
+      width: 100%;
+      background: #F5F9FF;
+      border-radius: 32px 32px 0 0;
+      padding: 0 0 32px;
+      animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .promo-sheet-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 32px 32px 0 0;
+    }
+
+    .promo-sheet-body {
+      padding: 20px 20px 0;
+    }
+
+    .promo-sheet-badge {
+      display: inline-block;
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .promo-sheet-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c2461;
+      margin-bottom: 8px;
+    }
+
+    .promo-sheet-desc {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .promo-code-box {
+      background: #EFF6FF;
+      border: 1.5px dashed #2563EB;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .promo-code-label { font-size: 10px; color: #475569; }
+    .promo-code-val { font-size: 15px; font-weight: 800; color: #1D4ED8; letter-spacing: 1px; }
+    .promo-copy-btn {
+      background: #1D4ED8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .promo-close-btn {
+      width: 100%;
+      padding: 13px;
+      background: #0c2461;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0 20px;
+      width: calc(100% - 40px);
     }
 
     /* ── FEATURED / BIG CARD ── */
@@ -956,13 +1163,13 @@
     .detail-header {
       position: relative;
       width: 100%;
-      height: 340px;
     }
 
     .detail-header img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      display: block;
+      object-fit: unset;
     }
 
     .detail-close {
@@ -993,16 +1200,14 @@
 
     .detail-glass-panel {
       position: relative;
-      margin-top: -55px;
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur) saturate(170%);
-      -webkit-backdrop-filter: var(--glass-blur) saturate(170%);
-      border-top: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.6);
       border-radius: 32px 32px 0 0;
       padding: 24px 20px 100px;
       z-index: 10;
-      box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.06);
-      min-height: 450px;
+      box-shadow: 0 -10px 32px rgba(0,0,0,0.06);
     }
 
     .panel-handle {
@@ -1279,17 +1484,10 @@
         <div class="avatar">JP</div>
       </div>
 
-      <div class="hero">
-        <div class="hero-eyebrow">Destinasi Terbaik</div>
-        <h2>Explore Beautiful<br>Staycation in Indonesia</h2>
-        <p>Temukan hotel aesthetic, villa cozy,<br>dan pengalaman liburan terbaik.</p>
-        <div class="hero-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" />
-          </svg>
-          Explore Now
-        </div>
+      <div class="hero" id="heroSlider" style="padding:0; overflow:hidden; min-height:148px;">
+        <div id="heroTrack" style="display:flex; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);"></div>
       </div>
+      <div style="display:flex; justify-content:center; gap:5px; margin-top:8px;" id="heroDots"></div>
 
       <div class="search-wrap">
         <div class="searchbar">
@@ -1319,6 +1517,15 @@
       </div>
 
       <div class="stack-row" id="stackRow"></div>
+
+      <div class="sec-head">
+        <div class="title">Promo & Diskon</div>
+      </div>
+
+      <div class="promo-slider-wrap" id="promoSliderWrap">
+        <div class="promo-track" id="promoTrack"></div>
+      </div>
+      <div class="promo-dots" id="promoDots"></div>
 
       <div class="sec-head">
         <div class="title">Rekomendasi Untukmu</div>
@@ -1451,12 +1658,32 @@
           <div class="modal-price-wrap">
             <div class="detail-price">Rp <span id="detailPrice">000</span>rb <span>/ malam</span></div>
           </div>
-          <button class="detail-button" onclick="bookDetail()">Pesan Sekarang</button>
+          <button class="detail-button" onclick="bookDetail(currentProp)">Pesan Sekarang</button>
         </div>
 
       </div>
     </div>
 
+
+    <!-- PROMO DETAIL MODAL -->
+    <div class="promo-modal" id="promoModal">
+      <div class="promo-sheet">
+        <img class="promo-sheet-img" id="promoModalImg" src="" alt="Promo">
+        <div class="promo-sheet-body">
+          <div class="promo-sheet-badge" id="promoModalBadge"></div>
+          <div class="promo-sheet-title" id="promoModalTitle"></div>
+          <div class="promo-sheet-desc" id="promoModalDesc"></div>
+          <div class="promo-code-box">
+            <div>
+              <div class="promo-code-label">Kode Promo</div>
+              <div class="promo-code-val" id="promoModalCode"></div>
+            </div>
+            <button class="promo-copy-btn" onclick="copyPromoCode()">Salin</button>
+          </div>
+        </div>
+        <button class="promo-close-btn" onclick="closePromoModal()">Tutup</button>
+      </div>
+    </div>
 
     <!-- CATEGORY LIST MODAL -->
     <div class="cat-modal-overlay" id="catModal">
@@ -1808,13 +2035,94 @@
         }))
       ];
 
+      // DATA WISATA HERO SLIDER
+      const heroData = [
+        { city: 'Bali', name: 'Tanah Lot', desc: 'Pura ikonik di atas batu karang tepi laut', imageUrl: 'https://images.unsplash.com/photo-1604999333679-b86d54738315?w=700' },
+        { city: 'Bali', name: 'Tegalalang Rice Terrace', desc: 'Sawah terasering hijau memukau di Ubud', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700' },
+        { city: 'Bali', name: 'Pantai Kuta', desc: 'Pantai legendaris dengan sunset terbaik', imageUrl: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=700' },
+        { city: 'Batu', name: 'Coban Rondo', desc: 'Air terjun indah di tengah hutan pinus', imageUrl: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700' },
+        { city: 'Batu', name: 'Gunung Bromo', desc: 'Pemandangan gunung berapi paling ikonik di Jawa', imageUrl: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=700' },
+        { city: 'Batu', name: 'Selecta', desc: 'Taman bunga & kolam renang sejuk pegunungan', imageUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700' },
+        { city: 'Surabaya', name: 'Taman Bungkul', desc: 'Taman kota terbaik & ruang publik favorit', imageUrl: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700' },
+        { city: 'Surabaya', name: 'Monumen Kapal Selam', desc: 'Ikon kebanggaan kota pahlawan Surabaya', imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700' },
+      ];
+
+      let heroIndex = 0, heroTimer = null;
+
+      function initHeroSlider() {
+        const track = document.getElementById('heroTrack');
+        const dots = document.getElementById('heroDots');
+        if (!track || !dots) return;
+
+        track.innerHTML = heroData.map(d => `
+          <div class="hero-slide">
+            <img src="${d.imageUrl}" alt="${d.name}">
+            <div class="hero-slide-overlay">
+              <div class="hero-eyebrow">${d.city} &bull; Destinasi Terbaik</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;line-height:1.3;margin-bottom:4px;">${d.name}</h2>
+              <p style="font-size:10px;color:rgba(255,255,255,.85);margin:0;">${d.desc}</p>
+            </div>
+          </div>
+        `).join('');
+
+        dots.innerHTML = heroData.map((_, i) =>
+          `<div class="hero-dot${i === 0 ? ' active' : ''}" onclick="goToHero(${i})"></div>`
+        ).join('');
+
+        heroTimer = setInterval(() => { heroIndex = (heroIndex + 1) % heroData.length; goToHero(heroIndex); }, 5000);
+      }
+
+      function goToHero(idx) {
+        heroIndex = idx;
+        document.getElementById('heroTrack').style.transform = `translateX(-${idx * 100}%)`;
+        document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+
+      // DATA PROMO
+      const promoData = [
+        {
+          badge: 'FLASH SALE 40%',
+          title: 'Diskon 40% Villa Bali',
+          sub: 'Berlaku s/d 31 Juli 2025',
+          code: 'BALI40',
+          desc: 'Dapatkan diskon 40% untuk semua villa di Bali. Berlaku untuk pemesanan minimal 2 malam. Tidak dapat digabung dengan promo lain.',
+          imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600'
+        },
+        {
+          badge: 'WEEKEND DEAL 25%',
+          title: 'Hotel Surabaya Hemat 25%',
+          sub: 'Khusus Sabtu & Minggu',
+          code: 'WKND25',
+          desc: 'Nikmati menginap di hotel bintang 4 & 5 Surabaya dengan harga spesial 25% off setiap akhir pekan. Check-in Jumat–Minggu.',
+          imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600'
+        },
+        {
+          badge: 'EARLY BIRD 30%',
+          title: 'Pesan Lebih Awal, Hemat 30%',
+          sub: 'Pesan 14 hari sebelumnya',
+          code: 'EARLY30',
+          desc: 'Rencanakan liburanmu lebih awal dan hemat hingga 30%! Berlaku untuk semua tipe properti jika dipesan minimal 14 hari sebelum check-in.',
+          imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600'
+        },
+        {
+          badge: 'BATU SPECIAL 20%',
+          title: 'Staycation Batu Diskon 20%',
+          sub: 'Berlaku sepanjang bulan ini',
+          code: 'BATU20',
+          desc: 'Rasakan kesejukan Kota Batu dengan harga lebih terjangkau. Diskon 20% untuk semua properti di Batu, berlaku untuk semua hari.',
+          imageUrl: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600'
+        }
+      ];
+
       // 2. KETIKA WINDOW / HALAMAN SELESAI DIMUAT
       document.addEventListener("DOMContentLoaded", () => {
+        initHeroSlider();
         initCategories();
-        applyFilterAndSearch(); // Panggil fungsi utama untuk langsung render rekomendasi
+        applyFilterAndSearch();
         initFilters();
         initSearch();
         initCategoryModal();
+        initPromoSlider();
       });
 
       // 3. LOGIKA RENDER KATEGORI TIPE PROPERTI (STACKED CARDS)
@@ -1970,7 +2278,9 @@
       }
 
       // 7. POPUP MODAL DETAIL INTERAKTIF
+      let currentProp = null;
       window.openDetail = function(prop) {
+        currentProp = prop;
         const modal = document.getElementById("detailModal");
         if (!modal) return;
 
@@ -1991,9 +2301,8 @@
         if (modal) modal.classList.remove("active");
       };
 
-      window.bookDetail = function() {
-        alert("Booking sukses! Kamar berhasil dipesan.");
-        closeDetail();
+      window.bookDetail = function(prop) {
+        window.location.href = 'booking.php?id=' + prop.id;
       };
 
       // 8. POPUP BOTTOM SHEET KATEGORI (LIHAT SEMUA KOTA)
@@ -2049,6 +2358,76 @@
         }
 
         overlay.classList.add("active");
+      };
+
+      // PROMO SLIDER LOGIC
+      let promoIndex = 0;
+      let promoTimer = null;
+
+      function initPromoSlider() {
+        const track = document.getElementById('promoTrack');
+        const dotsWrap = document.getElementById('promoDots');
+        const wrap = document.getElementById('promoSliderWrap');
+        if (!track || !dotsWrap) return;
+
+        track.innerHTML = promoData.map((p, i) => `
+          <div class="promo-slide">
+            <img src="${p.imageUrl}" alt="${p.title}">
+            <div class="promo-overlay">
+              <div class="promo-badge">${p.badge}</div>
+              <div class="promo-title">${p.title}</div>
+              <div class="promo-sub">${p.sub}</div>
+            </div>
+          </div>
+        `).join('');
+
+        dotsWrap.innerHTML = promoData.map((_, i) =>
+          `<div class="promo-dot${i === 0 ? ' active' : ''}" onclick="goToPromo(${i})"></div>`
+        ).join('');
+
+        wrap.addEventListener('click', () => openPromoModal(promoIndex));
+        startPromoTimer();
+      }
+
+      function goToPromo(idx) {
+        promoIndex = idx;
+        document.getElementById('promoTrack').style.transform = `translateX(-${idx * 100}%)`;
+        document.querySelectorAll('.promo-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === idx);
+        });
+      }
+
+      function startPromoTimer() {
+        clearInterval(promoTimer);
+        promoTimer = setInterval(() => {
+          promoIndex = (promoIndex + 1) % promoData.length;
+          goToPromo(promoIndex);
+        }, 5000);
+      }
+
+      window.openPromoModal = function(idx) {
+        const p = promoData[idx];
+        document.getElementById('promoModalImg').src = p.imageUrl;
+        document.getElementById('promoModalBadge').innerText = p.badge;
+        document.getElementById('promoModalTitle').innerText = p.title;
+        document.getElementById('promoModalDesc').innerText = p.desc;
+        document.getElementById('promoModalCode').innerText = p.code;
+        document.getElementById('promoModal').classList.add('active');
+        clearInterval(promoTimer);
+      };
+
+      window.closePromoModal = function() {
+        document.getElementById('promoModal').classList.remove('active');
+        startPromoTimer();
+      };
+
+      window.copyPromoCode = function() {
+        const code = document.getElementById('promoModalCode').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.querySelector('.promo-copy-btn');
+          btn.innerText = 'Tersalin!';
+          setTimeout(() => btn.innerText = 'Salin', 1500);
+        });
       };
 
       window.closeCategoryModalAndOpenDetail = function(prop) {

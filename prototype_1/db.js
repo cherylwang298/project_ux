@@ -345,3 +345,5 @@ const apartmentDatabase = [
     mapPosition: { top: '37%', left: '49%' }
   }
 ];
+
+const allDatabase = [...villaDatabase, ...hotelDatabase, ...apartmentDatabase];
