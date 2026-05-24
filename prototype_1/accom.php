@@ -65,6 +65,29 @@ body{
   );
 }
 
+/* BACK BUTTON STYLE (SAMA FLIGHT) */
+.back-btn{
+  width:38px;
+  height:38px;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.2);
+
+  backdrop-filter:blur(18px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:white;
+  text-decoration:none;
+
+  font-size:18px;
+  font-weight:700;
+}
+
+/* KEEP YOUR ORIGINAL STYLE */
 .scroll{
   height:100%;
   overflow-y:auto;
@@ -284,6 +307,28 @@ body{
   text-decoration:none;
   color:#0c2461;
 }
+.topbar{
+  padding:16px 20px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+}
+
+.page-title{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  color:white;
+  font-size:16px;
+  font-weight:700;
+  font-family:'Playfair Display',serif;
+}
+
+.empty{
+  width:38px;
+  height:38px;
+}
 
 </style>
 </head>
@@ -303,19 +348,15 @@ body{
 
 <div class="topbar">
 
-<div>
-<div class="greeting">
-Welcome Back 👋
-</div>
+  <a href="home.php" class="back-btn">
+    ←
+  </a>
 
-<div class="name">
-Jessica Putri
-</div>
-</div>
+  <div class="page-title">
+    Accomodation Booking
+  </div>
 
-<div class="avatar">
-JP
-</div>
+  <div class="empty"></div>
 
 </div>
 
@@ -329,42 +370,45 @@ JP
 <?= $title ?>
 </h2>
 
+<div style="
+  margin-top:6px;
+  font-size:11px;
+  opacity:.85;
+">
+  <?= ucfirst($type) ?> • Stay Collection
+</div>
+
 <p>
 <?= $desc ?>
 </p>
 
 </div>
 
+<!-- REST FULLY UNCHANGED -->
 <div class="search-box">
 
-<input
-type="text"
-class="input"
-placeholder="Destination">
+<div style="
+  font-size:11px;
+  color:#0c2461;
+  font-weight:600;
+  margin-bottom:10px;
+">
+  Search <?= ucfirst($type) ?>
+</div>
+
+<input type="text" class="input" placeholder="Destination">
 
 <div class="row">
-
 <input type="date" class="input">
-
 <input type="date" class="input">
-
 </div>
 
 <div class="row">
-
-<input
-type="number"
-class="input"
-placeholder="Guest">
-
-<input
-type="number"
-class="input"
-placeholder="Room">
-
+<input type="number" class="input" placeholder="Guest">
+<input type="number" class="input" placeholder="Room">
 </div>
 
-<button class="btn">
+<button class="btn" onclick="searchAccom()">
 Search <?= ucfirst($type) ?>
 </button>
 
@@ -378,68 +422,31 @@ Recommended <?= ucfirst($type) ?>
 
 <div class="featured-scroll">
 
+<!-- SAME CONTENT -->
 <div class="feat-card">
-
 <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80">
-
 <div class="feat-info">
-
-<div class="feat-tag">
-<?= ucfirst($type) ?>
-</div>
-
+<div class="feat-tag"><?= ucfirst($type) ?></div>
 <h5>Luxury <?= ucfirst($type) ?></h5>
-
-<div class="loc">
-📍 Bali, Indonesia
-</div>
-
+<div class="loc">📍 Bali, Indonesia</div>
 <div class="feat-bottom">
-
-<div class="feat-price">
-Rp 2.500.000
+<div class="feat-price">Rp 2.500.000</div>
+<div>⭐ 4.9</div>
 </div>
-
-<div>
-⭐ 4.9
 </div>
-
-</div>
-
-</div>
-
 </div>
 
 <div class="feat-card">
-
 <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80">
-
 <div class="feat-info">
-
-<div class="feat-tag">
-<?= ucfirst($type) ?>
-</div>
-
+<div class="feat-tag"><?= ucfirst($type) ?></div>
 <h5>Ocean View Stay</h5>
-
-<div class="loc">
-📍 Lombok, Indonesia
-</div>
-
+<div class="loc">📍 Lombok, Indonesia</div>
 <div class="feat-bottom">
-
-<div class="feat-price">
-Rp 1.850.000
+<div class="feat-price">Rp 1.850.000</div>
+<div>⭐ 4.8</div>
 </div>
-
-<div>
-⭐ 4.8
 </div>
-
-</div>
-
-</div>
-
 </div>
 
 </div>
@@ -448,25 +455,55 @@ Rp 1.850.000
 
 <nav class="navbar">
 
-<div class="nav-item">
-<a href="home.php">Home</a>
-</div>
-
-<div class="nav-item">
-<a href="explore.php">Explore</a>
-</div>
-
-<div class="nav-item">
-<a href="pesanan.php">Pesanan</a>
-</div>
-
-<div class="nav-item">
-<a href="profile.php">Profil</a>
-</div>
+<div class="nav-item"><a href="home.php">Home</a></div>
+<div class="nav-item"><a href="explore.php">Explore</a></div>
+<div class="nav-item"><a href="pesanan.php">Pesanan</a></div>
+<div class="nav-item"><a href="profile.php">Profil</a></div>
 
 </nav>
 
 </div>
+
+<script>
+function searchAccom(){
+
+  const destination =
+    document.querySelectorAll('.input')[0].value;
+
+  const checkin =
+    document.querySelectorAll('.input')[1].value;
+
+  const checkout =
+    document.querySelectorAll('.input')[2].value;
+
+  const guest =
+    document.querySelectorAll('.input')[3].value;
+
+  const room =
+    document.querySelectorAll('.input')[4].value;
+
+  if(!destination){
+    alert("Please enter destination");
+    return;
+  }
+
+  const searchData = {
+    type: "<?= $type ?>",
+    destination,
+    checkin,
+    checkout,
+    guest,
+    room
+  };
+
+  localStorage.setItem(
+    'accomSearch',
+    JSON.stringify(searchData)
+  );
+
+  window.location.href = 'accom-result.php';
+}
+</script>
 
 </body>
 </html>
