@@ -2,199 +2,195 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Flight Payment</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+  margin:0;
+  background:#b8cfe8;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:system-ui;
+}
+
+.phone{
+  width:375px;
+  height:812px;
+  border-radius:44px;
+  border:9px solid #18181b;
+  overflow:hidden;
+  position:relative;
+  background:linear-gradient(165deg,#1e57b8,#2563EB,#C5DEFF);
+  box-shadow:0 40px 80px rgba(0,0,0,.35);
+}
+
+.notch{
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  width:100px;
+  height:26px;
+  border-radius:14px;
+  background:#111;
+  z-index:10;
+}
+
+.scroll{
+  height:100%;
+  overflow-y:auto;
+  padding:60px 18px 30px;
+}
+
+.scroll::-webkit-scrollbar{ display:none; }
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:28px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.label{
+  font-size:12px;
+  color:#64748b;
+  margin-top:12px;
+}
+
+.value{
+  font-weight:700;
+  color:#0f172a;
+}
+
+.total{
+  font-size:22px;
+  color:#2563EB;
+  margin-top:4px;
+}
+
+.select{
+  width:100%;
+  height:48px;
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+  padding:0 12px;
+  margin-top:16px;
+}
+
+.button{
+  width:100%;
+  height:52px;
+  border:none;
+  border-radius:16px;
+  background:#2563EB;
+  color:white;
+  font-weight:700;
+  margin-top:16px;
+}
+</style>
 </head>
 
-<body class="bg-slate-100 min-h-screen flex justify-center items-center">
+<body>
 
-<div class="w-[375px] bg-white rounded-3xl p-6 shadow-xl">
+<div class="phone">
+<div class="notch"></div>
 
-<h1 class="text-2xl font-bold mb-6">
-Flight Payment
+<div class="scroll">
+
+<div class="card">
+
+<h1 class="text-xl font-bold mb-4">
+✈️ Flight Payment
 </h1>
 
-<div class="mb-5">
+<div class="label">Airline</div>
+<div id="airline" class="value"></div>
 
-<p class="text-gray-500 text-sm">
-Airline
-</p>
+<div class="label">Route</div>
+<div id="route" class="value"></div>
 
-<h2
-  id="airline"
-  class="font-bold text-lg"
-></h2>
+<div class="label">Passengers</div>
+<div id="passenger" class="value"></div>
 
-</div>
+<div class="label">Total Payment</div>
+<div id="total" class="total"></div>
 
-<div class="mb-5">
-
-<p class="text-gray-500 text-sm">
-Route
-</p>
-
-<h2
-  id="route"
-  class="font-semibold"
-></h2>
-
-</div>
-
-<div class="mb-5">
-
-<p class="text-gray-500 text-sm">
-Passengers
-</p>
-
-<h2
-  id="passenger"
-  class="font-semibold"
-></h2>
-
-</div>
-
-<div class="mb-6">
-
-<p class="text-gray-500 text-sm">
-Total Payment
-</p>
-
-<h2
-  id="total"
-  class="text-2xl font-bold text-blue-600"
-></h2>
-
-</div>
-
-<select
-  id="paymentMethod"
-  class="w-full h-12 border rounded-xl px-4 mb-6"
->
-
-<option value="">
-Select Payment
-</option>
-
-<option>
-Credit Card
-</option>
-
-<option>
-Bank Transfer
-</option>
-
-<option>
-E-Wallet
-</option>
-
+<select id="paymentMethod" class="select">
+<option value="">Select Payment</option>
+<option>Credit Card</option>
+<option>Bank Transfer</option>
+<option>E-Wallet</option>
 </select>
 
-<button
-  onclick="payNow()"
-  class="w-full h-12 bg-blue-600 rounded-xl text-white font-bold"
->
+<button class="button" onclick="payNow()">
 Pay Now
 </button>
 
 </div>
 
-<script>
-const booking = JSON.parse(localStorage.getItem('pendingFlightBooking'));
+</div>
+</div>
 
-if (!booking) {
+<script>
+const booking =
+  JSON.parse(localStorage.getItem('pendingFlightBooking'));
+
+if(!booking){
   window.location.href = 'flight.php';
 }
 
-document.getElementById('airline').innerText = booking.airline;
-document.getElementById('route').innerText = `${booking.from} → ${booking.to}`;
-document.getElementById('passenger').innerText = `${booking.passenger} Passenger(s)`;
-document.getElementById('total').innerText = `Rp ${booking.totalPrice.toLocaleString('id-ID')}`;
+document.getElementById('airline').innerText =
+  booking.airline;
 
-// async function payNow() {
+document.getElementById('route').innerText =
+  `${booking.from} → ${booking.to}`;
 
-//   const paymentMethod = document.getElementById('paymentMethod').value;
+document.getElementById('passenger').innerText =
+  `${booking.passenger} Passenger(s)`;
 
-//   if (!paymentMethod) {
-//     alert('Select payment method');
-//     return;
-//   }
+document.getElementById('total').innerText =
+  `Rp ${booking.totalPrice.toLocaleString('id-ID')}`;
 
-//   const payload = {
-//     ...booking,
-//     paymentMethod
-//   };
+async function payNow(){
 
-//   try {
-//     const res = await fetch('save-flight-booking.php', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(payload)
-//     });
+  const method =
+    document.getElementById('paymentMethod').value;
 
-//     const text = await response.text();
-//     console.log("RAW RESPONSE:", text);
-
-//     const result = await res.json();
-
-//     if (result.success) {
-//       localStorage.removeItem('pendingFlightBooking');
-
-//       alert('Payment Successful ✈️');
-
-//       window.location.href = 'flight.php';
-//     } else {
-//       alert(result.message || 'Failed to save booking');
-//     }
-
-//   } catch (err) {
-//     console.error(err);
-//     alert('Server error');
-//   }
-// }
-
-async function payNow() {
-
-  const paymentMethod = document.getElementById('paymentMethod').value;
-
-  if (!paymentMethod) {
+  if(!method){
     alert('Select payment method');
     return;
   }
 
   const payload = {
     ...booking,
-    paymentMethod
+    paymentMethod: method
   };
 
-  const response = await fetch('save-flight-booking.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+  const res =
+    await fetch('save-flight-booking.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
 
-  const text = await response.text();
-console.log("RAW RESPONSE:", text);
+  const text = await res.text();
+  const result = JSON.parse(text);
 
-const result = JSON.parse(text);
-
-  if (result.success) {
+  if(result.success){
     localStorage.removeItem('pendingFlightBooking');
-
     alert('Payment Successful ✈️');
-
-    window.location.href = 'flight.php';
+    window.location.href='flight.php';
   } else {
-    alert(result.message || 'Failed to save booking');
+    alert(result.message || 'Failed');
   }
 }
-
-
 </script>
 
 </body>

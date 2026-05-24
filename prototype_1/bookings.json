@@ -73,5 +73,43 @@
         "totalPrice": 3960000,
         "paymentMethod": "Credit Card",
         "bookedAt": "2026-05-24T16:06:05.331Z"
+    },
+    {
+        "type": "flight",
+        "id": "f-005",
+        "airline": "Singapore Airlines",
+        "from": "Singapore",
+        "to": "Tokyo",
+        "fromAirport": "Changi",
+        "toAirport": "Narita",
+        "departureDate": "2026-05-23",
+        "departureTime": "23:15",
+        "arrivalTime": "07:30",
+        "passenger": 3,
+        "pricePerPassenger": 4850000,
+        "subtotal": 14550000,
+        "tax": 1455000,
+        "totalPrice": 16005000,
+        "paymentMethod": "Bank Transfer",
+        "bookedAt": "2026-05-24T16:43:30.050Z"
+    },
+    {
+        "type": "flight",
+        "id": "f-002",
+        "airline": "Citilink",
+        "from": "Surabaya",
+        "to": "Bali",
+        "fromAirport": "Soekarno-Hatta",
+        "toAirport": "Ngurah Rai",
+        "departureDate": "2026-06-20",
+        "departureTime": "13:10",
+        "arrivalTime": "14:30",
+        "passenger": 2,
+        "pricePerPassenger": 720000,
+        "subtotal": 1440000,
+        "tax": 144000,
+        "totalPrice": 1584000,
+        "paymentMethod": "E-Wallet",
+        "bookedAt": "2026-05-24T16:44:21.450Z"
     }
 ]
