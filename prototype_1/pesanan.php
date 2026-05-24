@@ -516,145 +516,200 @@
 </div>
 
 <script src="db.js"></script>
+
 <script>
 let bookingDatabase = [];
 let activeMethodFilter = 'All';
 
-async function loadBookings() {
-    try {
-        const response = await fetch('bookings.json');
-        
-        // Cek kalau fetch gagal (misal file gak ada)
-        if (!response.ok) throw new Error('File tidak ditemukan');
-        
-        bookingDatabase = await response.json();
-        renderBookings();
+function loadBookings() {
 
-        document.getElementById('booking-search').addEventListener('input', renderBookings);
-    } catch (error) {
-        const container = document.getElementById('booking-container');
-        showEmptyState(container);
+    let storedData = localStorage.getItem('agoda_bookings');
+
+    if (!storedData) {
+
+        localStorage.setItem(
+            'agoda_bookings',
+            JSON.stringify(initialDummyBookings)
+        );
+
+        storedData = JSON.stringify(initialDummyBookings);
     }
+
+    bookingDatabase = JSON.parse(storedData);
+
+    renderBookings();
+
+    document
+        .getElementById('booking-search')
+        .addEventListener('input', renderBookings);
 }
 
 function setMethodFilter(method) {
+
     activeMethodFilter = method;
-    document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.toggle('active', chip.dataset.method === method));
+
+    document.querySelectorAll('.filter-chip')
+        .forEach(chip => {
+
+            chip.classList.toggle(
+                'active',
+                chip.dataset.method === method
+            );
+
+        });
+
     renderBookings();
 }
 
 function renderBookings() {
-    const container = document.getElementById('booking-container');
-    const searchValue = document.getElementById('booking-search').value.trim().toLowerCase();
-    
+
+    const container =
+        document.getElementById('booking-container');
+
+    const searchValue =
+        document.getElementById('booking-search')
+        .value
+        .trim()
+        .toLowerCase();
+
     const filtered = bookingDatabase
         .filter(booking => {
-            const matchesMethod = activeMethodFilter === 'All' || booking.paymentMethod === activeMethodFilter;
-            const matchesSearch = searchValue === '' ||
+
+            const matchesMethod =
+                activeMethodFilter === 'All' ||
+                booking.paymentMethod === activeMethodFilter;
+
+            const matchesSearch =
+                searchValue === '' ||
                 booking.villaName.toLowerCase().includes(searchValue) ||
                 booking.checkin.toLowerCase().includes(searchValue) ||
                 booking.checkout.toLowerCase().includes(searchValue);
+
             return matchesMethod && matchesSearch;
         })
-        .sort((a, b) => new Date(b.bookedAt) - new Date(a.bookedAt));
+        .sort((a, b) =>
+            new Date(b.bookedAt) - new Date(a.bookedAt)
+        );
 
     if (filtered.length === 0) {
+
         showEmptyState(container);
         return;
     }
 
     container.innerHTML = '';
+
     filtered.forEach(booking => {
-function loadBookings() {
-    // 1. Cek apakah sudah ada data pemesanan di localStorage
-    let storedData = localStorage.getItem('agoda_bookings');
-    
-    // 2. Jika kosong (baru pertama kali buka web), tarik data dari db.js lalu simpan ke localStorage
-    if (!storedData) {
-        localStorage.setItem('agoda_bookings', JSON.stringify(initialDummyBookings));
-        storedData = JSON.stringify(initialDummyBookings);
-    }
-    
-    const bookings = JSON.parse(storedData);
-    const container = document.getElementById('booking-container');
 
-    // 3. Tampilkan empty state jika benar-benar kosong (misal tester menghapus semua pesanan nanti)
-    if (bookings.length === 0) {
-        showEmptyState(container);
-        return;
-    }
+        const villaDetail =
+            villaDatabase.find(v => v.id === booking.villaId);
 
-    // 4. Render kartu pesanan
-    bookings.reverse().forEach(booking => {
-        // Cocokkan villaId dengan database di db.js
-        const villaDetail = villaDatabase.find(v => v.id === booking.villaId);
-        
-        if (villaDetail) {
-            const formattedTotal = new Intl.NumberFormat('id-ID', {
+        if (!villaDetail) return;
+
+        const formattedTotal =
+            new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
                 maximumFractionDigits: 0
             }).format(booking.total);
 
-            container.innerHTML += `
-                <div class="booking-card">
-                    <img src="${villaDetail.imageUrl}" class="booking-image" alt="Villa Image">
-                    
-                    <div class="booking-detail">
-<<<<<<< HEAD
-                        <p class="villa-type">Berhasil Dipesan</p>
-                        <h2 class="villa-name">${booking.villaName}</h2>
-                        <p class="villa-location">${booking.checkin} → ${booking.checkout}</p>
-=======
-                        <p class="villa-type">📍 Berhasil Dipesan</p>
-                        <h2 class="villa-name">${villaDetail.name}</h2>
-                        <p class="villa-location">📅 ${booking.checkin} → ${booking.checkout}</p>
->>>>>>> b17b88b4bd5a513c7e326456c7f6a77b1cdb3c66
-                        
-                        <div class="divider"></div>
+        container.innerHTML += `
 
-                        <div class="summary-row">
-                            <span>Total Tamu</span>
-                            <span class="summary-value">${booking.guest}</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Metode Bayar</span>
-                            <span class="summary-value">${booking.paymentMethod}</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Total Tagihan</span>
-                            <span class="summary-value">${formattedTotal}</span>
-                        </div>
+            <div class="booking-card">
 
-                        <div class="card-actions">
-                            <div class="status-badge">${booking.paymentMethod}</div>
-                            <button class="cancel-btn" onclick="alert('Fitur pembatalan sedang diproses.')">Batalkan</button>
-                        </div>
+                <img
+                    src="${villaDetail.imageUrl}"
+                    class="booking-image"
+                    alt="Villa Image"
+                >
+
+                <div class="booking-detail">
+
+                    <p class="villa-type">
+                        📍 Berhasil Dipesan
+                    </p>
+
+                    <h2 class="villa-name">
+                        ${villaDetail.name}
+                    </h2>
+
+                    <p class="villa-location">
+                        📅 ${booking.checkin}
+                        → ${booking.checkout}
+                    </p>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-row">
+                        <span>Total Tamu</span>
+                        <span class="summary-value">
+                            ${booking.guest}
+                        </span>
                     </div>
+
+                    <div class="summary-row">
+                        <span>Metode Bayar</span>
+                        <span class="summary-value">
+                            ${booking.paymentMethod}
+                        </span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Total Tagihan</span>
+                        <span class="summary-value">
+                            ${formattedTotal}
+                        </span>
+                    </div>
+
+                    <div class="card-actions">
+
+                        <div class="status-badge">
+                            ${booking.paymentMethod}
+                        </div>
+
+                        <button
+                            class="cancel-btn"
+                            onclick="alert('Fitur pembatalan sedang diproses.')"
+                        >
+                            Batalkan
+                        </button>
+
+                    </div>
+
                 </div>
-            `;
-<<<<<<< HEAD
-        });
-=======
-        }
+
+            </div>
+
+        `;
     });
->>>>>>> b17b88b4bd5a513c7e326456c7f6a77b1cdb3c66
 }
 
 function showEmptyState(container) {
+
     container.innerHTML = `
         <div class="empty-state">
-            <div class="empty-icon">🧳</div>
-            <div class="empty-title">Belum Ada Pesanan</div>
-            <div class="empty-desc">Yuk mulai booking penginapan impianmu dan buat momen liburan tak terlupakan! ✨</div>
-            <a href="explore.php" class="explore-btn">Cari Penginapan</a>
+
+            <div class="empty-icon">
+                🧳
+            </div>
+
+            <div class="empty-title">
+                Belum Ada Pesanan
+            </div>
+
+            <div class="empty-desc">
+                Yuk mulai booking penginapan impianmu dan buat momen liburan tak terlupakan! ✨
+            </div>
+
+            <a href="explore.php" class="explore-btn">
+                Cari Penginapan
+            </a>
+
         </div>
     `;
 }
 
-// Jalankan fungsi saat halaman dimuat
 loadBookings();
 </script>
-
 </body>
 </html>
