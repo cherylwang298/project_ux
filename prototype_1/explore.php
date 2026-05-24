@@ -79,7 +79,7 @@
         .statusbar .icons { display: flex; gap: 5px; align-items: center; }
         .statusbar .icons svg { width: 14px; height: 14px; fill: var(--blue-900); }
 
-        /* ── SCROLLABLE REAL MAP CONTAINER ── */
+        /* ── REAL MAP CONTAINER ── */
         .map-canvas-container {
             position: absolute;
             inset: 0;
@@ -88,12 +88,10 @@
             z-index: 1;
         }
         
-        /* Menghilangkan watermark teks bawaan leaflet biar clean */
         .leaflet-control-attribution { display: none !important; }
         .leaflet-control-zoom { display: none !important; }
 
-        /* ── CUSTOM BALON PIN MAPS LEAFLET ── */
-       /* ── FIX PIN MAPS AGAR BULAT SEMPURNA ── */
+        /* ── FIX PIN MAPS BULAT PERFECT ── */
         .custom-marker-icon {
             background: transparent;
             border: none;
@@ -103,20 +101,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 54px; /* Kunci lebar container utama pin */
-            height: 62px; /* Kunci tinggi container utama pin */
+            width: 54px;
+            height: 62px;
         }
         .map-marker-bubble {
-            width: 50px !important;  /* Paksa lebar mutlak 50px */
-            height: 50px !important; /* Paksa tinggi mutlak 50px */
+            width: 50px !important;
+            height: 50px !important;
             max-width: 50px;
             max-height: 50px;
             background: white;
-            border-radius: 50% !important; /* Paksa bulat sempurna */
+            border-radius: 50% !important;
             padding: 3px;
             box-shadow: 0 6px 16px rgba(12,36,97,0.22);
             border: 1px solid rgba(0,0,0,0.05);
-            overflow: hidden; /* Potong gambar yang keluar dari lingkaran */
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -124,7 +122,7 @@
         .map-marker-bubble img {
             width: 100% !important;
             height: 100% !important;
-            object-fit: cover !important; /* Potong gambar secara proporsional di tengah lingkaran */
+            object-fit: cover !important;
             border-radius: 50% !important;
             display: block;
         }
@@ -135,7 +133,7 @@
             border-top: 8px solid white;
             margin-top: -1px;
             filter: drop-shadow(0 2px 2px rgba(12,36,97,0.15));
-            flex-shrink: 0; /* Mencegah segitiga gepeng atau terdistorsi */
+            flex-shrink: 0;
         }
 
         /* ── TOP UI CONTROLLER ── */
@@ -143,15 +141,15 @@
             position: absolute;
             top: 82px; left: 20px; right: 20px;
             z-index: 100;
-            pointer-events: none; /* Supaya klik di sela-sela element tembus ke map */
+            pointer-events: none;
         }
-        .floating-top-ui * { pointer-events: auto; } /* Aktifkan klik hanya untuk input/button */
+        .floating-top-ui * { pointer-events: auto; }
         
         .discover-title {
             font-family: 'Playfair Display', serif;
             font-size: 28px; font-weight: 700;
             color: var(--blue-900); margin-bottom: 16px;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.5); /* Supaya tetap terbaca jelas di atas map */
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
         }
 
         .search-bar-wrap {
@@ -231,15 +229,14 @@
         }
 
         .card-info { padding: 12px 14px 14px; }
-        .card-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--blue-900); margin-bottom: 3px; }
-        .card-loc { font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 2px; margin-bottom: 8px; }
-        .card-loc svg { width: 9px; height: 9px; fill: var(--blue-500); }
+        .card-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--blue-900); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-loc { font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 2px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-loc svg { width: 9px; height: 9px; fill: var(--blue-500); flex-shrink: 0; }
         
         .card-price-row { display: flex; align-items: baseline; gap: 2px; }
         .card-price { font-size: 14px; font-weight: 700; color: #4a86f7; }
-        .card-price span { font-size: 10px; font-weight: 400; color: var(--muted); }
 
-        /* FAB RE-CENTER MAP LOCATION BUTTON */
+        /* FAB RE-CENTER LOCATION BUTTON */
         .fab-center-location {
             width: 46px; height: 46px;
             background: #4a86f7; border: none; border-radius: 50%;
@@ -288,10 +285,8 @@
             border-top: 1px solid rgba(37,99,235,.14);
         }
         .drawer-handle {
-            width: 48px;
-            height: 5px;
-            margin: 8px auto 10px;
-            border-radius: 999px;
+            width: 48px; height: 5px;
+            margin: 8px auto 10px; border-radius: 999px;
             background: rgba(12,36,97,.18);
         }
         .phone-frame.modal-open .modal-overlay { display: block; opacity: 1; }
@@ -300,34 +295,10 @@
         .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 12px; }
         .drawer-title { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 700; color: var(--blue-900); }
         .close-drawer { width: 34px; height: 34px; background: rgba(12,36,97,0.08); border: none; border-radius: 12px; cursor: pointer; color: var(--blue-900); font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .close-drawer:hover { background: rgba(12,36,97,0.14); }
+        
         .drawer-body { flex: 1; overflow-y: auto; margin-bottom: 18px; scrollbar-width: none; }
         .drawer-body::-webkit-scrollbar { display: none; }
-
-        .drawer-subtitle { font-size: 12px; color: rgba(12,36,97,.64); margin-bottom: 16px; line-height: 1.5; }
-        .drawer-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-        .drawer-pill { padding: 10px 14px; border-radius: 999px; background: rgba(37,99,235,.08); color: #1D4ED8; font-size: 11px; font-weight: 700; border: 1px solid rgba(37,99,235,.14); }
-
-        .card-action-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-        .wishlist-btn, .compare-btn {
-            flex: 1;
-            border: 1px solid rgba(12,36,97,.15);
-            border-radius: 14px;
-            background: rgba(255,255,255,.96);
-            color: #0c2461;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 10px 0;
-            cursor: pointer;
-            transition: all .2s;
-            min-width: 0;
-        }
-        .wishlist-btn.active, .compare-btn.active {
-            border-color: #2563EB;
-            background: rgba(37,99,235,.14);
-            color: #1D4ED8;
-        }
-        .wishlist-btn:hover, .compare-btn:hover { transform: translateY(-1px); border-color: rgba(37,99,235,.25); }
+        .drawer-subtitle { font-size: 11px; color: rgba(12,36,97,.64); margin-bottom: 14px; line-height: 1.5; }
         
         .filter-group { margin-bottom: 16px; }
         .group-label { font-size: 12px; font-weight: 700; color: var(--blue-900); margin-bottom: 8px; }
@@ -369,7 +340,7 @@
             <h2 class="discover-title">Discover</h2>
             <div class="search-bar-wrap">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" class="search-input" id="search-keyword" placeholder="Search villa or destination">
+                <input type="text" class="search-input" id="search-keyword" placeholder="Search accommodation or city...">
                 <button class="filter-trigger-btn" onclick="openFilter()" aria-label="Open Filter">
                     <svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M9 18h6" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
                 </button>
@@ -380,6 +351,7 @@
                 <div class="q-chip" id="chip-ubud" onclick="filterCityQuick('Ubud')">Ubud</div>
                 <div class="q-chip" id="chip-kuta" onclick="filterCityQuick('Kuta')">Kuta</div>
                 <div class="q-chip" id="chip-batu" onclick="filterCityQuick('Batu')">Batu</div>
+                <div class="q-chip" id="chip-surabaya" onclick="filterCityQuick('Surabaya')">Surabaya</div>
             </div>
         </div>
 
@@ -411,28 +383,23 @@
         </nav>
 
         <div class="modal-overlay" id="modal-backdrop"></div>
-        <div class="filter-drawer">
+        <div class="filter-drawer" id="filterDrawer">
             <div class="drawer-handle"></div>
             <div class="drawer-header">
                 <div>
                     <h3 class="drawer-title">Filter Pencarian</h3>
-                    <p class="drawer-subtitle">Temukan villa yang paling pas, bandingkan pilihan, dan lanjut booking dengan mudah.</p>
+                    <p class="drawer-subtitle">Temukan hotel, villa, atau apartemen yang paling pas sesuai budget.</p>
                 </div>
                 <button class="close-drawer" id="close-filter-btn">✕</button>
             </div>
-            <div class="drawer-actions">
-                <span class="drawer-pill">Fokus</span>
-                <span class="drawer-pill">Bandingkan</span>
-                <span class="drawer-pill">Eksekusi</span>
-            </div>
             <div class="drawer-body">
                 <div class="filter-group">
-                    <p class="group-label">Destinasi / Lokasi</p>
+                    <p class="group-label">Destinasi / Kota</p>
                     <select class="custom-select" id="filter-city">
                         <option value="">Semua Kota</option>
-                        <option value="Ubud">Ubud</option>
-                        <option value="Kuta">Kuta</option>
+                        <option value="Bali">Bali</option>
                         <option value="Batu">Batu</option>
+                        <option value="Surabaya">Surabaya</option>
                     </select>
                 </div>
 
@@ -444,10 +411,18 @@
                 <div class="filter-group">
                     <p class="group-label">Fasilitas Utama</p>
                     <div class="checkbox-container">
-                        <label class="facility-option"><input type="checkbox" name="facility" value="WiFi"> 📶 WiFi</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Pool"> mapped 🏊‍♂️ Pool</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="AC"> ❄️ AC</label>
-                        <label class="facility-option"><input type="checkbox" name="facility" value="Resto"> 🍔 Resto</label>
+<label class="facility-option"><input type="checkbox" name="facility" value="Wifi"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12.55a11 11 0 0114.08 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M1.42 9a16 16 0 0121.16 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M8.53 16.11a6 6 0 016.95 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="20" r="0.5"/></svg>
+                            WiFi</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Pool"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 17c2 2 4 2 6 0s4-2 6 0 4 2 6 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M3 10c2-2 4-2 6 0s4 2 6 0 4-2 6 0" fill="none" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="6" r="1.5" fill="#0c2461"/></svg>
+                            Pool</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Garden"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 21s-7-4.6-7-11a5 5 0 0110 0c0-1.5 1.6-3 3-3 1.8 0 3 1.6 3 3 0 6.4-9 11-9 11z" fill="none" stroke="#0c2461" stroke-width="2" stroke-linejoin="round"/></svg>
+                            Garden</label>
+                        <label class="facility-option"><input type="checkbox" name="facility" value="Gym"> 
+                            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 10h3m12 0h3" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M6 7v10m12-10v10" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/><path d="M8 9h8" stroke="#0c2461" stroke-width="2" stroke-linecap="round"/></svg>
+                            Gym</label>
                     </div>
                 </div>
             </div>
@@ -457,10 +432,10 @@
                 <button class="btn-apply" onclick="applyAdvancedFilter()">Terapkan Filter</button>
             </div>
         </div>
-
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
     <script src="db.js"></script>
 
     <script>
@@ -472,29 +447,39 @@
         let mapMarkersLayerGroup;
         let activeCityFilter = '';
         
-        // Titik Koordinat Ubud, Bali sebagai Center Target Utama Properti
-        const defaultMapCenter = [-8.5069, 115.2625]; 
+        // Titik Koordinat Pusat Wilayah Utama
+        const regionCenters = {
+            'ubud': [-8.5069, 115.2625],
+            'bali': [-8.4095, 115.1889],
+            'batu': [-7.8712, 112.5268],
+            'surabaya': [-7.2575, 112.7521],
+            'default': [-8.4095, 115.1889] // Default Center ke Bali agar mencakup area luas
+        };
 
         // --- INISIALISASI MAPS ENGINE (LEAFLET) ---
         function initMapEngine() {
-            // Pasang canvas Leaflet ke elemen HTML kita
             myLiveMap = L.map('realLiveMap', {
-                zoomControl: false // Sembunyikan tombol +/- bawaan browser desktop
-            }).setView(defaultMapCenter, 14); // Set lokasi awal di Ubud dengan tingkat zoom 14
+                zoomControl: false
+            }).setView(regionCenters.default, 10); // Mulai zoom level sedikit menjauh agar terlihat sebarannya
 
-            // Gunakan skin map CartoDB Positron supaya warnanya minimalis, cerah, & estetik mirip mockup
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19
             }).addTo(myLiveMap);
 
-            // Buat grup layer khusus untuk wadah penampung pin dinamis
             mapMarkersLayerGroup = L.layerGroup().addTo(myLiveMap);
         }
 
         // --- RE-CENTER MAP FUNCTION ---
         function recenterMap() {
             if (myLiveMap) {
-                myLiveMap.flyTo(defaultMapCenter, 14, { animate: true, duration: 1.5 });
+                let targetCenter = regionCenters.default;
+                if (activeCityFilter) {
+                    targetCenter = regionCenters[activeCityFilter.toLowerCase()] || regionCenters.default;
+                }
+                myLiveMap.flyTo(targetCenter, activeCityFilter === 'Surabaya' || activeCityFilter === 'Batu' ? 12 : 11, { 
+                    animate: true, 
+                    duration: 1.2 
+                });
             }
         }
 
@@ -504,25 +489,48 @@
         document.getElementById('close-filter-btn').addEventListener('click', closeModal);
         document.getElementById('modal-backdrop').addEventListener('click', closeModal);
 
-        // --- FILTER DATA ENGINE ---
+        // --- MASTER DATA ENGINE COMBINER ---
         function getFilteredVillas() {
             const keyword = searchInput.value.trim().toLowerCase();
-            const selectedCity = document.getElementById('filter-city').value || activeCityFilter;
+            const selectedCity = document.getElementById('filter-city').value;
             const maxBudget = document.getElementById('filter-budget').value;
             const checkedBoxes = document.querySelectorAll('input[name="facility"]:checked');
             const selectedFacilities = Array.from(checkedBoxes).map(cb => cb.value);
 
-            let result = [...villaDatabase];
+            // Penggabungan data master aman jika salah satu database kosong/tidak terbaca
+            let result = [];
+            if (typeof hotelDatabase !== 'undefined') result = [...result, ...hotelDatabase];
+            if (typeof villaDatabase !== 'undefined') result = [...result, ...villaDatabase];
+            if (typeof apartmentDatabase !== 'undefined') result = [...result, ...apartmentDatabase];
 
-            if (selectedCity) result = result.filter(v => v.city === selectedCity);
-            if (maxBudget) result = result.filter(v => v.pricePerNight <= parseInt(maxBudget, 10));
-            if (selectedFacilities.length > 0) {
-                result = result.filter(v => selectedFacilities.every(f => v.facilities.includes(f)));
+            // 1. Filter Berdasarkan Quick Chips atau Dropdown Advanced Filter
+            if (selectedCity) {
+                result = result.filter(v => v.city.toLowerCase() === selectedCity.toLowerCase());
+            } else if (activeCityFilter) {
+                if (activeCityFilter === 'Ubud' || activeCityFilter === 'Kuta') {
+                    // Ubud & Kuta disaring melalui kedekatan string detail lokasi karena di db masuk kota Bali
+                    result = result.filter(v => v.locationDetail.toLowerCase().includes(activeCityFilter.toLowerCase()));
+                } else {
+                    result = result.filter(v => v.city.toLowerCase() === activeCityFilter.toLowerCase());
+                }
             }
+
+            // 2. Filter Berdasarkan Budget Maksimal
+            if (maxBudget) {
+                result = result.filter(v => v.pricePerNight <= parseInt(maxBudget, 10));
+            }
+
+            // 3. Filter Berdasarkan Kelengkapan Fasilitas Checklist
+            if (selectedFacilities.length > 0) {
+                result = result.filter(v => selectedFacilities.every(f => v.facilities.some(vf => vf.toLowerCase().includes(f.toLowerCase()))));
+            }
+
+            // 4. Filter Berdasarkan Kotak Pencarian Keyword Nama/Kota
             if (keyword) {
                 result = result.filter(v =>
                     v.name.toLowerCase().includes(keyword) ||
-                    v.city.toLowerCase().includes(keyword)
+                    v.city.toLowerCase().includes(keyword) ||
+                    v.locationDetail.toLowerCase().includes(keyword)
                 );
             }
             return result;
@@ -530,33 +538,33 @@
 
         // --- MASTER RENDER PROCESS ---
         function render() {
-            const villas = getFilteredVillas();
-            renderHorizontalCards(villas);
-            renderLiveMapPins(villas);
+            const properties = getFilteredVillas();
+            renderHorizontalCards(properties);
+            renderLiveMapPins(properties);
         }
 
-        function renderHorizontalCards(villas) {
-            if (villas.length === 0) {
-                sliderContainer.innerHTML = `<div style="background:white; padding:12px 20px; border-radius:14px; font-size:11px; color:var(--blue-900); margin:0 auto; pointer-events:auto;">Properti tidak ditemukan</div>`;
+        function renderHorizontalCards(properties) {
+            if (properties.length === 0) {
+                sliderContainer.innerHTML = `<div style="background:white; padding:12px 20px; border-radius:14px; font-size:11px; color:var(--blue-900); margin:0 auto; pointer-events:auto; text-align:center;">Properti tidak ditemukan</div>`;
                 return;
             }
 
-            sliderContainer.innerHTML = villas.map(villa => {
-                const formattedPrice = villa.pricePerNight > 0 ? (villa.pricePerNight / 1000) + 'rb' : '-';
+            sliderContainer.innerHTML = properties.map(item => {
+                const priceInRb = Math.round(item.pricePerNight / 1000);
                 return `
-                    <div class="explore-card" onclick="openDetail('${villa.id}')">
+                    <div class="explore-card" onclick="openDetail('${item.id}')">
                         <div class="card-img-container">
-                            <img src="${villa.imageUrl}" alt="${villa.name}">
-                            <div class="card-badge-rating">⭐ ${villa.rating || '4.5'}</div>
+                            <img src="${item.imageUrl}" alt="${item.name}">
+                            <div class="card-badge-rating">⭐ ${item.rating || '4.5'}</div>
                         </div>
                         <div class="card-info">
-                            <h4 class="card-title">${villa.name}</h4>
+                            <h4 class="card-title">${item.name}</h4>
                             <div class="card-loc">
                                 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-                                ${villa.locationDetail || villa.city}
+                                ${item.locationDetail || item.city}
                             </div>
                             <div class="card-price-row">
-                                <div class="card-price">Rp ${formattedPrice}</div>
+                                <div class="card-price">Rp ${priceInRb}rb</div>
                                 <div class="card-price" style="font-size:10px; color:var(--muted); font-weight:400;">/ malam</div>
                             </div>
                         </div>
@@ -565,20 +573,29 @@
             }).join('');
         }
 
-        function renderLiveMapPins(villas) {
-            // Reset/bersihkan pin peta lama
+        function renderLiveMapPins(properties) {
             mapMarkersLayerGroup.clearLayers();
+            if (properties.length === 0) return;
 
-            villas.forEach((villa, index) => {
-                // Set sebaran koordinat geospasial real di sekitar Ubud jika di db.js belum kamu set lat/lng-nya
-                let lat = villa.lat || (-8.5050 - (index * 0.0040));
-                let lng = villa.lng || (115.2600 + (index * 0.0050));
+            // Koordinat Geospasial Mockup Real-World Berdasarkan Wilayah
+            const baseCoordinates = {
+                'batu': [-7.8712, 112.5268],
+                'surabaya': [-7.2575, 112.7521],
+                'bali': [-8.5069, 115.2625] // default ke Ubud agar pin terfokus rata
+            };
 
-                // Cetak elemen Balon Pin Kaca persis mockup kita ke format Leaflet Marker
+            properties.forEach((item, index) => {
+                // Gunakan koordinat dari db jika ada, jika tidak buat koordinat acak terstruktur di sekitar wilayah kota tersebut
+                let base = baseCoordinates[item.city.toLowerCase()] || baseCoordinates['bali'];
+                
+                // Atur arah acak sedikit berbeda agar pin tidak menumpuk di satu titik pusat kota yang sama
+                let lat = item.lat || (base[0] + (index * 0.0045) * (index % 2 === 0 ? 1 : -1));
+                let lng = item.lng || (base[1] + (index * 0.0060) * (index % 3 === 0 ? 1 : -1));
+
                 const markerHtml = `
                     <div class="map-marker-holder">
                         <div class="map-marker-bubble">
-                            <img src="${villa.imageUrl}" alt="${villa.name}">
+                            <img src="${item.imageUrl}" alt="${item.name}">
                         </div>
                         <div class="map-marker-arrow"></div>
                     </div>
@@ -591,11 +608,19 @@
                     iconAnchor: [25, 58]
                 });
 
-                // Pasang marker ke peta real
                 const marker = L.marker([lat, lng], { icon: customMarkerIcon });
-                marker.on('click', () => { openDetail(villa.id); });
+                marker.on('click', () => { openDetail(item.id); });
                 mapMarkersLayerGroup.addLayer(marker);
             });
+
+            // Geser posisi peta secara dinamis mengikuti sebaran sekelompok data baru yang ter-render
+            if (properties.length > 0) {
+                const firstItem = properties[0];
+                let centerRegion = regionCenters[firstItem.city.toLowerCase()] || regionCenters.default;
+                if (activeCityFilter === 'Ubud' || activeCityFilter === 'Kuta') centerRegion = regionCenters.ubud;
+                
+                myLiveMap.panTo(centerRegion);
+            }
         }
 
         // --- QUICK FILTER CHIPS HANDLER ---
@@ -607,16 +632,19 @@
             if (cityName === 'Ubud') document.getElementById('chip-ubud').classList.add('active');
             if (cityName === 'Kuta') document.getElementById('chip-kuta').classList.add('active');
             if (cityName === 'Batu') document.getElementById('chip-batu').classList.add('active');
+            if (cityName === 'Surabaya') document.getElementById('chip-surabaya').classList.add('active');
+            
+            // Samakan isi input filter dropdown jika quick chip ditekan
+            document.getElementById('filter-city').value = cityName === 'Ubud' || cityName === 'Kuta' ? 'Bali' : cityName;
             
             render();
-            
-            // Otomatis geser kamera fokus map jika klik kota Ubud
-            if (cityName === 'Ubud' && myLiveMap) {
-                myLiveMap.panTo(defaultMapCenter);
-            }
+            recenterMap();
         }
 
-        function applyAdvancedFilter() { closeModal(); render(); }
+        function applyAdvancedFilter() { 
+            closeModal(); 
+            render(); 
+        }
 
         function resetAdvancedFilter() {
             document.getElementById('filter-city').value = "";
@@ -626,14 +654,19 @@
             filterCityQuick('');
         }
 
-        function openDetail(id) { window.location.href = `accom_detail.php?id=${id}`; }
+        function openDetail(id) { 
+            window.location.href = `accom_detail.php?id=${id}`; 
+        }
 
         searchInput.addEventListener('input', render);
 
-        // Jalankan peta dan render komponen setelah halaman ter-load sempurna
+        // --- INTI WINDOW LOAD CHECKER ---
         window.onload = () => {
             initMapEngine();
-            if (typeof villaDatabase !== 'undefined') { render(); }
+            // Cek ke-tiga tipe database agar sinkronisasi data master 100% aman ter-load
+            if (typeof villaDatabase !== 'undefined' || typeof hotelDatabase !== 'undefined' || typeof apartmentDatabase !== 'undefined') { 
+                render(); 
+            }
         };
     </script>
 </body>
