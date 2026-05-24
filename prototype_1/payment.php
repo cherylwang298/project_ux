@@ -215,6 +215,40 @@
             cursor:pointer;
             box-shadow:0 10px 20px rgba(0,129,112,0.25);
         }
+          html.dark-mode body {
+            background: #020617;
+            color: #e2e8f0;
+        }
+        html.dark-mode .phone,
+        html.dark-mode .phone-frame {
+            border-color: #0f172a !important;
+            background: linear-gradient(165deg, #0f172a 0%, #111827 30%, #1f2937 60%, #0f172a 100%) !important;
+            box-shadow: 0 40px 90px rgba(0,0,0,.8) !important;
+        }
+        html.dark-mode .payment-summary,
+        html.dark-mode .card,
+        html.dark-mode .detail-row,
+        html.dark-mode .method-card,
+        html.dark-mode .form-field,
+        html.dark-mode .pay-action,
+        html.dark-mode .btn,
+        html.dark-mode .note-text {
+            background: rgba(15,23,42,.92) !important;
+            border-color: rgba(148,163,184,.2) !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .btn-primary,
+        html.dark-mode .btn-confirm {
+            background: rgba(37,99,235,.95) !important;
+            color: white !important;
+        }
+        html.dark-mode input,
+        html.dark-mode select,
+        html.dark-mode textarea {
+            background: rgba(15,23,42,.96) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(148,163,184,.3) !important;
+        }
     </style>
 </head>
 <body>
@@ -484,5 +518,6 @@
 
 </script>
 
+    <script src="theme.js"></script>
 </body>
 </html>

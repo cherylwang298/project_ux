@@ -325,6 +325,41 @@
             text-align: center;
             margin: 10px 0;
         }
+        html.dark-mode body {
+            background: #020617;
+            color: #e2e8f0;
+        }
+        html.dark-mode .phone-frame,
+        html.dark-mode .phone {
+            border-color: #0f172a !important;
+            background: linear-gradient(165deg, #0f172a 0%, #111827 30%, #1f2937 60%, #0f172a 100%) !important;
+            box-shadow: 0 40px 90px rgba(0,0,0,.8) !important;
+        }
+        html.dark-mode .content-card,
+        html.dark-mode .detail-card,
+        html.dark-mode .gallery,
+        html.dark-mode .info-row,
+        html.dark-mode .facility-row,
+        html.dark-mode .amenity,
+        html.dark-mode .price-box,
+        html.dark-mode .btn,
+        html.dark-mode .sticky-footer {
+            background: rgba(15,23,42,.92) !important;
+            border-color: rgba(148,163,184,.2) !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .btn-primary,
+        html.dark-mode .btn-book {
+            background: rgba(37,99,235,.95) !important;
+            color: white !important;
+        }
+        html.dark-mode input,
+        html.dark-mode textarea,
+        html.dark-mode .select-box {
+            background: rgba(15,23,42,.96) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(148,163,184,.3) !important;
+        }
     </style>
 </head>
 
@@ -370,7 +405,11 @@
             }
 
             let villa = null;
-            if (villaId) villa = villaDatabase.find(v => String(v.id) === String(villaId));
+            if (villaId) {
+                villa = villaDatabase.find(v => String(v.id) === String(villaId))
+                     || hotelDatabase.find(v => String(v.id) === String(villaId))
+                     || apartmentDatabase.find(v => String(v.id) === String(villaId));
+            }
 
             let usedFallback = false;
             if (!villa) {
@@ -460,6 +499,7 @@
         });
     </script>
 
+    <script src="theme.js"></script>
 </body>
 
 </html>

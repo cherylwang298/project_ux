@@ -294,6 +294,123 @@
 
         .nav-icon { font-size: 20px; }
 
+        html.dark-mode body {
+            background: #020617;
+            color: #e2e8f0;
+        }
+        html.dark-mode .phone-frame {
+            border-color: #0f172a;
+            background: linear-gradient(165deg, #0f172a 0%, #111827 30%, #1f2937 60%, #0f172a 100%);
+            box-shadow: 0 40px 90px rgba(0,0,0,.8);
+        }
+        html.dark-mode .content-area,
+        html.dark-mode .profile-header,
+        html.dark-mode .menu-card,
+        html.dark-mode .stat-box,
+        html.dark-mode .menu-item,
+        html.dark-mode .nav-bar {
+            background: rgba(15,23,42,.92);
+            border-color: rgba(148,163,184,.2);
+            color: #e2e8f0;
+        }
+        html.dark-mode .user-name,
+        html.dark-mode .user-email,
+        html.dark-mode .menu-text,
+        html.dark-mode .menu-section-title,
+        html.dark-mode .stat-value,
+        html.dark-mode .stat-label {
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .menu-item:hover {
+            background: rgba(37,99,235,.15);
+        }
+        html.dark-mode .menu-icon {
+            background: rgba(37,99,235,.2);
+            color: #bfdbfe;
+        }
+        html.dark-mode .logout-text,
+        html.dark-mode .logout-icon {
+            color: #fca5a5;
+        }
+        html.dark-mode .nav-item {
+            background: rgba(15,23,42,.8);
+            color: #94a3b8;
+        }
+        html.dark-mode .nav-item.active {
+            background: rgba(37,99,235,.95);
+            color: white;
+        }
+
+        html.dark-mode body {
+            background: #020617;
+            color: #e2e8f0;
+        }
+        html.dark-mode .phone-frame,
+        html.dark-mode .phone {
+            border-color: #0f172a !important;
+            background: linear-gradient(165deg, #0f172a 0%, #111827 30%, #1f2937 60%, #0f172a 100%) !important;
+            box-shadow: 0 40px 90px rgba(0,0,0,.8) !important;
+        }
+        html.dark-mode .content-area,
+        html.dark-mode .profile-header,
+        html.dark-mode .menu-card,
+        html.dark-mode .stat-box,
+        html.dark-mode .menu-item,
+        html.dark-mode .nav-bar,
+        html.dark-mode .action-button,
+        html.dark-mode .back-link,
+        html.dark-mode .info-card,
+        html.dark-mode .booking-card,
+        html.dark-mode .form-card,
+        html.dark-mode .settings-card {
+            background: rgba(15,23,42,.92) !important;
+            border-color: rgba(148,163,184,.2) !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .user-name,
+        html.dark-mode .user-email,
+        html.dark-mode .menu-text,
+        html.dark-mode .menu-section-title,
+        html.dark-mode .stat-value,
+        html.dark-mode .stat-label,
+        html.dark-mode .section-title,
+        html.dark-mode .info-label,
+        html.dark-mode .info-value {
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .menu-icon {
+            background: rgba(37,99,235,.2) !important;
+            color: #bfdbfe !important;
+        }
+        html.dark-mode .menu-item:hover {
+            background: rgba(37,99,235,.12) !important;
+        }
+        html.dark-mode .nav-item {
+            background: rgba(15,23,42,.9) !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .nav-item.active {
+            background: rgba(37,99,235,.95) !important;
+            color: white !important;
+        }
+        html.dark-mode input,
+        html.dark-mode select,
+        html.dark-mode textarea {
+            background: rgba(15,23,42,.96) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(148,163,184,.3) !important;
+        }
+        html.dark-mode .phone-notch,
+        html.dark-mode .notch {
+            background: #0f172a !important;
+        }
+        html.dark-mode .blob-top,
+        html.dark-mode .blob-1,
+        html.dark-mode .blob-2,
+        html.dark-mode .blob-bottom,
+        html.dark-mode .bg-glow {
+            opacity: .35 !important;
+        }
     </style>
 </head>
 <body>
@@ -332,7 +449,7 @@
             <div class="menu-section">
                 <h3 class="menu-section-title">Akun Saya</h3>
                 <div class="menu-card">
-                    <div class="menu-item">
+                    <a href="informasi.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -347,8 +464,8 @@
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </div>
-                    </div>
-                    <div class="menu-item">
+                    </a>
+                    <a href="datapenumpang.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -365,8 +482,8 @@
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </div>
-                    </div>
-                    <div class="menu-item">
+                    </a>
+                    <a href="metodepembayaran.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -383,14 +500,14 @@
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
 
             <div class="menu-section">
                 <h3 class="menu-section-title">Pengaturan & Bantuan</h3>
                 <div class="menu-card">
-                    <div class="menu-item">
+                    <a href="pengaturanapp.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -405,8 +522,8 @@
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </div>
-                    </div>
-                    <div class="menu-item">
+                    </a>
+                    <a href="pusatbantuan.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -421,8 +538,8 @@
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </div>
-                    </div>
-                    <div class="menu-item">
+                    </a>
+                    <a href="login.php" class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon logout-icon">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -434,7 +551,7 @@
                             <span class="menu-text logout-text">Keluar (Log Out)</span>
                         </div>
                         <div class="menu-arrow"></div>
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -479,6 +596,6 @@
             </div>
         </nav>
     </div>
-
+    <script src="theme.js"></script>
 </body>
 </html>

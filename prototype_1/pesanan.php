@@ -457,6 +457,40 @@
             stroke: #1D4ED8;
         }
 
+          html.dark-mode body {
+            background: #020617;
+            color: #e2e8f0;
+        }
+        html.dark-mode .phone,
+        html.dark-mode .phone-frame {
+            border-color: #0f172a !important;
+            background: linear-gradient(165deg, #0f172a 0%, #111827 30%, #1f2937 60%, #0f172a 100%) !important;
+            box-shadow: 0 40px 90px rgba(0,0,0,.8) !important;
+        }
+        html.dark-mode .order-list,
+        html.dark-mode .order-card,
+        html.dark-mode .order-header,
+        html.dark-mode .order-status,
+        html.dark-mode .order-details,
+        html.dark-mode .order-summary,
+        html.dark-mode .order-action,
+        html.dark-mode .btn {
+            background: rgba(15,23,42,.92) !important;
+            border-color: rgba(148,163,184,.2) !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .btn-primary,
+        html.dark-mode .btn-detail {
+            background: rgba(37,99,235,.95) !important;
+            color: white !important;
+        }
+        html.dark-mode input,
+        html.dark-mode select,
+        html.dark-mode textarea {
+            background: rgba(15,23,42,.96) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(148,163,184,.3) !important;
+        }
     </style>
 </head>
 <body>
@@ -618,5 +652,6 @@ function showEmptyState(container) {
 loadBookings();
 </script>
 
+    <script src="theme.js"></script>
 </body>
 </html>
