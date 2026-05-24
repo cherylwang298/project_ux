@@ -350,8 +350,7 @@ results.forEach(r => {
       JSON.stringify(r)
     );
 
-    window.location.href =
-      'accom-detail.php';
+    window.location.href = `accom_detail.php?id=${r.id}`;
 
   };
 
