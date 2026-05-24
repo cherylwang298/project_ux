@@ -108,6 +108,9 @@
             object-fit: cover;
             border: 3px solid rgba(255,255,255,.95);
             box-shadow: 0 10px 24px rgba(0,0,0,.12);
+            border: 3px solid rgba(255,255,255,0.9);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: white; /* Biar pinggirannya bersih */
         }
 
         .edit-avatar-btn {
@@ -200,7 +203,8 @@
             justify-content: space-between;
             padding: 16px 20px;
             cursor: pointer;
-            transition: background .2s ease, transform .2s ease;
+            transition: background 0.2s ease;
+            text-decoration: none; /* Penting untuk tag a */
         }
 
         .menu-item:not(:last-child) {
@@ -251,7 +255,7 @@
             color: #e63946;
         }
 
-        .nav-bar {
+        /* .nav-bar {
             position: absolute;
             bottom: 24px;
             left: 24px;
@@ -292,7 +296,75 @@
             background: rgba(37,99,235,.18);
         }
 
-        .nav-icon { font-size: 20px; }
+        .nav-icon { font-size: 20px; } */
+
+        .nav-bar {
+    position: absolute;
+    bottom: 16px;
+    left: 14px;
+    right: 14px;
+    height: 68px;
+
+    border-radius: 26px;
+
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+    border: 1px solid rgba(255,255,255,0.45);
+
+    box-shadow:
+        0 8px 32px rgba(30,87,185,0.18),
+        0 2px 8px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 0 12px;
+    z-index: 100;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(12,36,97,.45);
+    transition: .3s ease;
+}
+
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: rgba(12,36,97,.45);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.nav-item.active {
+    background: rgba(255,255,255,.55);
+    box-shadow: 0 2px 12px rgba(37,99,235,.15);
+    color: #1D4ED8;
+}
+
+.nav-item.active svg {
+    stroke: #1D4ED8;
+}
 
     </style>
 </head>
@@ -306,15 +378,10 @@
 
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500" alt="Profile" class="avatar-img">
-                    <button class="edit-avatar-btn" aria-label="Edit profile photo">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 20h9"/>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/>
-                        </svg>
-                    </button>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Profile" class="avatar-img">
+                    <div class="edit-avatar-btn">✏️</div>
                 </div>
-                <h2 class="user-name">Jessica Gabriel</h2>
+                <h2 class="user-name" id="display-name">Jessica Gabriel</h2>
                 <p class="user-email">c14240045@john.petra.ac.id</p>
                 
                 <div class="stats-row">
@@ -332,22 +399,28 @@
             <div class="menu-section">
                 <h3 class="menu-section-title">Akun Saya</h3>
                 <div class="menu-card">
-                    <div class="menu-item">
-                        <div class="menu-item-left">
-                            <div class="menu-icon">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    
+                <a href="edit_profile.php" class="menu-item">
+    <div class="menu-item-left">
+        <div class="menu-icon">
+           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="8" r="3.5" />
                                     <path d="M5.5 20.5c0-3.5 2.9-6.5 6.5-6.5s6.5 3 6.5 6.5" />
                                 </svg>
-                            </div>
-                            <span class="menu-text">Informasi Pribadi</span>
-                        </div>
-                        <div class="menu-arrow">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m9 18 6-6-6-6" />
-                            </svg>
-                        </div>
-                    </div>
+        </div>
+        <span class="menu-text">Informasi Pribadi</span>
+    </div>
+
+    <div class="menu-arrow">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+              stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6" />
+        </svg>
+    </div>
+</a>
+
+                    
                     <div class="menu-item">
                         <div class="menu-item-left">
                             <div class="menu-icon">
@@ -441,44 +514,49 @@
         </div>
 
         <nav class="nav-bar">
-            <div class="nav-item">
-                <a href="home.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" />
-                        <path d="M9 21V12h6v9" />
-                    </svg>
-                    <span>Awal</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="explore.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <span>Explore</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="pesanan.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                        <path d="M16 2v4" />
-                        <path d="M8 2v4" />
-                        <path d="M3 10h18" />
-                    </svg>
-                    <span>Pesanan</span>
-                </a>
-            </div>
-            <div class="nav-item active">
-                <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>Profil</span>
-            </div>
-        </nav>
+    <a href="home.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z"/>
+            <path d="M9 21V12h6v9"/>
+        </svg>
+        <span>Awal</span>
+    </a>
+
+    <a href="explore.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <span>Explore</span>
+    </a>
+
+    <a href="pesanan.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4"/>
+            <path d="M8 2v4"/>
+            <path d="M3 10h18"/>
+        </svg>
+        <span>Pesanan</span>
+    </a>
+
+    <a href="profile.php" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profil</span>
+    </a>
+</nav>
     </div>
 
+    <script>
+        window.onload = () => {
+            const savedName = localStorage.getItem('agoda_user_name');
+            if(savedName) {
+                document.getElementById('display-name').innerText = savedName;
+            }
+        }
+    </script>
 </body>
 </html>

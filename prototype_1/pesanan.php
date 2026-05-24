@@ -515,6 +515,7 @@
     </nav>
 </div>
 
+<script src="db.js"></script>
 <script>
 let bookingDatabase = [];
 let activeMethodFilter = 'All';
@@ -564,6 +565,31 @@ function renderBookings() {
 
     container.innerHTML = '';
     filtered.forEach(booking => {
+function loadBookings() {
+    // 1. Cek apakah sudah ada data pemesanan di localStorage
+    let storedData = localStorage.getItem('agoda_bookings');
+    
+    // 2. Jika kosong (baru pertama kali buka web), tarik data dari db.js lalu simpan ke localStorage
+    if (!storedData) {
+        localStorage.setItem('agoda_bookings', JSON.stringify(initialDummyBookings));
+        storedData = JSON.stringify(initialDummyBookings);
+    }
+    
+    const bookings = JSON.parse(storedData);
+    const container = document.getElementById('booking-container');
+
+    // 3. Tampilkan empty state jika benar-benar kosong (misal tester menghapus semua pesanan nanti)
+    if (bookings.length === 0) {
+        showEmptyState(container);
+        return;
+    }
+
+    // 4. Render kartu pesanan
+    bookings.reverse().forEach(booking => {
+        // Cocokkan villaId dengan database di db.js
+        const villaDetail = villaDatabase.find(v => v.id === booking.villaId);
+        
+        if (villaDetail) {
             const formattedTotal = new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
@@ -572,12 +598,18 @@ function renderBookings() {
 
             container.innerHTML += `
                 <div class="booking-card">
-                    <img src="${booking.imageUrl}" class="booking-image" alt="Villa Image">
+                    <img src="${villaDetail.imageUrl}" class="booking-image" alt="Villa Image">
                     
                     <div class="booking-detail">
+<<<<<<< HEAD
                         <p class="villa-type">Berhasil Dipesan</p>
                         <h2 class="villa-name">${booking.villaName}</h2>
                         <p class="villa-location">${booking.checkin} → ${booking.checkout}</p>
+=======
+                        <p class="villa-type">📍 Berhasil Dipesan</p>
+                        <h2 class="villa-name">${villaDetail.name}</h2>
+                        <p class="villa-location">📅 ${booking.checkin} → ${booking.checkout}</p>
+>>>>>>> b17b88b4bd5a513c7e326456c7f6a77b1cdb3c66
                         
                         <div class="divider"></div>
 
@@ -601,7 +633,12 @@ function renderBookings() {
                     </div>
                 </div>
             `;
+<<<<<<< HEAD
         });
+=======
+        }
+    });
+>>>>>>> b17b88b4bd5a513c7e326456c7f6a77b1cdb3c66
 }
 
 function showEmptyState(container) {
@@ -615,6 +652,7 @@ function showEmptyState(container) {
     `;
 }
 
+// Jalankan fungsi saat halaman dimuat
 loadBookings();
 </script>
 
