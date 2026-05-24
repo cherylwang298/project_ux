@@ -2,9 +2,26 @@
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (!$data) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Invalid JSON"
+    ]);
+    exit;
+}
+
 $file = 'bookings.json';
 
-$currentData = json_decode(file_get_contents($file), true);
+$currentData = file_exists($file)
+    ? json_decode(file_get_contents($file), true)
+    : [];
+
+// =========================
+// 🔥 TAMBAHKAN DEFAULT TYPE
+// =========================
+if (!isset($data['type'])) {
+    $data['type'] = 'villa';
+}
 
 $currentData[] = $data;
 
@@ -14,7 +31,6 @@ file_put_contents(
 );
 
 echo json_encode([
-    "status" => "success"
+    "status" => "success",
+    "data" => $data
 ]);
-
-?>

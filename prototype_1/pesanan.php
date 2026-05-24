@@ -521,27 +521,25 @@
 let bookingDatabase = [];
 let activeMethodFilter = 'All';
 
-function loadBookings() {
+async function loadBookings() {
+    try {
+        const res = await fetch('bookings.json');
+        const data = await res.json();
 
-    let storedData = localStorage.getItem('agoda_bookings');
+        bookingDatabase = data;
 
-    if (!storedData) {
+        renderBookings();
 
-        localStorage.setItem(
-            'agoda_bookings',
-            JSON.stringify(initialDummyBookings)
-        );
+        document
+            .getElementById('booking-search')
+            .addEventListener('input', renderBookings);
 
-        storedData = JSON.stringify(initialDummyBookings);
+    } catch (error) {
+        console.error("Gagal load bookings.json:", error);
+
+        const container = document.getElementById('booking-container');
+        container.innerHTML = "<p style='text-align:center'>Gagal memuat data booking 😢</p>";
     }
-
-    bookingDatabase = JSON.parse(storedData);
-
-    renderBookings();
-
-    document
-        .getElementById('booking-search')
-        .addEventListener('input', renderBookings);
 }
 
 function setMethodFilter(method) {
@@ -561,10 +559,132 @@ function setMethodFilter(method) {
     renderBookings();
 }
 
+// function renderBookings() {
+
+//     const container =
+//         document.getElementById('booking-container');
+
+//     const searchValue =
+//         document.getElementById('booking-search')
+//         .value
+//         .trim()
+//         .toLowerCase();
+
+//     const filtered = bookingDatabase
+//         .filter(booking => {
+
+//             const matchesMethod =
+//                 activeMethodFilter === 'All' ||
+//                 booking.paymentMethod === activeMethodFilter;
+
+//             const matchesSearch =
+//                 searchValue === '' ||
+//                 booking.villaName.toLowerCase().includes(searchValue) ||
+//                 booking.checkin.toLowerCase().includes(searchValue) ||
+//                 booking.checkout.toLowerCase().includes(searchValue);
+
+//             return matchesMethod && matchesSearch;
+//         })
+//         .sort((a, b) =>
+//             new Date(b.bookedAt) - new Date(a.bookedAt)
+//         );
+
+//     if (filtered.length === 0) {
+
+//         showEmptyState(container);
+//         return;
+//     }
+
+//     container.innerHTML = '';
+
+//     filtered.forEach(booking => {
+
+//         const villaDetail =
+//             villaDatabase.find(v => v.id === booking.villaId);
+
+//         if (!villaDetail) return;
+
+//         const formattedTotal =
+//             new Intl.NumberFormat('id-ID', {
+//                 style: 'currency',
+//                 currency: 'IDR',
+//                 maximumFractionDigits: 0
+//             }).format(booking.total);
+
+//         container.innerHTML += `
+
+//             <div class="booking-card">
+
+//                 <img
+//                     src="${villaDetail.imageUrl}"
+//                     class="booking-image"
+//                     alt="Villa Image"
+//                 >
+
+//                 <div class="booking-detail">
+
+//                     <p class="villa-type">
+//                         📍 Berhasil Dipesan
+//                     </p>
+
+//                     <h2 class="villa-name">
+//                         ${villaDetail.name}
+//                     </h2>
+
+//                     <p class="villa-location">
+//                         📅 ${booking.checkin}
+//                         → ${booking.checkout}
+//                     </p>
+
+//                     <div class="divider"></div>
+
+//                     <div class="summary-row">
+//                         <span>Total Tamu</span>
+//                         <span class="summary-value">
+//                             ${booking.guest}
+//                         </span>
+//                     </div>
+
+//                     <div class="summary-row">
+//                         <span>Metode Bayar</span>
+//                         <span class="summary-value">
+//                             ${booking.paymentMethod}
+//                         </span>
+//                     </div>
+
+//                     <div class="summary-row">
+//                         <span>Total Tagihan</span>
+//                         <span class="summary-value">
+//                             ${formattedTotal}
+//                         </span>
+//                     </div>
+
+//                     <div class="card-actions">
+
+//                         <div class="status-badge">
+//                             ${booking.paymentMethod}
+//                         </div>
+
+//                         <button
+//                             class="cancel-btn"
+//                             onclick="alert('Fitur pembatalan sedang diproses.')"
+//                         >
+//                             Batalkan
+//                         </button>
+
+//                     </div>
+
+//                 </div>
+
+//             </div>
+
+//         `;
+//     });
+// }
+
 function renderBookings() {
 
-    const container =
-        document.getElementById('booking-container');
+    const container = document.getElementById('booking-container');
 
     const searchValue =
         document.getElementById('booking-search')
@@ -581,9 +701,7 @@ function renderBookings() {
 
             const matchesSearch =
                 searchValue === '' ||
-                booking.villaName.toLowerCase().includes(searchValue) ||
-                booking.checkin.toLowerCase().includes(searchValue) ||
-                booking.checkout.toLowerCase().includes(searchValue);
+                JSON.stringify(booking).toLowerCase().includes(searchValue);
 
             return matchesMethod && matchesSearch;
         })
@@ -592,7 +710,6 @@ function renderBookings() {
         );
 
     if (filtered.length === 0) {
-
         showEmptyState(container);
         return;
     }
@@ -601,88 +718,111 @@ function renderBookings() {
 
     filtered.forEach(booking => {
 
-        const villaDetail =
-            villaDatabase.find(v => v.id === booking.villaId);
+        // =========================
+        // 🏠 VILLA BOOKING
+        // =========================
+        if (booking.type === 'villa') {
 
-        if (!villaDetail) return;
+            const villaDetail =
+                villaDatabase.find(v => v.id === booking.villaId);
 
-        const formattedTotal =
-            new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                maximumFractionDigits: 0
-            }).format(booking.total);
+            if (!villaDetail) return;
 
-        container.innerHTML += `
+            const formattedTotal =
+                new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(booking.total);
 
-            <div class="booking-card">
+            container.innerHTML += `
+                <div class="booking-card">
+                    <img src="${villaDetail.imageUrl}" class="booking-image">
 
-                <img
-                    src="${villaDetail.imageUrl}"
-                    class="booking-image"
-                    alt="Villa Image"
-                >
+                    <div class="booking-detail">
+                        <p class="villa-type">📍 Villa Booking</p>
 
-                <div class="booking-detail">
+                        <h2 class="villa-name">${villaDetail.name}</h2>
 
-                    <p class="villa-type">
-                        📍 Berhasil Dipesan
-                    </p>
+                        <p class="villa-location">
+                            📅 ${booking.checkin} → ${booking.checkout}
+                        </p>
 
-                    <h2 class="villa-name">
-                        ${villaDetail.name}
-                    </h2>
+                        <div class="divider"></div>
 
-                    <p class="villa-location">
-                        📅 ${booking.checkin}
-                        → ${booking.checkout}
-                    </p>
-
-                    <div class="divider"></div>
-
-                    <div class="summary-row">
-                        <span>Total Tamu</span>
-                        <span class="summary-value">
-                            ${booking.guest}
-                        </span>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>Metode Bayar</span>
-                        <span class="summary-value">
-                            ${booking.paymentMethod}
-                        </span>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>Total Tagihan</span>
-                        <span class="summary-value">
-                            ${formattedTotal}
-                        </span>
-                    </div>
-
-                    <div class="card-actions">
-
-                        <div class="status-badge">
-                            ${booking.paymentMethod}
+                        <div class="summary-row">
+                            <span>Total Tamu</span>
+                            <span class="summary-value">${booking.guest}</span>
                         </div>
 
-                        <button
-                            class="cancel-btn"
-                            onclick="alert('Fitur pembatalan sedang diproses.')"
-                        >
-                            Batalkan
-                        </button>
+                        <div class="summary-row">
+                            <span>Metode Bayar</span>
+                            <span class="summary-value">${booking.paymentMethod}</span>
+                        </div>
 
+                        <div class="summary-row">
+                            <span>Total</span>
+                            <span class="summary-value">${formattedTotal}</span>
+                        </div>
                     </div>
-
                 </div>
+            `;
+        }
 
-            </div>
+        // =========================
+        // ✈️ FLIGHT BOOKING
+        // =========================
+        else if (booking.type === 'flight') {
 
-        `;
+            const formattedTotal =
+                new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(booking.totalPrice);
+
+            container.innerHTML += `
+                <div class="booking-card">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500" class="booking-image">
+
+                    <div class="booking-detail">
+                        <p class="villa-type">✈️ Flight Booking</p>
+
+                        <h2 class="villa-name">${booking.airline}</h2>
+
+                        <p class="villa-location">
+                            ${booking.from} → ${booking.to}
+                        </p>
+
+                        <div class="divider"></div>
+
+                        <div class="summary-row">
+                            <span>Passenger</span>
+                            <span class="summary-value">${booking.passenger}</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Departure</span>
+                            <span class="summary-value">${booking.departureDate}</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Metode Bayar</span>
+                            <span class="summary-value">${booking.paymentMethod}</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Total</span>
+                            <span class="summary-value">${formattedTotal}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
     });
 }
+
 
 function showEmptyState(container) {
 

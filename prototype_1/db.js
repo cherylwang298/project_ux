@@ -194,3 +194,174 @@ const initialDummyBookings = [
     "bookedAt": "2026-05-18T00:57:46.830Z"
   }
 ]
+
+const flightDatabase = [
+
+  // SURABAYA -> BALI
+
+  {
+    id: "f-001",
+
+    airline: "Garuda Indonesia",
+
+    from: "Surabaya",
+    to: "Bali",
+
+    fromAirport: "Soekarno-Hatta",
+    toAirport: "Ngurah Rai",
+
+    departureDate: "2026-05-25",
+
+    departureTime: "08:20",
+    arrivalTime: "09:35",
+
+    duration: "1j 15m",
+
+    type: "Direct Flight",
+
+    seatClass: "Economy",
+
+    price: 850000,
+
+    rating: 4.9,
+
+    baggage: "20kg",
+
+    imageUrl:
+      "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80"
+  },
+
+  {
+    id: "f-002",
+
+    airline: "Citilink",
+
+    from: "Surabaya",
+    to: "Bali",
+
+    fromAirport: "Soekarno-Hatta",
+    toAirport: "Ngurah Rai",
+
+    departureDate: "2026-05-25",
+
+    departureTime: "13:10",
+    arrivalTime: "14:30",
+
+    duration: "1j 20m",
+
+    type: "Promo",
+
+    seatClass: "Economy",
+
+    price: 720000,
+
+    rating: 4.7,
+
+    baggage: "15kg",
+
+    imageUrl:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"
+  },
+
+  // JAKARTA -> LOMBOK
+
+  {
+    id: "f-003",
+
+    airline: "AirAsia",
+
+    from: "Jakarta",
+    to: "Lombok",
+
+    fromAirport: "Soekarno-Hatta",
+    toAirport: "Husein Sastranegara",
+
+    departureDate: "2026-05-28",
+
+    departureTime: "06:45",
+    arrivalTime: "09:10",
+
+    duration: "2j 25m",
+
+    type: "Best Price",
+
+    seatClass: "Economy",
+
+    price: 1200000,
+
+    rating: 4.8,
+
+    baggage: "20kg",
+
+    imageUrl:
+      "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=600&q=80"
+  },
+
+    {
+    id: "f-004",
+
+    airline: "AirAsia",
+
+    from: "Lombok",
+    to: "Jakarta",
+
+    fromAirport: "Husein Sastranegara",
+    toAirport: "Soekarno-Hatta",
+
+    departureDate: "2026-05-30",
+
+    departureTime: "09:45",
+    arrivalTime: "12:10",
+
+    duration: "2j 25m",
+
+    type: "Best Price",
+
+    seatClass: "Economy",
+
+    price: 1200000,
+
+    rating: 4.8,
+
+    baggage: "20kg",
+
+    imageUrl:
+      "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=600&q=80"
+  },
+
+
+  // SINGAPORE -> TOKYO
+
+  {
+    id: "f-005",
+
+    airline: "Singapore Airlines",
+
+    from: "Singapore",
+    to: "Tokyo",
+
+    fromAirport: "Changi",
+    toAirport: "Narita",
+
+    departureDate: "2026-06-02",
+
+    departureTime: "23:15",
+    arrivalTime: "07:30",
+
+    duration: "7j 15m",
+
+    type: "Best Seller",
+
+    seatClass: "Business",
+
+    price: 4850000,
+
+    rating: 5.0,
+
+    baggage: "30kg",
+
+    imageUrl:
+      "https://images.unsplash.com/photo-1540339832862-474599807836?w=600&q=80"
+  }
+
+];
