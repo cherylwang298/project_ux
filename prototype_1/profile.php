@@ -251,7 +251,7 @@
             color: #e63946;
         }
 
-        .nav-bar {
+        /* .nav-bar {
             position: absolute;
             bottom: 24px;
             left: 24px;
@@ -292,7 +292,75 @@
             background: rgba(37,99,235,.18);
         }
 
-        .nav-icon { font-size: 20px; }
+        .nav-icon { font-size: 20px; } */
+
+        .nav-bar {
+    position: absolute;
+    bottom: 16px;
+    left: 14px;
+    right: 14px;
+    height: 68px;
+
+    border-radius: 26px;
+
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+    border: 1px solid rgba(255,255,255,0.45);
+
+    box-shadow:
+        0 8px 32px rgba(30,87,185,0.18),
+        0 2px 8px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 0 12px;
+    z-index: 100;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(12,36,97,.45);
+    transition: .3s ease;
+}
+
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: rgba(12,36,97,.45);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.nav-item.active {
+    background: rgba(255,255,255,.55);
+    box-shadow: 0 2px 12px rgba(37,99,235,.15);
+    color: #1D4ED8;
+}
+
+.nav-item.active svg {
+    stroke: #1D4ED8;
+}
 
         html.dark-mode body {
             background: #020617;
@@ -558,43 +626,40 @@
         </div>
 
         <nav class="nav-bar">
-            <div class="nav-item">
-                <a href="home.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" />
-                        <path d="M9 21V12h6v9" />
-                    </svg>
-                    <span>Awal</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="explore.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <span>Explore</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="pesanan.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                        <path d="M16 2v4" />
-                        <path d="M8 2v4" />
-                        <path d="M3 10h18" />
-                    </svg>
-                    <span>Pesanan</span>
-                </a>
-            </div>
-            <div class="nav-item active">
-                <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>Profil</span>
-            </div>
-        </nav>
+    <a href="home.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z"/>
+            <path d="M9 21V12h6v9"/>
+        </svg>
+        <span>Awal</span>
+    </a>
+
+    <a href="explore.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <span>Explore</span>
+    </a>
+
+    <a href="pesanan.php" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4"/>
+            <path d="M8 2v4"/>
+            <path d="M3 10h18"/>
+        </svg>
+        <span>Pesanan</span>
+    </a>
+
+    <a href="profile.php" class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profil</span>
+    </a>
+</nav>
     </div>
     <script src="theme.js"></script>
 </body>

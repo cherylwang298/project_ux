@@ -269,37 +269,38 @@
 
 <script>
 
-    const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-    const villaId = params.get('id') || '';
-    const checkin = params.get('checkin') || '';
-    const checkout = params.get('checkout') || '';
-    const guest = params.get('guest') || '';
-    const total = params.get('total') || '';
+const villaId = params.get('id') || '';
+const checkin = params.get('checkin') || '';
+const checkout = params.get('checkout') || '';
+const guest = params.get('guest') || '';
+const total = params.get('total') || '';
 
-    const villa =
-        villaDatabase.find(v => v.id === villaId);
+const villa = villaDatabase.find(v => v.id == villaId);
 
-        if (!villa) {
+const content = document.getElementById('payment-content');
 
-    document.getElementById('payment-content').innerHTML = `
-        <h2 style="padding:40px; text-align:center;">
+if (!villa) {
+
+    content.innerHTML = `
+        <h2 style="
+            padding:40px;
+            text-align:center;
+            color:#0f172a;
+        ">
             Villa not found 😭
         </h2>
     `;
 
-    return;
+} else {
 
-}
     const formattedTotal =
         new Intl.NumberFormat('id-ID', {
             style:'currency',
             currency:'IDR',
             maximumFractionDigits:0
         }).format(total);
-
-    const content =
-        document.getElementById('payment-content');
 
     content.innerHTML = `
 
@@ -474,7 +475,11 @@
 
     });
 
-    async function completePayment(){
+}
+
+async function completePayment(){
+
+    if (!villa) return;
 
     const bookingData = {
 

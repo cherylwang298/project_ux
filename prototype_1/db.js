@@ -375,9 +375,14 @@ const apartmentDatabase = [
     locationDetail: "Embong Malang, Surabaya Pusat",
     pricePerNight: 2500000,
     rating: 4.9,
+<<<<<<< HEAD
     facilities: ["🏊‍♂️ Pool", "🌅 Balcony", "🏋️‍♂️ Gym"],
     imageUrl: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500",
     mapPosition: { top: '37%', left: '49%' }
+=======
+    facilities: ["🏊‍♂️ Pool", "🛁 Bathtub", "🌅 Balcony", "📶 Wifi"],
+    imageUrl: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=500"
+>>>>>>> 94b6ab090fc703cfc5fc0391fd7d3589b1af96b0
   }
 ];
 
