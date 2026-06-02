@@ -1528,18 +1528,16 @@
       </div>
       <div class="promo-dots" id="promoDots"></div>
 
-      <div class="sec-head">
-        <div class="title">Rekomendasi Untukmu</div>
-        <div class="see-all">Lihat semua →</div>
-      </div>
 
       <div class="sec-head">
-        <div class="title">Penerbangan Populer</div>
-      </div>
+    <div class="title">Rekomendasi Populer</div>
+    <div class="see-all">Lihat semua →</div>
+</div>
 
-      <div class="featured-scroll" id="flightScroll"></div>
+<div class="featured-scroll" id="featuredScroll"></div>
 
-      <div class="featured-scroll" id="featuredScroll"></div>
+
+      
 
       <div style="height:8px"></div>
     </div>
@@ -2062,6 +2060,10 @@ const flightDatabase = [
 
       // Gabungkan semua menjadi satu data terpusat
       const allProperties = [
+         ...flightDatabase.map(f => ({
+            ...f,
+            category: 'flight'
+        })),
         ...villaDatabase.map(v => ({
           ...v,
           category: 'villa'
@@ -2195,7 +2197,7 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
         initSearch();
         initCategoryModal();
         initPromoSlider();
-        renderFlights();
+        // renderFlights();
       });
 
       // 3. LOGIKA RENDER KATEGORI TIPE PROPERTI (STACKED CARDS)
@@ -2235,7 +2237,7 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
           while (imgs.length < 3) imgs.push(imgs[0]);
 
           const groupHtml = `
-            <div class="stack-group" onclick="openCategoryByType('${cat.key}', '${cat.label}')"> 
+            <div class="stack-group" onclick="window.location.href='accom.php?type=${cat.key}'">
               <div class="stack-cluster">
                 <div class="sc"><img src="${imgs[2]}" alt="${cat.label}"></div>
                 <div class="sc"><img src="${imgs[1]}" alt="${cat.label}"></div>
@@ -2261,6 +2263,42 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
 
         featuredScroll.innerHTML = "";
         propertiesList.forEach(prop => {
+          if(prop.category === 'flight'){
+
+        featuredScroll.innerHTML += `
+        <div class="feat-card">
+            <img src="${prop.imageUrl}">
+            <div class="feat-info">
+
+                <span class="feat-tag">
+                    ${prop.airline}
+                </span>
+
+                <h5>
+                    ${prop.origin} → ${prop.destination}
+                </h5>
+
+                <div class="loc">
+                    🕒 ${prop.departure} - ${prop.arrival}
+                </div>
+
+                <div class="feat-bottom">
+                    <div class="feat-price">
+                        Rp ${Math.round(prop.price/1000)}rb
+                    </div>
+
+                    <div class="feat-stars">
+                        ✈️ Flight
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        `;
+
+        return;
+    }
+
           const priceInRb = Math.round(prop.pricePerNight / 1000);
           // Atasi masalah single quote agar parsing objek di inline onclick aman
           const safePropJson = JSON.stringify(prop).replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -2330,11 +2368,28 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
         }
 
         if (searchQuery !== "") {
-          filtered = filtered.filter(p =>
-            p.name.toLowerCase().includes(searchQuery) ||
-            p.city.toLowerCase().includes(searchQuery) ||
-            p.locationDetail.toLowerCase().includes(searchQuery)
-          );
+          // filtered = filtered.filter(p =>
+          //   p.name.toLowerCase().includes(searchQuery) ||
+          //   p.city.toLowerCase().includes(searchQuery) ||
+          //   p.locationDetail.toLowerCase().includes(searchQuery)
+          // );
+          filtered = filtered.filter(p => {
+
+    if(p.category === 'flight'){
+        return (
+            p.origin.toLowerCase().includes(searchQuery) ||
+            p.destination.toLowerCase().includes(searchQuery) ||
+            p.airline.toLowerCase().includes(searchQuery)
+        );
+    }
+
+    return (
+        p.name.toLowerCase().includes(searchQuery) ||
+        p.city.toLowerCase().includes(searchQuery) ||
+        p.locationDetail.toLowerCase().includes(searchQuery)
+    );
+
+});
         }
 
         // Urutkan default berdasarkan rating terbaik
