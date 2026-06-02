@@ -142,6 +142,8 @@ Pay Now
 const booking =
   JSON.parse(localStorage.getItem('pendingFlightBooking'));
 
+  console.log('BOOKING:', booking);
+
 if(!booking){
   window.location.href = 'flight.php';
 }
@@ -181,6 +183,10 @@ async function payNow(){
     });
 
   const text = await res.text();
+
+  console.log(text);
+
+
   const result = JSON.parse(text);
 
   if(result.success){
