@@ -61,5 +61,24 @@
         "total": "3035000",
         "paymentMethod": "Bank Transfer",
         "bookedAt": "2026-06-02T16:39:39.751Z"
+    },
+    {
+        "type": "flight",
+        "id": "f-003",
+        "airline": "AirAsia",
+        "from": "Surabaya",
+        "to": "Yogyakarta",
+        "fromAirport": null,
+        "toAirport": null,
+        "departureDate": "2026-06-12",
+        "departureTime": "13:00",
+        "arrivalTime": "14:05",
+        "passenger": 2,
+        "pricePerPassenger": 500000,
+        "subtotal": 1000000,
+        "tax": 100000,
+        "totalPrice": 1100000,
+        "paymentMethod": "Credit Card",
+        "bookedAt": "2026-06-02T17:09:52.998Z"
     }
 ]
