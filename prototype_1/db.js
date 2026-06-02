@@ -347,3 +347,36 @@ const apartmentDatabase = [
 ];
 
 const allDatabase = [...villaDatabase, ...hotelDatabase, ...apartmentDatabase];
+
+const flightDatabase = [
+{
+    id:"f-001",
+    airline:"Garuda Indonesia",
+    origin:"Surabaya",
+    destination:"Bali",
+    departure:"08:00",
+    arrival:"09:05",
+    price:850000,
+    imageUrl:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500"
+},
+{
+    id:"f-002",
+    airline:"Citilink",
+    origin:"Surabaya",
+    destination:"Jakarta",
+    departure:"10:20",
+    arrival:"11:45",
+    price:650000,
+    imageUrl:"https://images.unsplash.com/photo-1540339832862-474599807836?w=500"
+},
+{
+    id:"f-003",
+    airline:"AirAsia",
+    origin:"Surabaya",
+    destination:"Yogyakarta",
+    departure:"13:00",
+    arrival:"14:05",
+    price:500000,
+    imageUrl:"https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=500"
+}
+];

@@ -1506,6 +1506,7 @@
 
       <div class="chips">
         <div class="chip active" data-filter="semua">Semua</div>
+        <div class="chip idle" data-filter="flight">Flight</div>
         <div class="chip idle" data-filter="hotel">Hotel</div>
         <div class="chip idle" data-filter="villa">Villa</div>
         <div class="chip idle" data-filter="apartemen">Apartemen</div>
@@ -1531,6 +1532,12 @@
         <div class="title">Rekomendasi Untukmu</div>
         <div class="see-all">Lihat semua →</div>
       </div>
+
+      <div class="sec-head">
+        <div class="title">Penerbangan Populer</div>
+      </div>
+
+      <div class="featured-scroll" id="flightScroll"></div>
 
       <div class="featured-scroll" id="featuredScroll"></div>
 
@@ -2019,6 +2026,40 @@
         }
       ];
 
+      
+const flightDatabase = [
+{
+    id:"f-001",
+    airline:"Garuda Indonesia",
+    origin:"Surabaya",
+    destination:"Bali",
+    departure:"08:00",
+    arrival:"09:05",
+    price:850000,
+    imageUrl:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500"
+},
+{
+    id:"f-002",
+    airline:"Citilink",
+    origin:"Surabaya",
+    destination:"Jakarta",
+    departure:"10:20",
+    arrival:"11:45",
+    price:650000,
+    imageUrl:"https://images.unsplash.com/photo-1540339832862-474599807836?w=500"
+},
+{
+    id:"f-003",
+    airline:"AirAsia",
+    origin:"Surabaya",
+    destination:"Yogyakarta",
+    departure:"13:00",
+    arrival:"14:05",
+    price:500000,
+    imageUrl:"https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=500"
+}
+];
+
       // Gabungkan semua menjadi satu data terpusat
       const allProperties = [
         ...villaDatabase.map(v => ({
@@ -2035,17 +2076,48 @@
         }))
       ];
 
+      const allAccommodations = [
+  ...villaDatabase.map(v=>({...v,category:'villa'})),
+  ...hotelDatabase.map(h=>({...h,category:'hotel'})),
+  ...apartmentDatabase.map(a=>({...a,category:'apartemen'}))
+];
+
       // DATA WISATA HERO SLIDER
+      // const heroData = [
+      //   { city: 'Bali', name: 'Tanah Lot', desc: 'Pura ikonik di atas batu karang tepi laut', imageUrl: 'https://images.unsplash.com/photo-1604999333679-b86d54738315?w=700' },
+      //   { city: 'Bali', name: 'Tegalalang Rice Terrace', desc: 'Sawah terasering hijau memukau di Ubud', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700' },
+      //   { city: 'Bali', name: 'Pantai Kuta', desc: 'Pantai legendaris dengan sunset terbaik', imageUrl: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=700' },
+      //   { city: 'Batu', name: 'Coban Rondo', desc: 'Air terjun indah di tengah hutan pinus', imageUrl: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700' },
+      //   { city: 'Batu', name: 'Gunung Bromo', desc: 'Pemandangan gunung berapi paling ikonik di Jawa', imageUrl: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=700' },
+      //   { city: 'Batu', name: 'Selecta', desc: 'Taman bunga & kolam renang sejuk pegunungan', imageUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700' },
+      //   { city: 'Surabaya', name: 'Taman Bungkul', desc: 'Taman kota terbaik & ruang publik favorit', imageUrl: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700' },
+      //   { city: 'Surabaya', name: 'Monumen Kapal Selam', desc: 'Ikon kebanggaan kota pahlawan Surabaya', imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700' },
+      // ];
+
       const heroData = [
-        { city: 'Bali', name: 'Tanah Lot', desc: 'Pura ikonik di atas batu karang tepi laut', imageUrl: 'https://images.unsplash.com/photo-1604999333679-b86d54738315?w=700' },
-        { city: 'Bali', name: 'Tegalalang Rice Terrace', desc: 'Sawah terasering hijau memukau di Ubud', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700' },
-        { city: 'Bali', name: 'Pantai Kuta', desc: 'Pantai legendaris dengan sunset terbaik', imageUrl: 'https://images.unsplash.com/photo-1573790387438-4da905039392?w=700' },
-        { city: 'Batu', name: 'Coban Rondo', desc: 'Air terjun indah di tengah hutan pinus', imageUrl: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700' },
-        { city: 'Batu', name: 'Gunung Bromo', desc: 'Pemandangan gunung berapi paling ikonik di Jawa', imageUrl: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=700' },
-        { city: 'Batu', name: 'Selecta', desc: 'Taman bunga & kolam renang sejuk pegunungan', imageUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700' },
-        { city: 'Surabaya', name: 'Taman Bungkul', desc: 'Taman kota terbaik & ruang publik favorit', imageUrl: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700' },
-        { city: 'Surabaya', name: 'Monumen Kapal Selam', desc: 'Ikon kebanggaan kota pahlawan Surabaya', imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700' },
-      ];
+
+{
+city:'Flight',
+name:'Jakarta → Bali',
+desc:'Mulai Rp 499rb',
+imageUrl:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=700'
+},
+
+{
+city:'Villa Bali',
+name:'Luxury Private Pool',
+desc:'Diskon hingga 40%',
+imageUrl:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700'
+},
+
+{
+city:'Hotel Surabaya',
+name:'Staycation Premium',
+desc:'Mulai Rp 380rb',
+imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
+}
+
+];
 
       let heroIndex = 0, heroTimer = null;
 
@@ -2123,10 +2195,12 @@
         initSearch();
         initCategoryModal();
         initPromoSlider();
+        renderFlights();
       });
 
       // 3. LOGIKA RENDER KATEGORI TIPE PROPERTI (STACKED CARDS)
       const categoryConfig = [
+        { key:'flight', label:'Flight' },
         { key: 'villa',     label: 'Villa' },
         { key: 'hotel',     label: 'Hotel' },
         { key: 'apartemen', label: 'Apartemen' },
@@ -2138,51 +2212,42 @@
         stackRow.innerHTML = "";
 
         categoryConfig.forEach(cat => {
+          
+          // --- KONDISI 1: JIKA KATEGORINYA ADALAH FLIGHT ---
+          if (cat.key === 'flight') {
+            stackRow.insertAdjacentHTML("beforeend", `
+              <div class="stack-group" onclick="window.location.href='flight.php'">
+                <div class="stack-cluster">
+                  <div class="sc"><img src="https://images.unsplash.com/photo-1521727857535-28d2047314ac?w=500"></div>
+                  <div class="sc"><img src="https://images.unsplash.com/photo-1502920917128-1aa500764ce7?w=500"></div>
+                  <div class="sc"><img src="https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=500"></div>
+                </div>
+                <div class="stack-label">Flight</div>
+          
+              </div>
+            `);
+            return; // Lompat ke perulangan berikutnya, jangan eksekusi kode properti di bawah
+          }
+
+          // --- KONDISI 2: UNTUK VILLA, HOTEL, APARTEMEN ---
           const catProps = allProperties.filter(p => p.category === cat.key);
           const imgs = catProps.slice(0, 3).map(p => p.imageUrl);
           while (imgs.length < 3) imgs.push(imgs[0]);
 
           const groupHtml = `
-      <div class="stack-group" onclick="openCategoryByType('${cat.key}', '${cat.label}')"> 
-        <div class="stack-cluster">
-          <div class="sc"><img src="${imgs[2]}" alt="${cat.label}"></div>
-          <div class="sc"><img src="${imgs[1]}" alt="${cat.label}"></div>
-          <div class="sc" data-count="+${catProps.length}"><img src="${imgs[0]}" alt="${cat.label}"></div>
-        </div>
-        <div class="stack-label">${cat.label}</div>
-        <div class="stack-sub">${catProps.length} Properti</div>
-      </div>
-    `;
-          stackRow.insertAdjacentHTML("beforeend", groupHtml);
-        });
-      }
-
-      window.openCategoryByType = function(typeKey, typeLabel) {
-        const overlay = document.getElementById("catModal");
-        const title = document.getElementById("catModalTitle");
-        const body = document.getElementById("catListBody");
-        if (!overlay || !title || !body) return;
-
-        title.innerText = typeLabel;
-        const listData = allProperties.filter(p => p.category === typeKey);
-        body.innerHTML = "";
-
-        listData.forEach(prop => {
-          const safePropJson = JSON.stringify(prop).replace(/'/g, "\\'").replace(/"/g, '&quot;');
-          body.insertAdjacentHTML("beforeend", `
-            <div class="cat-list-item" onclick="closeCategoryModalAndOpenDetail(${safePropJson})">
-              <img class="cat-list-thumb" src="${prop.imageUrl}" alt="${prop.name}">
-              <div class="cat-list-info">
-                <div class="cat-list-name">${prop.name}</div>
-                <div class="cat-list-loc">${prop.locationDetail}</div>
+            <div class="stack-group" onclick="openCategoryByType('${cat.key}', '${cat.label}')"> 
+              <div class="stack-cluster">
+                <div class="sc"><img src="${imgs[2]}" alt="${cat.label}"></div>
+                <div class="sc"><img src="${imgs[1]}" alt="${cat.label}"></div>
+                <div class="sc" data-count="+${catProps.length}"><img src="${imgs[0]}" alt="${cat.label}"></div>
               </div>
-              <div class="cat-list-price">Rp ${Math.round(prop.pricePerNight/1000)}rb<span style="font-size:9px;font-weight:400;color:var(--muted)">/m</span></div>
+              <div class="stack-label">${cat.label}</div>
+             
             </div>
-          `);
-        });
-
-        overlay.classList.add("active");
-      };
+          `;
+          stackRow.insertAdjacentHTML("beforeend", groupHtml);
+        }); // Penutup forEach yang aman
+      } // Penutup fungsi initCategories() yang aman
 
       // 4. LOGIKA RENDER KARTU UTAMA REKOMENDASI
       function renderFeatured(propertiesList) {
@@ -2436,5 +2501,56 @@
           openDetail(prop);
         }, 250);
       };
+
+      function renderFlights(){
+
+const flightScroll =
+document.getElementById('flightScroll');
+
+flightScroll.innerHTML='';
+
+flightDatabase.forEach(f=>{
+
+flightScroll.innerHTML += `
+
+<div class="feat-card">
+
+<img src="${f.imageUrl}">
+
+<div class="feat-info">
+
+<span class="feat-tag">
+${f.airline}
+</span>
+
+<h5>
+${f.origin} → ${f.destination}
+</h5>
+
+<div class="loc">
+🕒 ${f.departure} - ${f.arrival}
+</div>
+
+<div class="feat-bottom">
+
+<div class="feat-price">
+Rp ${Math.round(f.price/1000)}rb
+</div>
+
+<div class="feat-stars">
+✈️ Flight
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
     </script>
 </body>
