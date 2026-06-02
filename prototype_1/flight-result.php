@@ -669,7 +669,7 @@ if(filteredFlights.length === 0){
         <div class="card-footer">
 
           <div class="rating">
-            ⭐ ${flight.rating}
+           
           </div>
 
           <button
