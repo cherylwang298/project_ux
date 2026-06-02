@@ -241,14 +241,21 @@
 <script src="db.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
+  const checkin = params.get('checkin');
+  const checkout = params.get('checkout');
+  const guest = params.get('guest');
+  const room = params.get('room');
   const villaId = params.get('id');
 
   const allDB = typeof allDatabase !== 'undefined' ? allDatabase : [...(typeof villaDatabase !== 'undefined' ? villaDatabase : []), ...(typeof hotelDatabase !== 'undefined' ? hotelDatabase : []), ...(typeof apartmentDatabase !== 'undefined' ? apartmentDatabase : [])];
 
-  const villa = allDB.find(v => v.id === villaId) || {
+  const villa = allDB.find(v => String(v.id) === String(villaId)) || {
     id: villaId, name: 'Properti', type: '-', locationDetail: '-',
     pricePerNight: 0, imageUrl: '', rating: 0, facilities: []
   };
+  console.log("Villa ID:", villaId);
+console.log("Villa Found:", villa);
+console.log("Price Per Night:", villa.pricePerNight);
 
   const fmt = n => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(n);
 
@@ -258,7 +265,10 @@
   document.getElementById('propLoc').innerText = villa.locationDetail;
   document.getElementById('propPrice').innerHTML = fmt(villa.pricePerNight) + ' <span>/ malam</span>';
   document.getElementById('sumPrice').innerText = fmt(villa.pricePerNight);
+  document.getElementById('checkin').value = checkin || '';
+  document.getElementById('checkout').value = checkout || '';
 
+  
   const promoData = [
     { badge: 'FLASH SALE 40%', title: 'Diskon 40% Villa Bali', code: 'BALI40', discount: 40, imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200' },
     { badge: 'WEEKEND DEAL 25%', title: 'Hotel Surabaya Hemat 25%', code: 'WKND25', discount: 25, imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200' },
@@ -267,6 +277,26 @@
   ];
 
   let selectedPromo = null;
+
+  // isi otomatis dari halaman sebelumnya
+if (checkin) {
+    document.getElementById('checkin').value = checkin;
+}
+
+if (checkout) {
+    document.getElementById('checkout').value = checkout;
+}
+
+if (guest) {
+    document.getElementById('guestCount').value =
+        guest + (guest > 1 ? ' Guests' : ' Guest');
+}
+
+if (checkin && checkout) {
+    calcTotal();
+}
+
+
 
   document.getElementById('promoList').innerHTML = promoData.map((p, i) => `
     <div class="promo-item" id="pi-${i}" onclick="selectPromo(${i})">

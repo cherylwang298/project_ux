@@ -360,6 +360,26 @@
             color: #e2e8f0 !important;
             border-color: rgba(148,163,184,.3) !important;
         }
+.price-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.modal-price{
+    font-size:22px;
+    font-weight:800;
+    color:#1D4ED8;
+    line-height:1;
+    letter-spacing:-0.5px;
+}
+
+.price-subtitle{
+    margin-top:4px;
+    font-size:11px;
+    color:#64748B;
+    font-weight:500;
+}
     </style>
 </head>
 
@@ -374,13 +394,25 @@
             <div id="detail-dynamic-target"></div>
         </div>
 
-        <div class="fixed-booking-bar" id="fixedFooter" style="display: none;">
+        <!-- <div class="fixed-booking-bar" id="fixedFooter" style="display: none;">
             <div class="price-container">
                 <div class="modal-price" id="footerPrice">Rp 000rb</div>
-                <div class="modal-price<span>/ malam</span>" style="font-size:10px; color:var(--muted)">/ malam</div>
+                <div class="modal-price<span>/ malam</span>" style="font-size:10px; color:var(--muted)"></div>
             </div>
             <button id="detailBookBtn" class="detail-button">Pesan Sekarang</button>
-        </div>
+        </div> -->
+        <div class="fixed-booking-bar" id="fixedFooter" style="display:none;">
+    
+    <div class="price-container">
+        <div class="modal-price" id="footerPrice"></div>
+        <div class="price-subtitle">per malam</div>
+    </div>
+
+    <button id="detailBookBtn" class="detail-button">
+        Pesan Sekarang
+    </button>
+
+</div>
     </div>
 
     <script src="db.js"></script>
@@ -389,6 +421,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
             const villaId = params.get('id');
+            const checkin = params.get('checkin') || '';
+            const checkout = params.get('checkout') || '';
+            const guest = params.get('guest') || '';
             const dynamicTarget = document.getElementById('detail-dynamic-target');
             const fixedFooter = document.getElementById('fixedFooter');
             const footerPrice = document.getElementById('footerPrice');
@@ -438,7 +473,8 @@
             const duration = villa.duration || '—';
 
             // Update Harga di Fixed Footer & Munculkan Footernya
-            footerPrice.innerHTML = `${formattedPrice}<span>/ malam</span>`;
+            // footerPrice.innerHTML = `${formattedPrice}<span>/ malam</span>`;
+            footerPrice.textContent = formattedPrice;
             fixedFooter.style.display = 'flex';
 
             // Render Struktur Layout Glass-Overlay Transparan menimpa Hero Image
@@ -490,8 +526,7 @@
             const detailBookBtn = document.getElementById('detailBookBtn');
             if (villa.id && detailBookBtn) {
                 detailBookBtn.onclick = () => {
-                    window.location.href = `booking.php?id=${encodeURIComponent(villa.id)}`;
-                };
+                    window.location.href =`booking.php?id=${encodeURIComponent(villa.id)}&checkin=${encodeURIComponent(checkin)}&checkout=${encodeURIComponent(checkout)}&guest=${encodeURIComponent(guest)}`;};
             } else if (detailBookBtn) {
                 detailBookBtn.disabled = true;
                 detailBookBtn.style.opacity = '.6';
