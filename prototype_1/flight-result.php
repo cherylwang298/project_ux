@@ -533,24 +533,39 @@ document.getElementById('searchDetail')
 
 /* FILTER DATA */
 
+// const filteredFlights =
+//   flightDatabase.filter(flight => {
+
+//     return (
+
+//       flight.origin
+//         .toLowerCase()
+//         .includes(searchData.from.toLowerCase())
+
+//       &&
+
+//       flight.destination
+//         .toLowerCase()
+//         .includes(searchData.to.toLowerCase())
+
+//     );
+
+//   });
+
 const filteredFlights =
   flightDatabase.filter(flight => {
 
     return (
 
       flight.from
-      .toLowerCase()
-      .includes(
-        searchData.from.toLowerCase()
-      )
+        .toLowerCase()
+        .includes(searchData.from.toLowerCase())
 
       &&
 
       flight.to
-      .toLowerCase()
-      .includes(
-        searchData.to.toLowerCase()
-      )
+        .toLowerCase()
+        .includes(searchData.to.toLowerCase())
 
     );
 
@@ -633,9 +648,7 @@ if(filteredFlights.length === 0){
 
             <div class="line"></div>
 
-            <div class="duration">
-              ${flight.duration}
-            </div>
+           
 
           </div>
 
