@@ -83,7 +83,7 @@ CSS);
       </div>
 
       <button type="submit" id="submitBtn" class="w-full h-14 rounded-full bg-gradient-to-r from-primary to-secondary-container text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-[.98] transition-all group">
-        <span class="material-symbols-outlined text-[20px]">login</span><span id="btnTxt">Sign In</span><span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        <span class="material-symbols-outlined text-[20px]">login</span><span id="btnTxt">Sign In</span>
       </button>
     </form>
 

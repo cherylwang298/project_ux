@@ -86,7 +86,7 @@ CSS
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 min-w-0">
+    <main class="flex-1 min-w-0 mt-6">
       <!-- Mobile Tab Bar -->
       <div class="flex md:hidden gap-1 mb-5 admin-card rounded-2xl p-2">
         <?php foreach([['overview','Dashboard','space_dashboard'],['bookings','Bookings','book_online'],['users','Users','group'],['properties','Propertieses','home']] as [$t,$l,$icon]): ?>

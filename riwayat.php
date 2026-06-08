@@ -57,22 +57,6 @@ CSS
 </div>
 
 <main class="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
-  <!-- Stats Row -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 anim-fade-up">
-    <?php foreach([
-      ['Total Bookings',$totalN,'history','primary'],
-      ['Active',$confirmed,'check_circle','green-600'],
-      ['Completed',$completed,'task_alt','blue-600'],
-      ['Total Spend',formatRupiah($totalSpend),'payments','primary'],
-    ] as [$lbl,$val,$icon,$color]): ?>
-    <div class="glass rounded-2xl p-5">
-      <span class="material-symbols-outlined text-<?= $color ?> text-2xl mb-2 block icon-fill"><?= $icon ?></span>
-      <p class="text-2xl font-extrabold text-on-surface"><?= $val ?></p>
-      <p class="text-xs text-outline"><?= $lbl ?></p>
-    </div>
-    <?php endforeach; ?>
-  </div>
-
   <!-- Filter Tabs -->
   <div class="flex flex-wrap gap-2 mb-8 anim-fade-up">
     <?php foreach([

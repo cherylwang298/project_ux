@@ -45,6 +45,32 @@ echo htmlHead("Find Flights", <<<CSS
 .date-strip{display:flex;align-items:center;gap:10px;margin-bottom:24px}.date-arrow{width:46px;height:46px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(195,197,216,.55);display:flex;align-items:center;justify-content:center;color:#004ce2;font-weight:800;box-shadow:0 14px 40px -28px rgba(17,28,45,.32)}.date-tabs{flex:1;display:flex;gap:10px;overflow-x:auto;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.7);border-radius:999px;padding:8px;box-shadow:0 14px 40px -28px rgba(17,28,45,.32)}.date-tab{min-width:112px;height:46px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#434655}.date-tab.active{border:2px solid #004ce2;color:#004ce2;background:white}.sort-pill.active{background:white;color:#004ce2;box-shadow:0 8px 20px -14px rgba(0,76,226,.55)}.return-option{border:1px solid rgba(195,197,216,.55);background:rgba(255,255,255,.52);border-radius:14px;padding:10px 12px;transition:.2s}.return-option:hover{border-color:#004ce2;background:rgba(220,225,255,.4)}
 .airline-filter{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(255,255,255,.48));backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.66);box-shadow:0 18px 45px -25px rgba(17,28,45,.32);border-radius:24px}.airline-check{width:17px;height:17px;border-radius:4px;color:#004ce2;border-color:rgba(17,28,45,.3)}
 .glass-card,.flight-card{border-radius:24px!important;background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(255,255,255,.48))!important;backdrop-filter:blur(28px)!important;-webkit-backdrop-filter:blur(28px)!important;border:1px solid rgba(255,255,255,.65)!important;box-shadow:0 18px 48px -26px rgba(17,28,45,.38)!important;transition:all .28s ease!important;cursor:pointer}.flight-card:hover,.glass-card:hover{transform:translateY(-4px)!important;box-shadow:0 26px 64px -30px rgba(0,76,226,.38)!important;border-color:rgba(255,255,255,.85)!important}.destination-title{font-size:clamp(22px,2vw,32px);font-weight:800;letter-spacing:-.04em;color:#111c2d}.route-code{font-size:14px;font-weight:800;color:rgba(17,28,45,.55)}
+/* One-way layout: remove return date, expand other fields */
+#searchFieldsRow.oneway-layout .flight-field:not(#returnDateField) {
+    /* all fields except return get equal flexibility */
+}
+/* Better: redefine grid columns for one-way */
+#searchFieldsRow.oneway-layout {
+    grid-template-columns: repeat(12, 1fr);
+}
+#searchFieldsRow.oneway-layout #fromField {
+    grid-column: span 3;
+}
+#searchFieldsRow.oneway-layout #toField {
+    grid-column: span 3;
+}
+#searchFieldsRow.oneway-layout #departureDateField {
+    grid-column: span 2;  /* wider departure */
+}
+#searchFieldsRow.oneway-layout #paxField {
+    grid-column: span 2;
+}
+#searchFieldsRow.oneway-layout button[type="submit"] {
+    grid-column: span 2;  /* wider search button */
+}
+#searchFieldsRow.oneway-layout #returnDateField {
+    display: none;
+}
 @keyframes planeFly{0%,100%{transform:translateX(0) rotate(0)}50%{transform:translateX(8px) rotate(2deg)}}.plane-fly{animation:planeFly 2s ease-in-out infinite}
 CSS
 );
@@ -60,7 +86,7 @@ CSS
       <p class="text-on-surface-variant">Choose a popular route or search for a specific flight.</p>
     </div>
 
-    <form method="GET" class="flight-search p-5 md:p-6 max-w-5xl mx-auto">
+    <form method="GET" class="flight-search p-5 md:p-6 w-full mx-auto">
       <div class="flex flex-wrap gap-2 mb-5">
         <button type="button" onclick="setTrip('round',this)" class="trip-btn <?= $trip==='round'?'active':'' ?> px-5 py-2 rounded-full text-sm font-bold bg-white/70 text-on-surface">Round Trip</button>
         <button type="button" onclick="setTrip('oneway',this)" class="trip-btn <?= $trip==='oneway'?'active':'' ?> px-5 py-2 rounded-full text-sm font-bold bg-white/70 text-on-surface">One Way</button>
@@ -71,31 +97,31 @@ CSS
       </div>
       <input type="hidden" name="class" id="classInput" value="<?= h($class) ?>">
       <input type="hidden" name="trip" id="tripInput" value="<?= h($trip) ?>">
-
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-3 items-center">
-        <div class="flight-field relative md:col-span-1">
+      
+      <div id="searchFieldsRow" class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        <div class="flight-field relative md:col-span-2" id="fromField">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">flight_takeoff</span>
           <input list="cities" type="text" name="from" value="<?= h($from) ?>" class="w-full h-14 pl-12 pr-4 text-sm" placeholder="From: Jakarta">
         </div>
-        <div class="flight-field relative md:col-span-1">
+        <div class="flight-field relative md:col-span-2" id="toField">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">flight_land</span>
           <input list="cities" type="text" name="to" value="<?= h($to) ?>" class="w-full h-14 pl-12 pr-4 text-sm" placeholder="To: Bali">
         </div>
-        <div class="flight-field relative md:col-span-1">
+        <div class="flight-field relative md:col-span-2" id="departureDateField">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">calendar_month</span>
           <input type="date" name="date" value="<?= h($date) ?>" min="<?= date('Y-m-d') ?>" class="w-full h-14 pl-12 pr-4 text-sm">
         </div>
-        <div class="flight-field relative md:col-span-1" id="returnDateField">
+        <div class="flight-field relative md:col-span-2" id="returnDateField">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">event_repeat</span>
           <input type="date" name="return_date" value="<?= h($returnDate) ?>" min="<?= date('Y-m-d') ?>" class="w-full h-14 pl-12 pr-4 text-sm">
         </div>
-        <div class="flight-field flex items-center justify-between h-14 px-4">
+        <div class="flight-field flex items-center justify-between h-14 px-4 md:col-span-2" id="paxField">
           <span class="material-symbols-outlined text-outline text-[20px]">person</span>
           <button type="button" onclick="changePax(-1)" class="w-8 h-8 rounded-full bg-white/70 font-bold text-lg">−</button>
           <input id="paxInput" name="pax" value="<?= $pax ?>" readonly class="w-10 text-center bg-transparent border-0 shadow-none outline-none text-sm font-bold">
           <button type="button" onclick="changePax(1)" class="w-8 h-8 rounded-full bg-white/70 font-bold text-lg">+</button>
         </div>
-        <button type="submit" class="h-14 px-5 bg-primary text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-primary/20">
+        <button type="submit" class="md:col-span-2 h-14 px-5 bg-primary text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-lg shadow-primary/20">
           <span class="material-symbols-outlined text-[20px]">search</span>
           Search
         </button>
@@ -191,7 +217,7 @@ CSS
 
         <!-- Route -->
         <div class="flex-1 flex items-center gap-4">
-          <div class="text-center min-w-[120px]">
+          <div class="text-center min-w-[120px] ">
             <p class="destination-title"><?= h($f['from_city']) ?></p>
             <p class="route-code"><?= h($f['from_code']) ?> · <?= $f['departure_time'] ?></p>
           </div>
@@ -290,11 +316,28 @@ function setClass(cls, btn) {
   document.getElementById('classInput').value = cls;
 }
 function setTrip(type, btn) {
-  document.querySelectorAll('.trip-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tripInput').value = type;
-  document.getElementById('returnDateField').style.display = type === 'round' ? '' : 'none';
+    // Update active button styling
+    document.querySelectorAll('.trip-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tripInput').value = type;
+
+    const searchRow = document.getElementById('searchFieldsRow');
+    const returnField = document.getElementById('returnDateField');
+
+    if (type === 'oneway') {
+        searchRow.classList.add('oneway-layout');
+        if (returnField) returnField.style.display = 'none';
+        // Optionally remove required attribute
+        document.querySelector('input[name="return_date"]').removeAttribute('required');
+    } else {
+        searchRow.classList.remove('oneway-layout');
+        if (returnField) returnField.style.display = '';
+        document.querySelector('input[name="return_date"]').setAttribute('required', 'required');
+    }
 }
+// Initial call to set correct layout
+setTrip(document.getElementById('tripInput').value, document.querySelector('.trip-btn.active'));
+
 function changePax(delta) {
   const input = document.getElementById('paxInput');
   let val = parseInt(input.value || '1', 10) + delta;

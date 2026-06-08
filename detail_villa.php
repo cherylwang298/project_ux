@@ -16,6 +16,7 @@ CSS
     ?>
     <body class="bg-background text-on-background min-h-screen">
     <?= navbar('detail_villa.php') ?>
+    <?= backButton('detail_villa.php') ?>
 
     <div class="hero-parallax h-[55vh] relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"></div>
