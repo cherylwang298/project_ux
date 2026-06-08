@@ -196,15 +196,17 @@ body{
 
   padding:18px;
 
-  border-radius:24px;
+  border-radius:28px;
 
-  background:rgba(255,255,255,.25);
+  background:rgba(255,255,255,0.35);
 
   backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
 
-  border:1px solid rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,0.55);
 
-  color:white;
+  color:#0c2461;
+  box-shadow:0 18px 40px rgba(0,0,0,0.08);
 }
 
 .route{
@@ -218,7 +220,8 @@ body{
 
 .search-detail{
   font-size:12px;
-  opacity:.9;
+  color:#475569;
+  opacity:.96;
 
   line-height:1.8;
 }
@@ -241,7 +244,7 @@ body{
 /* FLIGHT LIST */
 
 .flight-list{
-  padding:0 16px;
+  padding:0 16px 20px;
 
   display:flex;
   flex-direction:column;
@@ -251,14 +254,14 @@ body{
 /* CARD */
 
 .flight-card{
-  background:white;
-
+  background:rgba(255,255,255,0.40);
+  border:1px solid rgba(255,255,255,0.55);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
   border-radius:26px;
-
   padding:18px;
-
   box-shadow:
-    0 10px 25px rgba(0,0,0,.08);
+    0 18px 45px rgba(0,0,0,.10);
 }
 
 .airline-row{
@@ -407,13 +410,17 @@ body{
 .empty-state{
   margin:40px 20px;
 
-  background:white;
+  background:rgba(255,255,255,0.42);
+  border:1px solid rgba(255,255,255,0.55);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
 
   border-radius:24px;
 
   padding:30px 20px;
 
   text-align:center;
+  box-shadow:0 18px 40px rgba(0,0,0,.08);
 }
 
 .empty-state h3{

@@ -262,6 +262,8 @@
             color: #334155;
         }
 
+        /* Date picker removed: selection occurs on accom.php */
+
         /* ── FLOATING FIXED FOOTER CTA ── */
         .fixed-booking-bar {
             position: absolute;
@@ -519,14 +521,21 @@
             <div class="modal-amenities">
                 ${(villa.facilities || []).map(f => `<div class="amenity">${f}</div>`).join('')}
             </div>
+
+            <!-- Tanggal Tersedia dihapus — gunakan tanggal dari pencarian di accom.php -->
         </div>
     `;
+
+            // Tanggal tersedia dihapus — detail mengikuti tanggal dari pencarian (URL params)
 
             // Handler Navigasi ke Halaman Booking
             const detailBookBtn = document.getElementById('detailBookBtn');
             if (villa.id && detailBookBtn) {
                 detailBookBtn.onclick = () => {
-                    window.location.href =`booking.php?id=${encodeURIComponent(villa.id)}&checkin=${encodeURIComponent(checkin)}&checkout=${encodeURIComponent(checkout)}&guest=${encodeURIComponent(guest)}`;};
+                    const ci = checkin || '';
+                    const co = checkout || ci || '';
+                    window.location.href = `booking.php?id=${encodeURIComponent(villa.id)}&checkin=${encodeURIComponent(ci)}&checkout=${encodeURIComponent(co)}&guest=${encodeURIComponent(guest)}`;
+                };
             } else if (detailBookBtn) {
                 detailBookBtn.disabled = true;
                 detailBookBtn.style.opacity = '.6';

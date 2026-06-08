@@ -292,62 +292,7 @@
       fill: #1D4ED8;
     }
 
-    /* ── SEARCH BAR ── */
-    .search-wrap {
-      padding: 14px 16px 0;
-    }
-
-    .searchbar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, .75);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-radius: 16px;
-      padding: 0 14px;
-      height: 48px;
-      border: 1px solid rgba(255, 255, 255, .9);
-      box-shadow: 0 4px 18px rgba(37, 99, 235, .1);
-    }
-
-    .searchbar svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    .searchbar input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      color: #1e3a5f;
-      outline: none;
-    }
-
-    .searchbar input::placeholder {
-      color: rgba(30, 58, 95, .4);
-    }
-
-    .filter-pill {
-      width: 32px;
-      height: 32px;
-      background: #2563EB;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .filter-pill svg {
-      width: 15px;
-      height: 15px;
-      fill: white;
-    }
+    /* Search bar removed from home (search on accom.php) */
 
     /* ── FILTER CHIPS ── */
     .chips {
@@ -1355,7 +1300,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 24px 10px;
+      padding: 16px 24px 10px;
       z-index: 100;
       box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.03);
     }
@@ -1489,34 +1434,9 @@
       </div>
       <div style="display:flex; justify-content:center; gap:5px; margin-top:8px;" id="heroDots"></div>
 
-      <div class="search-wrap">
-        <div class="searchbar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
-          <input type="text" placeholder="Cari hotel, villa, destinasi...">
-          <div class="filter-pill">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 6h18M6 12h12M9 18h6" />
-            </svg>
-          </div>
-        </div>
-      </div>
+      <!-- Search bar removed; use accomodation search page instead -->
 
-      <div class="chips">
-        <div class="chip active" data-filter="semua">Semua</div>
-        <div class="chip idle" data-filter="flight">Flight</div>
-        <div class="chip idle" data-filter="hotel">Hotel</div>
-        <div class="chip idle" data-filter="villa">Villa</div>
-        <div class="chip idle" data-filter="apartemen">Apartemen</div>
-      </div>
-
-      <div class="sec-head">
-        <div class="title">Jelajah Kategori</div>
-        <div class="see-all">Lihat semua →</div>
-      </div>
-
+      <!-- Kategori chips dan header dihapus untuk tampilan ringkas -->
       <div class="stack-row" id="stackRow"></div>
 
       <div class="sec-head">
@@ -1558,6 +1478,15 @@
             <path d="m21 21-4.35-4.35" />
           </svg>
           <span>Explore</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="flight.php" style="display:flex; flex-direction:column; align-items:center; gap:3px; text-decoration:none; width:100%; height:100%; justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12l19-6-3 6 3 6-19-6z" />
+            <path d="M12 6v12" />
+          </svg>
+          <span>Flight</span>
         </a>
       </div>
       <div class="nav-item">
@@ -2194,7 +2123,6 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
         initCategories();
         applyFilterAndSearch();
         initFilters();
-        initSearch();
         initCategoryModal();
         initPromoSlider();
         // renderFlights();
@@ -2202,7 +2130,6 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
 
       // 3. LOGIKA RENDER KATEGORI TIPE PROPERTI (STACKED CARDS)
       const categoryConfig = [
-        { key:'flight', label:'Flight' },
         { key: 'villa',     label: 'Villa' },
         { key: 'hotel',     label: 'Hotel' },
         { key: 'apartemen', label: 'Apartemen' },
@@ -2263,42 +2190,8 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
 
         featuredScroll.innerHTML = "";
         propertiesList.forEach(prop => {
-          if(prop.category === 'flight'){
-
-        featuredScroll.innerHTML += `
-        <div class="feat-card">
-            <img src="${prop.imageUrl}">
-            <div class="feat-info">
-
-                <span class="feat-tag">
-                    ${prop.airline}
-                </span>
-
-                <h5>
-                    ${prop.origin} → ${prop.destination}
-                </h5>
-
-                <div class="loc">
-                    🕒 ${prop.departure} - ${prop.arrival}
-                </div>
-
-                <div class="feat-bottom">
-                    <div class="feat-price">
-                        Rp ${Math.round(prop.price/1000)}rb
-                    </div>
-
-                    <div class="feat-stars">
-                        ✈️ Flight
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        `;
-
-        return;
-    }
-
+          // skip flights in 'Rekomendasi Populer'
+          if (prop.category === 'flight') return;
           const priceInRb = Math.round(prop.pricePerNight / 1000);
           // Atasi masalah single quote agar parsing objek di inline onclick aman
           const safePropJson = JSON.stringify(prop).replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -2347,18 +2240,8 @@ imageUrl:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700'
         });
       }
 
-      // 6. FITUR SEARCH BAR 
+      // Search removed from home; filtering uses chips and other controls
       let searchQuery = "";
-
-      function initSearch() {
-        const searchInput = document.querySelector(".searchbar input");
-        if (!searchInput) return;
-
-        searchInput.addEventListener("input", (e) => {
-          searchQuery = e.target.value.toLowerCase().trim();
-          applyFilterAndSearch();
-        });
-      }
 
       function applyFilterAndSearch() {
         let filtered = allProperties;

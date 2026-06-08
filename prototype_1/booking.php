@@ -71,14 +71,7 @@
     .section { padding: 14px 20px 0; }
     .sec-label { font-size: 12px; font-weight: 700; color: #0c2461; margin-bottom: 8px; letter-spacing: .2px; }
 
-    /* DATE PILLS */
-    .date-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
-    .date-pill {
-      padding: 6px 14px; border-radius: 999px;
-      background: white; border: 1px solid rgba(12,36,97,.08);
-      box-shadow: 0 2px 8px rgba(12,36,97,.06), inset 0 1px 0 rgba(255,255,255,1);
-      color: var(--blue-500); font-size: 11px; font-weight: 600;
-    }
+    /* Date pills removed — dates come from accom.php */
 
     /* FORM CARD */
     .form-card {
@@ -178,16 +171,7 @@
       <div class="prop-price" id="propPrice"></div>
     </div>
 
-    <div class="section">
-      <div class="sec-label">Tanggal Tersedia</div>
-      <div class="date-pills">
-        <div class="date-pill">20 Jul</div>
-        <div class="date-pill">21 Jul</div>
-        <div class="date-pill">22 Jul</div>
-        <div class="date-pill">24 Jul</div>
-        <div class="date-pill">25 Jul</div>
-      </div>
-    </div>
+    <!-- Tanggal Tersedia dihapus — gunakan tanggal dari halaman pencarian -->
 
     <div class="section">
       <div class="sec-label">Booking Detail</div>
@@ -298,21 +282,42 @@ if (checkin && checkout) {
 
 
 
-  document.getElementById('promoList').innerHTML = promoData.map((p, i) => `
-    <div class="promo-item" id="pi-${i}" onclick="selectPromo(${i})">
-      <img class="promo-item-img" src="${p.imageUrl}" alt="${p.title}">
-      <div class="promo-item-info">
-        <div class="promo-item-badge">${p.badge}</div>
-        <div class="promo-item-title">${p.title}</div>
-        <div class="promo-item-code">Kode: ${p.code}</div>
-      </div>
-      <div class="promo-check" id="pc-${i}"></div>
-    </div>
-  `).join('');
+  // show only promos relevant to this property's city/location
+  function getRelevantPromosFor(villaObj) {
+    const key = (villaObj.city || villaObj.locationDetail || villaObj.name || '').toLowerCase();
+    if (!key) return [];
+    return promoData.filter(p => {
+      const hay = (p.title + ' ' + p.desc + ' ' + p.badge + ' ' + p.code).toLowerCase();
+      return hay.includes(key);
+    });
+  }
+
+  const relevant = getRelevantPromosFor(villa);
+  if (relevant.length === 0) {
+    document.getElementById('promoList').innerHTML = '<div style="color:var(--muted); font-size:12px">Tidak ada promo khusus untuk lokasi ini.</div>';
+  } else {
+    document.getElementById('promoList').innerHTML = relevant.map((p) => {
+      const globalIndex = promoData.findIndex(pp => pp.code === p.code);
+      return `
+        <div class="promo-item" id="pi-${globalIndex}" onclick="selectPromo(${globalIndex})">
+          <img class="promo-item-img" src="${p.imageUrl}" alt="${p.title}">
+          <div class="promo-item-info">
+            <div class="promo-item-badge">${p.badge}</div>
+            <div class="promo-item-title">${p.title}</div>
+            <div class="promo-item-code">Kode: ${p.code}</div>
+          </div>
+          <div class="promo-check" id="pc-${globalIndex}"></div>
+        </div>
+      `;
+    }).join('');
+  }
 
   function selectPromo(idx) {
     selectedPromo = selectedPromo === idx ? null : idx;
-    promoData.forEach((_, i) => document.getElementById(`pi-${i}`).classList.toggle('selected', i === selectedPromo));
+    promoData.forEach((_, i) => {
+      const el = document.getElementById(`pi-${i}`);
+      if (el) el.classList.toggle('selected', i === selectedPromo);
+    });
     calcTotal();
   }
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SimplyCash Login</title>
+    <title>StayGo Login</title>
 
     <!-- FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -740,11 +740,10 @@
             <!-- LOGO -->
             <div class="logo">
 
-                <span>SimplyCash</span>
+                <span>StayGo</span>
 
                 <p>
-                    Smart finance solution for your business,
-                    inventory, and daily cashflow.
+                    Smart travel solution for your staycations, flights, and perfect getaways
                 </p>
 
             </div>

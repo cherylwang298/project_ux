@@ -440,7 +440,7 @@
                         <div class="stat-label">AgodaCash</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-value">4</div>
+                        <div class="stat-value" id="orderCount">0</div>
                         <div class="stat-label">Pesanan</div>
                     </div>
                 </div>
@@ -577,6 +577,15 @@
                 </a>
             </div>
             <div class="nav-item">
+                <a href="flight.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12l19-6-3 6 3 6-19-6z" />
+                        <path d="M12 6v12" />
+                    </svg>
+                    <span>Flight</span>
+                </a>
+            </div>
+            <div class="nav-item">
                 <a href="pesanan.php" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
                     <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -597,5 +606,21 @@
         </nav>
     </div>
     <script src="theme.js"></script>
+    <script>
+        // Update order count from bookings.json
+        (async function(){
+            try {
+                const res = await fetch('bookings.json');
+                if (!res.ok) throw new Error('no bookings');
+                const data = await res.json();
+                const count = Array.isArray(data) ? data.length : 0;
+                const el = document.getElementById('orderCount');
+                if (el) el.innerText = count;
+            } catch (e) {
+                const el = document.getElementById('orderCount');
+                if (el) el.innerText = 0;
+            }
+        })();
+    </script>
 </body>
 </html>

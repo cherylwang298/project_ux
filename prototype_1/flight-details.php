@@ -194,14 +194,17 @@ body{
 .detail-card{
   margin:0 16px;
 
-  background:white;
+  background:rgba(255,255,255,0.42);
+  border:1px solid rgba(255,255,255,0.55);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
 
   border-radius:28px;
 
   overflow:hidden;
 
   box-shadow:
-    0 10px 30px rgba(0,0,0,.1);
+    0 18px 40px rgba(0,0,0,.14);
 }
 
 .banner{
@@ -210,8 +213,8 @@ body{
   background:
     linear-gradient(
       135deg,
-      rgba(13,40,120,.9),
-      rgba(37,99,235,.7)
+      rgba(13,40,120,.92),
+      rgba(37,99,235,.72)
     );
 
   display:flex;
@@ -259,12 +262,10 @@ body{
 /* ROUTE */
 
 .route-box{
-  background:#EFF6FF;
-
+  background:rgba(255,255,255,0.62);
+  border:1px solid rgba(255,255,255,0.65);
   border-radius:20px;
-
   padding:18px;
-
   margin-bottom:20px;
 }
 
@@ -344,6 +345,8 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid rgba(37,99,235,0.08);
 }
 
 .label{

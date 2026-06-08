@@ -5,7 +5,11 @@ header('Content-Type: application/json');
 // MATIKAN WARNING jadi JSON tetap bersih
 error_reporting(0);
 
-$data = json_decode(file_get_contents("php://input"), true);
+$rawInput = file_get_contents("php://input");
+// Simpan log mentah untuk debugging ketika dipanggil dari browser
+@file_put_contents('save-flight-debug.log', date('c') . " RAW_INPUT: " . $rawInput . PHP_EOL, FILE_APPEND);
+
+$data = json_decode($rawInput, true);
 
 if (!$data) {
     echo json_encode([
@@ -42,6 +46,12 @@ $newBooking = [
     "subtotal" => $data["subtotal"] ?? null,
     "tax" => $data["tax"] ?? null,
     "totalPrice" => $data["totalPrice"] ?? null,
+    "total" => $data["grandTotal"] ?? $data["totalPrice"] ?? null,
+    "promoCode" => $data["promoCode"] ?? null,
+    "promoTitle" => $data["promoTitle"] ?? null,
+    "promoDiscount" => $data["promoDiscount"] ?? null,
+    "discountAmount" => $data["discountAmount"] ?? null,
+    "grandTotal" => $data["grandTotal"] ?? null,
     "paymentMethod" => $data["paymentMethod"] ?? null,
     "bookedAt" => $data["bookedAt"] ?? null
 ];

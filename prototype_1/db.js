@@ -95,6 +95,30 @@ const villaDatabase = [
     facilities: ["👪 Fam Room", "🌅 Balcony", "📶 Wifi"],
     imageUrl: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=500",
     mapPosition: { top: '30%', left: '28%' }
+  },
+  {
+    id: "v-009",
+    name: "Luxury Villa Bali",
+    type: "Private Pool Villa",
+    city: "Bali",
+    locationDetail: "Bali, Indonesia",
+    pricePerNight: 2500000,
+    rating: 4.9,
+    facilities: ["🏊‍♂️ Pool", "🌅 Balcony", "📶 Wifi"],
+    imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500",
+    mapPosition: { top: '45%', left: '52%' }
+  },
+  {
+    id: "v-010",
+    name: "Ocean View Stay",
+    type: "Villa & Balcony",
+    city: "Lombok",
+    locationDetail: "Lombok, Indonesia",
+    pricePerNight: 1850000,
+    rating: 4.8,
+    facilities: ["🌊 Ocean View", "🛏️ King Bed", "📶 Wifi"],
+    imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500",
+    mapPosition: { top: '40%', left: '62%' }
   }
 ];
 

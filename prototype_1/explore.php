@@ -372,9 +372,13 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <span>Explore</span>
             </div>
+            <a href="flight.php" class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M2 12l19-6-3 6 3 6-19-6z"/><path d="M12 6v12"/></svg>
+                <span>Flight</span>
+            </a>
             <a href="pesanan.php" class="nav-item">
                 <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                <span>Trips</span>
+                <span>Pesanan</span>
             </a>
             <a href="profile.php" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>

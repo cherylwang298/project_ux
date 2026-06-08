@@ -295,7 +295,19 @@ document.getElementById('detailText').innerText =
   `${data.checkin || '-'} → ${data.checkout || '-'} • ${data.guest || 0} Guest`;
 
 /* DATA */
-let results = villaDatabase;
+let results;
+
+switch((data.type || 'hotel').toLowerCase()){
+  case 'villa':
+    results = typeof villaDatabase !== 'undefined' ? [...villaDatabase] : [];
+    break;
+  case 'apartemen':
+  case 'apartment':
+    results = typeof apartmentDatabase !== 'undefined' ? [...apartmentDatabase] : [];
+    break;
+  default:
+    results = typeof hotelDatabase !== 'undefined' ? [...hotelDatabase] : [];
+}
 
 /* FILTER */
 if(data.destination){

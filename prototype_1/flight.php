@@ -640,18 +640,18 @@ pengalaman booking yang cepat dan mudah.
 </div>
 
 <!-- POPULAR -->
-
+<!-- 
 <div class="sec-head">
     <div class="title">
     Popular Flights
     </div>
-</div>
+</div> -->
 
-<div class="featured-scroll">
+<!-- <div class="featured-scroll"> -->
 
 <!-- CARD -->
 
-<div class="feat-card">
+<!-- <div class="feat-card">
 
 <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80">
 
@@ -683,11 +683,11 @@ Rp 850.000
 
 </div>
 
-</div>
+</div> -->
 
 <!-- CARD -->
 
-<div class="feat-card">
+<!-- <div class="feat-card">
 
 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80">
 
@@ -719,11 +719,11 @@ Rp 1.200.000
 
 </div>
 
-</div>
+</div> -->
 
 <!-- CARD -->
 
-<div class="feat-card">
+<!-- <div class="feat-card">
 
 <img src="https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?w=600&q=80">
 
@@ -761,7 +761,7 @@ Rp 4.850.000
 
 </div>
 
-</div>
+</div> -->
 
 <!-- <script>
 
@@ -819,6 +819,39 @@ roundTripBtn.addEventListener('click', () => {
 
 });
 
+</script>
+
+<script>
+// Set minimum dates for departure and return to today
+(function(){
+  const depart = document.getElementById('departDate');
+  const ret = document.getElementById('returnDate');
+
+  function toYMD(d){
+    return d.toISOString().split('T')[0];
+  }
+
+  const today = new Date();
+  const todayStr = toYMD(today);
+
+  if(depart){
+    depart.min = todayStr;
+    if(!depart.value) depart.value = todayStr;
+    depart.addEventListener('change', () => {
+      const val = depart.value || todayStr;
+      if(ret) ret.min = val;
+      // if return is before depart, bump it
+      if(ret && ret.value && ret.value < val) ret.value = val;
+    });
+  }
+
+  if(ret){
+    // make sure return min is at least today or depart
+    ret.min = depart && depart.value ? depart.value : todayStr;
+    if(!ret.value) ret.value = ret.min;
+  }
+
+})();
 </script>
 
 <script>
