@@ -28,14 +28,29 @@ if (!isset($_SESSION['guest_profiles'][$uid]) || empty($_SESSION['guest_profiles
 $return = gp_str($_GET['return'] ?? $_POST['return'] ?? 'checkout.php', 'checkout.php');
 $slot = gp_str($_GET['slot'] ?? $_POST['slot'] ?? 'guest', 'guest');
 
+// ---- LOGIKA BARU: Cek profil yang sudah kepake di kursi (slot) lain ----
+$usedProfiles = [];
+if (isset($_SESSION['selected_guest_profile'][$uid])) {
+    foreach ($_SESSION['selected_guest_profile'][$uid] as $s => $pId) {
+        if ($s !== $slot) {
+            $usedProfiles[] = $pId;
+        }
+    }
+}
+// ------------------------------------------------------------------------
+
 if (isset($_GET['use'])) {
     $useId = gp_str($_GET['use']);
-    foreach ($_SESSION['guest_profiles'][$uid] as $profile) {
-        if (gp_str($profile['id'] ?? '') === $useId) {
-            if (!isset($_SESSION['selected_guest_profile'])) $_SESSION['selected_guest_profile'] = [];
-            if (!isset($_SESSION['selected_guest_profile'][$uid])) $_SESSION['selected_guest_profile'][$uid] = [];
-            $_SESSION['selected_guest_profile'][$uid][$slot] = $useId;
-            break;
+    
+    // Jangan izinkan proses use jika profil sudah terpakai di slot lain
+    if (!in_array($useId, $usedProfiles)) {
+        foreach ($_SESSION['guest_profiles'][$uid] as $profile) {
+            if (gp_str($profile['id'] ?? '') === $useId) {
+                if (!isset($_SESSION['selected_guest_profile'])) $_SESSION['selected_guest_profile'] = [];
+                if (!isset($_SESSION['selected_guest_profile'][$uid])) $_SESSION['selected_guest_profile'][$uid] = [];
+                $_SESSION['selected_guest_profile'][$uid][$slot] = $useId;
+                break;
+            }
         }
     }
     header('Location: ' . $return);
@@ -49,6 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['guest_profiles'][$uid],
             fn($p) => gp_str($p['id'] ?? '') !== $deleteId
         ));
+        
+        // Jika yang didelete kebetulan sedang diselect, hapus dari slotnya juga
+        if (isset($_SESSION['selected_guest_profile'][$uid])) {
+            foreach ($_SESSION['selected_guest_profile'][$uid] as $s => $pId) {
+                if ($pId === $deleteId) unset($_SESSION['selected_guest_profile'][$uid][$s]);
+            }
+        }
+
         header('Location: ' . gp_url('guest_profiles.php', ['slot'=>$slot,'return'=>$return]));
         exit;
     }
@@ -79,7 +102,12 @@ $profiles = $_SESSION['guest_profiles'][$uid];
 $selectedId = $_SESSION['selected_guest_profile'][$uid][$slot] ?? '';
 
 echo htmlHead('Choose Saved Data', <<<CSS
-.profile-card{background:rgba(255,255,255,.86);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(195,197,216,.45);box-shadow:0 18px 52px rgba(0,76,226,.08);transition:all .25s ease}.profile-card:hover{transform:translateY(-3px);border-color:rgba(0,76,226,.25);box-shadow:0 24px 64px rgba(0,76,226,.12)}.profile-card.selected{border-color:#004ce2!important;box-shadow:0 24px 64px rgba(0,76,226,.18)!important}.input-field{width:100%;height:48px;border-radius:14px;background:rgba(246,248,255,.85);border:1.5px solid rgba(195,197,216,.8);padding:0 14px;outline:none}.input-field:focus{border-color:#004ce2;box-shadow:0 0 0 3px rgba(0,76,226,.1)}.modal-backdrop{background:rgba(17,28,45,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.modal-box{background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.7);box-shadow:0 30px 90px rgba(17,28,45,.28)}.profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.profile-card{background:rgba(255,255,255,.86);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(195,197,216,.45);box-shadow:0 18px 52px rgba(0,76,226,.08);transition:all .25s ease}
+.profile-card:hover:not(.used-profile){transform:translateY(-3px);border-color:rgba(0,76,226,.25);box-shadow:0 24px 64px rgba(0,76,226,.12)}
+.profile-card.selected{border-color:#004ce2!important;box-shadow:0 24px 64px rgba(0,76,226,.18)!important}
+/* CSS Tambahan untuk profil yang sudah terpakai */
+.used-profile{opacity:0.5;filter:grayscale(1);cursor:not-allowed;box-shadow:none!important}
+.input-field{width:100%;height:48px;border-radius:14px;background:rgba(246,248,255,.85);border:1.5px solid rgba(195,197,216,.8);padding:0 14px;outline:none}.input-field:focus{border-color:#004ce2;box-shadow:0 0 0 3px rgba(0,76,226,.1)}.modal-backdrop{background:rgba(17,28,45,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.modal-box{background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.7);box-shadow:0 30px 90px rgba(17,28,45,.28)}.profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
 CSS);
 ?>
 <body class="bg-background text-on-background min-h-screen">
@@ -87,7 +115,10 @@ CSS);
 <?= backButton($return) ?>
 <main class="pt-28 pb-20 px-5 md:px-16 max-w-[1180px] mx-auto">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-        <div><h1 class="text-4xl font-extrabold text-on-surface mb-2">Choose Saved Data</h1><p class="text-on-surface-variant">Pick one saved profile for this booking, or add/edit data first.</p></div>
+        <div>
+            <h1 class="text-4xl font-extrabold text-on-surface mb-2">Choose Saved Data</h1>
+            <p class="text-on-surface-variant">Pick one saved profile for this booking.
+        </div>
         <button type="button" onclick="openModal()" class="px-6 py-3 rounded-full bg-primary text-white font-bold shadow-lg">+ Add New Data</button>
     </div>
 
@@ -101,16 +132,34 @@ CSS);
             $phone = gp_str($profile['phone'] ?? '-');
             $useUrl = gp_url('guest_profiles.php', ['slot'=>$slot,'use'=>$profileId,'return'=>$return]);
             $profileJson = htmlspecialchars(json_encode(['id'=>$profileId,'label'=>$label,'name'=>$name,'email'=>$email,'phone'=>$phone], JSON_HEX_APOS|JSON_HEX_QUOT), ENT_QUOTES, 'UTF-8');
+            
+            // Cek apakah profil ini ada di dalam array yang kepake
+            $isUsed = in_array($profileId, $usedProfiles);
             ?>
-            <div class="profile-card <?= $selectedId === $profileId ? 'selected' : '' ?> rounded-3xl p-5">
+            
+            <div class="profile-card <?= $selectedId === $profileId ? 'selected' : '' ?> <?= $isUsed ? 'used-profile' : '' ?> rounded-3xl p-5 relative">
+                
+                <?php if ($isUsed): ?>
+                    <div class="absolute top-4 right-4 px-3 py-1 bg-red-100 text-red-600 text-[10px] font-extrabold uppercase rounded-full tracking-wider border border-red-200">
+                        In Use
+                    </div>
+                <?php endif; ?>
+
                 <div class="flex items-start gap-4 mb-5">
                     <div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-primary">person</span></div>
                     <div class="min-w-0"><p class="font-extrabold text-on-surface"><?= h($label) ?></p><p class="text-lg font-bold text-on-surface-variant"><?= h($name) ?></p><p class="text-sm text-outline truncate"><?= h($email) ?></p><p class="text-sm text-outline truncate"><?= h($phone) ?></p></div>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <a href="<?= h($useUrl) ?>" class="px-5 py-2.5 rounded-full bg-primary text-white text-sm font-bold"><?= $selectedId === $profileId ? 'Selected' : 'Use This Data' ?></a>
-                    <button type="button" onclick='editProfile(<?= $profileJson ?>)' class="px-5 py-2.5 rounded-full bg-primary-fixed text-primary text-sm font-bold">Edit</button>
-                    <form method="POST" onsubmit="return confirm('Delete this saved data?')" class="inline"><input type="hidden" name="slot" value="<?= h($slot) ?>"><input type="hidden" name="return" value="<?= h($return) ?>"><input type="hidden" name="delete_id" value="<?= h($profileId) ?>"><button type="submit" class="px-5 py-2.5 rounded-full bg-red-100 text-red-700 text-sm font-bold">Delete</button></form>
+                    <?php if (!$isUsed): ?>
+                        <a href="<?= h($useUrl) ?>" class="px-5 py-2.5 rounded-full bg-primary text-white text-sm font-bold <?= $selectedId === $profileId ? 'pointer-events-none' : '' ?>">
+                            <?= $selectedId === $profileId ? 'Selected' : 'Use This Data' ?>
+                        </a>
+                        <button type="button" onclick='editProfile(<?= $profileJson ?>)' class="px-5 py-2.5 rounded-full bg-primary-fixed text-primary text-sm font-bold">Edit</button>
+                        <form method="POST" onsubmit="return confirm('Delete this saved data?')" class="inline"><input type="hidden" name="slot" value="<?= h($slot) ?>"><input type="hidden" name="return" value="<?= h($return) ?>"><input type="hidden" name="delete_id" value="<?= h($profileId) ?>"><button type="submit" class="px-5 py-2.5 rounded-full bg-red-100 text-red-700 text-sm font-bold">Delete</button></form>
+                    <?php else: ?>
+                        <!-- Jika dipake, tombol Use dihapus dan diganti info -->
+                        <span class="px-4 py-2 text-sm font-bold text-error">Sudah dipilih di kursi lain</span>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

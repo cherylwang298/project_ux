@@ -4,11 +4,22 @@ require 'config.php';
 $id = (int)($_GET['id'] ?? 0);
 
 if ($id) {
+    // ── DETAIL VIEW ─────────────────────────────────────────────
     $p = getProperty($id);
     if (!$p || $p['type'] !== 'villa') { header('Location: detail_villa.php'); exit; }
-    $favd = isFavourited($id);
+    
+    // Cek status database
+    $favd = auth() ? isFavourited($id) : false;
 
+    // Tambahkan CSS Animasi Wiggle di sini
     echo htmlHead(h($p['name']), <<<CSS
+@keyframes heart-wiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.4) rotate(-15deg); }
+  50% { transform: scale(1.4) rotate(15deg); }
+  75% { transform: scale(1.4) rotate(-15deg); }
+}
+.anim-wiggle { animation: heart-wiggle 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .hero-parallax{background-image:url('{$p['image_url']}');background-size:cover;background-position:center;background-attachment:fixed}
 .glass-card{background:rgba(255,255,255,.78);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.45);box-shadow:0 8px 32px rgba(0,103,127,.07)}
 CSS
@@ -35,11 +46,13 @@ CSS
           </div>
           <div class="flex items-center gap-3">
             <?php if (auth()): ?>
-            <button id="favBtn" onclick="toggleFav()"
-              class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center <?= $favd?'text-error':'text-white' ?> hover:scale-110 transition-all">
-              <span class="material-symbols-outlined text-[24px] <?= $favd?'icon-fill':'' ?>" id="favIcon">favorite</span>
+            <!-- Ini Tombol yang kamu minta untuk Detail View -->
+            <button id="favBtn" onclick="animateAndToggleFav(this, <?= $p['id'] ?>)" 
+              class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:scale-105 transition-all <?= $favd ? 'text-red-500' : 'text-white' ?>">
+              <span class="material-symbols-outlined text-[24px] <?= $favd ? 'icon-fill' : '' ?>">favorite</span>
             </button>
             <?php endif; ?>
+            
             <div class="glass rounded-2xl px-4 py-3 text-center">
               <div class="flex items-center gap-1 justify-center">
                 <span class="material-symbols-outlined icon-fill text-amber-400 text-[20px]">star</span>
@@ -131,7 +144,7 @@ CSS
                 <div>
                   <label class="block text-xs font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Check-out</label>
                   <input type="date" id="checkout" class="w-full h-11 px-3 rounded-xl bg-surface-container-low border border-outline-variant text-sm outline-none focus:border-secondary transition-colors"
-                    min="<?= date('Y-m-d',strtotime('+1 day')) ?>" value="<?= date('Y-m-d',strtotime('+7 days')) ?>">
+                    min="<?= date('Y-m-d',strtotime('+4 days')) ?>" value="<?= date('Y-m-d',strtotime('+7 days')) ?>">
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Guests</label>
@@ -173,7 +186,13 @@ CSS
     <script>
     const PPN = <?= $p['price_per_night'] ?>;
     const propId = <?= $p['id'] ?>;
-    function calcNights(){const i=new Date(document.getElementById('checkin').value);const o=new Date(document.getElementById('checkout').value);return Math.max(1,Math.round((o-i)/86400000));}
+    
+    function calcNights(){
+        const i=new Date(document.getElementById('checkin').value);
+        const o=new Date(document.getElementById('checkout').value);
+        return Math.max(1,Math.round((o-i)/86400000));
+    }
+    
     function updatePrice(){
       const n=calcNights();const base=PPN*n;const tax=base*0.11;const total=base+tax;
       document.getElementById('nightsLabel').textContent='<?= formatRupiah($p['price_per_night']) ?> × '+n+' nights';
@@ -181,24 +200,70 @@ CSS
       document.getElementById('taxAmt').textContent='Rp '+Math.round(tax).toLocaleString('id-ID');
       document.getElementById('totalAmt').textContent='Rp '+Math.round(total).toLocaleString('id-ID');
     }
+    
     function changeGuests(delta){
       const input=document.getElementById('guests');
       let val=parseInt(input.value||'1',10)+delta;
       input.value=Math.max(1,Math.min(<?= $p['max_guests'] ?>,val));
     }
+    
     function gotoCheckout(){
       const ci=document.getElementById('checkin').value;const co=document.getElementById('checkout').value;
       const g=document.getElementById('guests').value;const n=calcNights();const total=Math.round(PPN*n*1.11);
       location.href=`checkout.php?type=villa&id=${propId}&checkin=${ci}&checkout=${co}&guests=${g}&total=${total}`;
     }
-    document.getElementById('checkin').onchange=updatePrice;
-    document.getElementById('checkout').onchange=updatePrice;
+
+    // --- LOGIKA KALENDER PINTAR ---
+    document.getElementById('checkin').addEventListener('change', function() {
+        let ciVal = this.value;
+        if (!ciVal) return;
+        
+        // Buat objek date dari Checkin, lalu tambah 1 hari
+        let d = new Date(ciVal);
+        d.setDate(d.getDate() + 1);
+        
+        // Format ulang ke YYYY-MM-DD
+        let nextDay = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        
+        let coInput = document.getElementById('checkout');
+        coInput.min = nextDay; // Mencegah user klik tanggal yang salah di UI kalender
+        
+        // Auto-koreksi jika checkout yang ada saat ini <= checkin yang baru
+        if (coInput.value <= ciVal) {
+            coInput.value = nextDay;
+        }
+        
+        updatePrice();
+    });
+
+    document.getElementById('checkout').addEventListener('change', updatePrice);
+    
     <?php if (auth()): ?>
-    async function toggleFav(){
-      const fd=new FormData();fd.append('property_id',propId);
-      const r=await fetch('toggle_fav.php',{method:'POST',body:fd});const d=await r.json();
-      const btn=document.getElementById('favBtn');const icon=document.getElementById('favIcon');
-      btn.classList.toggle('text-error',d.active);btn.classList.toggle('text-white',!d.active);icon.classList.toggle('icon-fill',d.active);
+    // Fungsi gabungan: Animasi + Panggil DB
+    async function animateAndToggleFav(btn, id) {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      
+      // Trigger animasi wiggle
+      icon.classList.remove('anim-wiggle');
+      void icon.offsetWidth; 
+      icon.classList.add('anim-wiggle');
+      
+      // Update DB
+      const fd = new FormData(); 
+      fd.append('property_id', id);
+      const r = await fetch('toggle_fav.php', { method: 'POST', body: fd });
+      const d = await r.json();
+      
+      // Ubah warna langsung
+      if (d.active) {
+          btn.classList.add('text-red-500');
+          btn.classList.remove('text-white', 'text-outline');
+          icon.classList.add('icon-fill');
+      } else {
+          btn.classList.remove('text-red-500');
+          btn.classList.add(btn.classList.contains('bg-white/20') ? 'text-white' : 'text-outline');
+          icon.classList.remove('icon-fill');
+      }
     }
     <?php endif; ?>
     </script>
@@ -208,7 +273,16 @@ CSS
 } else {
     // ── LISTING VIEW ─────────────────────────────────────────────
     $villas = getProperties('villa');
+    
+    // Tambahkan CSS Animasi Wiggle di List juga
     echo htmlHead("Villas Bali", <<<CSS
+@keyframes heart-wiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.4) rotate(-15deg); }
+  50% { transform: scale(1.4) rotate(15deg); }
+  75% { transform: scale(1.4) rotate(-15deg); }
+}
+.anim-wiggle { animation: heart-wiggle 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .prop-card{background:rgba(255,255,255,.78);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.45);box-shadow:0 8px 28px rgba(0,103,127,.06);transition:all .35s cubic-bezier(.22,1,.36,1)}
 .prop-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,103,127,.12);border-color:rgba(0,103,127,.15)}
 .filter-btn.active{background:#00677f;color:white;box-shadow:0 4px 12px rgba(0,103,127,.3)}
@@ -236,7 +310,7 @@ CSS
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="villaGrid">
         <?php foreach ($villas as $i => $p):
-          $favd = isFavourited($p['id']);
+          $favd = auth() ? isFavourited($p['id']) : false;
         ?>
         <div class="prop-card card-villa rounded-2xl overflow-hidden anim-fade-up delay-<?= min(500,($i+1)*80) ?>"
           data-name="<?= strtolower(h($p['name'].' '.$p['location'])) ?>" data-beds="<?= $p['bedrooms'] ?>" data-price="<?= $p['price_per_night'] ?>">
@@ -248,9 +322,10 @@ CSS
               <span class="px-2.5 py-1 bg-white/25 text-white rounded-full text-xs font-semibold"><?= $p['bedrooms'] ?>BR</span>
             </div>
             <?php if (auth()): ?>
-            <button onclick="toggleFavBtn(<?= $p['id'] ?>,this)"
-              class="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-all shadow-md <?= $favd?'text-error':'text-outline' ?>">
-              <span class="material-symbols-outlined text-[20px] <?= $favd?'icon-fill':'' ?>">favorite</span>
+            <!-- Tombol Listing yang sudah diupdate ke versi merah bergoyang -->
+            <button onclick="event.stopPropagation(); event.preventDefault(); animateAndToggleFav(this, <?= $p['id'] ?>)"
+              class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md flex items-center justify-center hover:scale-110 transition-all shadow-md <?= $favd ? 'text-red-500' : 'text-white' ?>">
+              <span class="material-symbols-outlined text-[20px] <?= $favd ? 'icon-fill' : '' ?>">favorite</span>
             </button>
             <?php endif; ?>
             <div class="absolute bottom-3 right-3 flex items-center gap-1 bg-black/40 px-2.5 py-1 rounded-full">
@@ -282,7 +357,31 @@ CSS
     </main>
     <?= footer() ?>
     <script>
-    async function toggleFavBtn(id,btn){const fd=new FormData();fd.append('property_id',id);const r=await fetch('toggle_fav.php',{method:'POST',body:fd});const d=await r.json();const icon=btn.querySelector('.material-symbols-outlined');btn.classList.toggle('text-error',d.active);btn.classList.toggle('text-outline',!d.active);icon.classList.toggle('icon-fill',d.active);}
+    <?php if (auth()): ?>
+    // Fungsi gabungan: Animasi + Panggil DB untuk halaman depan
+    async function animateAndToggleFav(btn, id) {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      icon.classList.remove('anim-wiggle');
+      void icon.offsetWidth; 
+      icon.classList.add('anim-wiggle');
+      
+      const fd = new FormData(); 
+      fd.append('property_id', id);
+      const r = await fetch('toggle_fav.php', { method: 'POST', body: fd });
+      const d = await r.json();
+      
+      if (d.active) {
+          btn.classList.add('text-red-500');
+          btn.classList.remove('text-white', 'text-outline');
+          icon.classList.add('icon-fill');
+      } else {
+          btn.classList.remove('text-red-500');
+          btn.classList.add('text-white');
+          icon.classList.remove('icon-fill');
+      }
+    }
+    <?php endif; ?>
+
     function filterBed(min,btn){
       document.querySelectorAll('.filter-btn').forEach(b=>{b.classList.remove('active');b.classList.add('text-on-surface-variant');});
       btn.classList.add('active');btn.classList.remove('text-on-surface-variant');

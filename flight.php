@@ -204,7 +204,7 @@ CSS
       $checkoutUrl = auth() ? 'checkout.php?type=flight&id='.$f['id'].'&class='.$class.'&pax='.$pax.'&date='.h($date).'&trip='.$trip.'&return_date='.h($returnDate).($returnFlight?'&return_id='.$returnFlight['id']:'').'&total='.round($totalPrice*1.11) : 'login.php';
     ?>
     <div onclick="window.location.href='<?= $checkoutUrl ?>'" class="flight-card rounded-2xl p-5 md:p-6 anim-fade-up delay-<?= min(500,($i+1)*80) ?>"
-      data-airline="<?= h($f['airline']) ?>" data-price="<?= $price ?>" data-depart="<?= $f['departure_time'] ?>" data-dur="<?= $f['duration'] ?>">
+      data-flight-airline="<?= h($f['airline']) ?>" data-price="<?= $price ?>" data-depart="<?= $f['departure_time'] ?>" data-dur="<?= $f['duration'] ?>">
       <div class="flex flex-col md:flex-row md:items-center gap-5">
         <!-- Airline -->
         <div class="flex items-center gap-3 md:w-40">
@@ -344,9 +344,9 @@ function changePax(delta) {
   input.value = Math.max(1, Math.min(9, val));
 }
 function filterAirlines() {
-  const checked = [...document.querySelectorAll('.airline-check:checked')].map(i=>i.dataset.airline);
-  document.querySelectorAll('[data-airline]').forEach(card => {
-    card.style.display = checked.includes(card.dataset.airline) ? '' : 'none';
+  const checked = [...document.querySelectorAll('.airline-check:checked')].map(i => i.dataset.airline);
+  document.querySelectorAll('.flight-card[data-flight-airline]').forEach(card => {
+    card.style.display = checked.includes(card.dataset.flightAirline) ? '' : 'none';
   });
 }
 function resetAirlines() {
