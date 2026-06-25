@@ -686,15 +686,186 @@ function setMethodFilter(method) {
 //     });
 // }
 
+// function renderBookings() {
+
+//     const container = document.getElementById('booking-container');
+
+//     const searchValue =
+//         document.getElementById('booking-search')
+//         .value
+//         .trim()
+//         .toLowerCase();
+
+//     const filtered = bookingDatabase
+//         .filter(booking => {
+
+//             const matchesMethod =
+//                 activeMethodFilter === 'All' ||
+//                 booking.paymentMethod === activeMethodFilter;
+
+//             const matchesSearch =
+//                 searchValue === '' ||
+//                 [
+//                     booking.villaName,
+//                     booking.airline,
+//                     booking.from,
+//                     booking.to,
+//                     booking.checkin,
+//                     booking.checkout,
+//                     booking.promoTitle,
+//                     booking.promoCode,
+//                     booking.paymentMethod
+//                 ].some(value =>
+//                     value && value.toString().toLowerCase().includes(searchValue)
+//                 );
+
+//             return matchesMethod && matchesSearch;
+//         })
+//         .sort((a, b) =>
+//             new Date(b.bookedAt) - new Date(a.bookedAt)
+//         );
+
+//     if (filtered.length === 0) {
+//         showEmptyState(container);
+//         return;
+//     }
+
+//     container.innerHTML = '';
+
+//     filtered.forEach(booking => {
+
+//         // =========================
+//         // 📍 VILLA BOOKING
+//         // =========================
+//         if (booking.villaId) {
+
+//             const villaDetail =
+//                 villaDatabase.find(v => v.id === booking.villaId);
+
+//             if (!villaDetail) return;
+
+//             const formattedTotal =
+//                 new Intl.NumberFormat('id-ID', {
+//                     style: 'currency',
+//                     currency: 'IDR',
+//                     maximumFractionDigits: 0
+//                 }).format(booking.total);
+
+//             container.innerHTML += `
+//                 <div class="booking-card">
+//                     <img src="${villaDetail.imageUrl}" class="booking-image">
+
+//                     <div class="booking-detail">
+//                         <p class="villa-type">📍 Villa Booking</p>
+
+//                         <h2 class="villa-name">${villaDetail.name}</h2>
+
+//                         <p class="villa-location">
+//                             📅 ${booking.checkin} → ${booking.checkout}
+//                         </p>
+
+//                         <div class="divider"></div>
+
+//                         <div class="summary-row">
+//                             <span>Total Tamu</span>
+//                             <span class="summary-value">${booking.guest}</span>
+//                         </div>
+
+//                         <div class="summary-row">
+//                             <span>Metode Bayar</span>
+//                             <span class="summary-value">${booking.paymentMethod}</span>
+//                         </div>
+
+//                         <div class="summary-row">
+//                             <span>Total</span>
+//                             <span class="summary-value">${formattedTotal}</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             `;
+//         }
+
+//         // =========================
+//         // ✈️ FLIGHT BOOKING
+//         // =========================
+//         else if (booking.type === 'flight' || booking.airline || booking.promoCode || booking.promoTitle) {
+
+//             const totalValue = booking.grandTotal ?? booking.totalPrice ?? booking.total ?? 0;
+//             const formattedTotal =
+//                 new Intl.NumberFormat('id-ID', {
+//                     style: 'currency',
+//                     currency: 'IDR',
+//                     maximumFractionDigits: 0
+//                 }).format(totalValue);
+
+//             const flightTitle = booking.airline || `${booking.from || '-'} → ${booking.to || '-'}`;
+//             const departureInfo = booking.departureDate ? `${booking.departureDate}${booking.departureTime ? ' · ' + booking.departureTime : ''}` : '-';
+//             const arrivalInfo = booking.arrivalTime ? booking.arrivalTime : '-';
+
+//             container.innerHTML += `
+//                 <div class="booking-card">
+//                     <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500" class="booking-image">
+
+//                     <div class="booking-detail">
+//                         <p class="villa-type">✈️ Flight Booking</p>
+
+//                         <h2 class="villa-name">${flightTitle}</h2>
+
+//                         <p class="villa-location">
+//                             ${booking.from || '-'} → ${booking.to || '-'}
+//                         </p>
+
+//                         <div class="divider"></div>
+
+//                         <div class="summary-row">
+//                             <span>Penumpang</span>
+//                             <span class="summary-value">${booking.passenger ?? '-'}</span>
+//                         </div>
+
+//                         <div class="summary-row">
+//                             <span>Keberangkatan</span>
+//                             <span class="summary-value">${departureInfo}</span>
+//                         </div>
+
+//                         <div class="summary-row">
+//                             <span>Arrive</span>
+//                             <span class="summary-value">${arrivalInfo}</span>
+//                         </div>
+
+//                         ${booking.promoTitle ? `
+//                         <div class="summary-row">
+//                             <span>Promo</span>
+//                             <span class="summary-value">${booking.promoTitle}</span>
+//                         </div>
+//                         ` : ''}
+
+//                         <div class="summary-row">
+//                             <span>Metode Bayar</span>
+//                             <span class="summary-value">${booking.paymentMethod || '-'}</span>
+//                         </div>
+
+//                         <div class="summary-row">
+//                             <span>Total</span>
+//                             <span class="summary-value">${formattedTotal}</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             `;
+//         }
+
+//     });
+// }
+
+
 function renderBookings() {
 
     const container = document.getElementById('booking-container');
 
     const searchValue =
         document.getElementById('booking-search')
-        .value
-        .trim()
-        .toLowerCase();
+            .value
+            .trim()
+            .toLowerCase();
 
     const filtered = bookingDatabase
         .filter(booking => {
@@ -716,7 +887,8 @@ function renderBookings() {
                     booking.promoCode,
                     booking.paymentMethod
                 ].some(value =>
-                    value && value.toString().toLowerCase().includes(searchValue)
+                    value &&
+                    value.toString().toLowerCase().includes(searchValue)
                 );
 
             return matchesMethod && matchesSearch;
@@ -735,30 +907,63 @@ function renderBookings() {
     filtered.forEach(booking => {
 
         // =========================
-        // 📍 VILLA BOOKING
+        // PROPERTY BOOKING
         // =========================
         if (booking.villaId) {
 
-            const villaDetail =
-                villaDatabase.find(v => v.id === booking.villaId);
+            let propertyDetail = null;
+            let propertyType = '🏡 Villa Booking';
 
-            if (!villaDetail) return;
+            if (booking.villaId.startsWith('v-')) {
+                propertyDetail =
+                    villaDatabase?.find(v => v.id === booking.villaId);
+
+                propertyType = '🏡 Villa Booking';
+            }
+            else if (booking.villaId.startsWith('h-')) {
+                propertyDetail =
+                    hotelDatabase?.find(h => h.id === booking.villaId);
+
+                propertyType = '🏨 Hotel Booking';
+            }
+            else if (booking.villaId.startsWith('a-')) {
+                propertyDetail =
+                    apartmentDatabase?.find(a => a.id === booking.villaId);
+
+                propertyType = '🏢 Apartment Booking';
+            }
+
+            // fallback kalau data tidak ditemukan
+            propertyDetail ??= {
+                name: booking.villaName,
+                imageUrl: booking.imageUrl
+            };
 
             const formattedTotal =
                 new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
                     maximumFractionDigits: 0
-                }).format(booking.total);
+                }).format(Number(booking.total || 0));
 
             container.innerHTML += `
                 <div class="booking-card">
-                    <img src="${villaDetail.imageUrl}" class="booking-image">
+
+                    <img
+                        src="${propertyDetail.imageUrl}"
+                        class="booking-image"
+                        alt="${propertyDetail.name}"
+                    >
 
                     <div class="booking-detail">
-                        <p class="villa-type">📍 Villa Booking</p>
 
-                        <h2 class="villa-name">${villaDetail.name}</h2>
+                        <p class="villa-type">
+                            ${propertyType}
+                        </p>
+
+                        <h2 class="villa-name">
+                            ${propertyDetail.name}
+                        </h2>
 
                         <p class="villa-location">
                             📅 ${booking.checkin} → ${booking.checkout}
@@ -768,29 +973,47 @@ function renderBookings() {
 
                         <div class="summary-row">
                             <span>Total Tamu</span>
-                            <span class="summary-value">${booking.guest}</span>
+                            <span class="summary-value">
+                                ${booking.guest}
+                            </span>
                         </div>
 
                         <div class="summary-row">
                             <span>Metode Bayar</span>
-                            <span class="summary-value">${booking.paymentMethod}</span>
+                            <span class="summary-value">
+                                ${booking.paymentMethod}
+                            </span>
                         </div>
 
                         <div class="summary-row">
                             <span>Total</span>
-                            <span class="summary-value">${formattedTotal}</span>
+                            <span class="summary-value">
+                                ${formattedTotal}
+                            </span>
                         </div>
+
                     </div>
+
                 </div>
             `;
         }
 
         // =========================
-        // ✈️ FLIGHT BOOKING
+        // FLIGHT BOOKING
         // =========================
-        else if (booking.type === 'flight' || booking.airline || booking.promoCode || booking.promoTitle) {
+        else if (
+            booking.type === 'flight' ||
+            booking.airline ||
+            booking.promoCode ||
+            booking.promoTitle
+        ) {
 
-            const totalValue = booking.grandTotal ?? booking.totalPrice ?? booking.total ?? 0;
+            const totalValue =
+                booking.grandTotal ??
+                booking.totalPrice ??
+                booking.total ??
+                0;
+
             const formattedTotal =
                 new Intl.NumberFormat('id-ID', {
                     style: 'currency',
@@ -798,57 +1021,90 @@ function renderBookings() {
                     maximumFractionDigits: 0
                 }).format(totalValue);
 
-            const flightTitle = booking.airline || `${booking.from || '-'} → ${booking.to || '-'}`;
-            const departureInfo = booking.departureDate ? `${booking.departureDate}${booking.departureTime ? ' · ' + booking.departureTime : ''}` : '-';
-            const arrivalInfo = booking.arrivalTime ? booking.arrivalTime : '-';
+            const flightTitle =
+                booking.airline ||
+                `${booking.from || '-'} → ${booking.to || '-'}`;
+
+            const departureInfo =
+                booking.departureDate
+                    ? `${booking.departureDate}${booking.departureTime ? ' · ' + booking.departureTime : ''}`
+                    : '-';
+
+            const arrivalInfo =
+                booking.arrivalTime || '-';
 
             container.innerHTML += `
                 <div class="booking-card">
-                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500" class="booking-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500"
+                        class="booking-image"
+                        alt="Flight"
+                    >
 
                     <div class="booking-detail">
-                        <p class="villa-type">✈️ Flight Booking</p>
 
-                        <h2 class="villa-name">${flightTitle}</h2>
+                        <p class="villa-type">
+                            ✈️ Flight Booking
+                        </p>
+
+                        <h2 class="villa-name">
+                            ${flightTitle}
+                        </h2>
 
                         <p class="villa-location">
-                            ${booking.from || '-'} → ${booking.to || '-'}
+                            ${booking.from || '-'} →
+                            ${booking.to || '-'}
                         </p>
 
                         <div class="divider"></div>
 
                         <div class="summary-row">
                             <span>Penumpang</span>
-                            <span class="summary-value">${booking.passenger ?? '-'}</span>
+                            <span class="summary-value">
+                                ${booking.passenger ?? '-'}
+                            </span>
                         </div>
 
                         <div class="summary-row">
                             <span>Keberangkatan</span>
-                            <span class="summary-value">${departureInfo}</span>
+                            <span class="summary-value">
+                                ${departureInfo}
+                            </span>
                         </div>
 
                         <div class="summary-row">
-                            <span>Arrive</span>
-                            <span class="summary-value">${arrivalInfo}</span>
+                            <span>Tiba</span>
+                            <span class="summary-value">
+                                ${arrivalInfo}
+                            </span>
                         </div>
 
                         ${booking.promoTitle ? `
-                        <div class="summary-row">
-                            <span>Promo</span>
-                            <span class="summary-value">${booking.promoTitle}</span>
-                        </div>
+                            <div class="summary-row">
+                                <span>Promo</span>
+                                <span class="summary-value">
+                                    ${booking.promoTitle}
+                                </span>
+                            </div>
                         ` : ''}
 
                         <div class="summary-row">
                             <span>Metode Bayar</span>
-                            <span class="summary-value">${booking.paymentMethod || '-'}</span>
+                            <span class="summary-value">
+                                ${booking.paymentMethod || '-'}
+                            </span>
                         </div>
 
                         <div class="summary-row">
                             <span>Total</span>
-                            <span class="summary-value">${formattedTotal}</span>
+                            <span class="summary-value">
+                                ${formattedTotal}
+                            </span>
                         </div>
+
                     </div>
+
                 </div>
             `;
         }

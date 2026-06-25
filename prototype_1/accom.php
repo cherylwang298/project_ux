@@ -513,7 +513,7 @@ body{
 
 <div class="row">
   <input type="number" id="guest" class="input" placeholder="Guest">
-  <input type="number" id="room" class="input" placeholder="Room">
+  <!-- <input type="number" id="room" class="input" placeholder="Room"> -->
 </div>
 
 <button class="btn" onclick="searchAccom()">
@@ -713,7 +713,7 @@ function searchAccom(){
   const checkin = document.getElementById('checkin').value;
   const checkout = document.getElementById('checkout').value;
   const guest = document.getElementById('guest').value;
-  const room = document.getElementById('room').value;
+  // const room = document.getElementById('room').value;
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -742,8 +742,8 @@ function searchAccom(){
     destination,
     checkin,
     checkout,
-    guest,
-    room
+    guest
+    // room
   };
 
   localStorage.setItem('accomSearch', JSON.stringify(searchData));
