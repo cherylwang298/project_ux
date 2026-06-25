@@ -1,4 +1,4 @@
-  <?php
+<?php
   require 'config.php';
 
   $id = (int)($_GET['id'] ?? 0);
@@ -21,6 +21,12 @@
     50% { transform: scale(1.4) rotate(15deg); }
     75% { transform: scale(1.4) rotate(-15deg); }
   }
+  @keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  /* Force navbar to always sit above hero/map overlays */
+  header, nav, [class*='navbar'], [class*='nav-bar'] { position:relative; z-index:9999 !important; }
   .anim-wiggle { animation: heart-wiggle 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .fav-btn{width:48px;height:48px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.45);backdrop-filter:blur(14px);transition:all .25s ease;border:none;cursor:pointer}
   .fav-btn:hover{transform:scale(1.08)}
@@ -395,81 +401,211 @@
   } else {
     // ── LISTING VIEW ─────────────────────────────────────────────
     $hotels = getProperties();
-    echo htmlHead("Accommodations", str_replace('{{IMAGE_URL}}', '', $customCSS));
+    echo htmlHead("Accommodations", str_replace('{{IMAGE_URL}}', '', $customCSS) . '
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+      #accomMap .leaflet-attribution-flag { display:none !important; }
+    </style>
+    ');
   ?>
   <body class="bg-background text-on-background min-h-screen">
     <?= navbar('detail_hotel.php') ?>
 
-    <div class="bg-gradient-to-r from-[#004ce2] to-[#00677f] pt-32 pb-16 px-5 md:px-16">
-      <div class="max-w-[1280px] mx-auto">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-2">Accommodations</h1>
-        <p class="text-white/75">Choose hotels or villas for your stay.</p>
+    <!-- ── HERO + MAP seamlessly merged ─────────────────────────── -->
+    <div class="relative" style="margin-top:0">
+
+      <!-- Blue gradient overlay — z-index BELOW navbar (navbar is z-50 or similar) -->
+      <div class="absolute top-0 left-0 right-0 pointer-events-none"
+           style="height:300px;z-index:10;background:linear-gradient(to bottom,#0545c6 0%, #07629f 55%, transparent 100%);">
       </div>
-    </div>
 
-    <main class="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
+      <!-- Hero text + search -->
+      <div class="relative px-5 md:px-16 pb-0" style="z-index:20;padding-top:120px;">
+        <div class="max-w-[1280px] mx-auto">
+          <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight text-center drop-shadow-lg" style="margin-bottom:10px;margin-top:0;">Accommodations</h1>
+          <p class="text-white/80 text-sm drop-shadow text-center" style="margin-bottom:28px;">Choose hotels or villas for your stay.</p>
 
-      <div class="glass-card rounded-2xl p-5 mb-8 anim-fade-up relative overflow-visible z-[100]">
-        <div class="flex flex-col md:flex-row md:items-center gap-3">
+          <!-- Search + Filter bar — glassmorphism: semi-transparent white -->
+          <div style="background:rgba(255,255,255,0.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid rgba(255,255,255,0.75);box-shadow:0 8px 32px rgba(0,20,80,0.18);"
+               class="rounded-2xl p-2.5 flex flex-col md:flex-row md:items-center gap-2.5">
 
-          <div class="flex-1 w-full relative">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
-            <input id="accomSearch" oninput="applyFilters()" class="w-full h-12 pl-12 pr-4 rounded-xl bg-surface-container-low border border-outline-variant outline-none focus:border-primary transition-colors text-sm" placeholder="Cari nama hotel atau villa...">
-          </div>
+            <div class="flex-1 w-full relative">
+              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#1a3a6e] text-[20px]">search</span>
+              <input id="accomSearch" oninput="applyFilters()"
+                style="background:rgba(255,255,255,0.6);border:1.5px solid rgba(180,205,240,0.7);color:#111c2d;"
+                class="w-full h-11 pl-11 pr-4 rounded-xl outline-none text-sm font-medium placeholder:text-[#3a5a8a]/70 focus:border-primary transition-colors"
+                placeholder="Cari nama hotel atau villa...">
+            </div>
 
-          <div class="relative shrink-0" id="dropdownTypeWrap">
-            <button onclick="toggleDropdown('dropdownType')" class="flex items-center gap-2 h-12 px-4 rounded-xl bg-surface-container-low border border-outline-variant hover:border-primary transition-colors text-sm font-semibold text-on-surface min-w-[140px] justify-between">
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[18px]">apartment</span>
-                <span id="typeLabel">Semua Tipe</span>
+            <div class="relative shrink-0" id="dropdownTypeWrap">
+              <button onclick="toggleDropdown('dropdownType')"
+                style="background:rgba(255,255,255,0.6);border:1.5px solid rgba(180,205,240,0.7);"
+                class="flex items-center gap-2 h-11 px-4 rounded-xl hover:bg-white/80 transition-colors text-sm font-semibold text-[#1a3a6e] min-w-[140px] justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[17px]">apartment</span>
+                  <span id="typeLabel">Semua Tipe</span>
+                </div>
+                <span class="material-symbols-outlined text-[#3a5a8a] text-[17px]" id="typeChevron">expand_more</span>
+              </button>
+              <div id="dropdownType" class="hidden absolute top-full left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-outline-variant/40 overflow-hidden z-[9999]">
+                <button onclick="setTypeFilter('all', 'Semua Tipe', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors dd-active">
+                  <span class="material-symbols-outlined text-[17px] text-primary">select_all</span> Semua Tipe
+                  <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check">check</span>
+                </button>
+                <button onclick="setTypeFilter('hotel', 'Hotel', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors">
+                  <span class="material-symbols-outlined text-[17px] text-outline">hotel</span> Hotel
+                  <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check hidden">check</span>
+                </button>
+                <button onclick="setTypeFilter('villa', 'Villa', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors">
+                  <span class="material-symbols-outlined text-[17px] text-outline">villa</span> Villa
+                  <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check hidden">check</span>
+                </button>
               </div>
-              <span class="material-symbols-outlined text-outline text-[18px]" id="typeChevron">expand_more</span>
-            </button>
-            <div id="dropdownType" class="hidden absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-outline-variant/40 overflow-hidden z-[9999]">
-              <button onclick="setTypeFilter('all', 'Semua Tipe', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors dd-active">
-                <span class="material-symbols-outlined text-[17px] text-primary">select_all</span> Semua Tipe
-                <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check">check</span>
+            </div>
+
+            <div class="relative shrink-0" id="dropdownRatingWrap">
+              <button onclick="toggleDropdown('dropdownRating')"
+                style="background:rgba(255,255,255,0.6);border:1.5px solid rgba(180,205,240,0.7);"
+                class="flex items-center gap-2 h-11 px-4 rounded-xl hover:bg-white/80 transition-colors text-sm font-semibold text-[#1a3a6e] min-w-[148px] justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon-fill text-amber-400 text-[17px]">star</span>
+                  <span id="ratingLabel">Urutkan</span>
+                </div>
+                <span class="material-symbols-outlined text-[#3a5a8a] text-[17px]" id="ratingChevron">expand_more</span>
               </button>
-              <button onclick="setTypeFilter('hotel', 'Hotel', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors">
-                <span class="material-symbols-outlined text-[17px] text-outline">hotel</span> Hotel
-                <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check hidden">check</span>
-              </button>
-              <button onclick="setTypeFilter('villa', 'Villa', this)" class="dd-item w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface hover:bg-primary/8 transition-colors">
-                <span class="material-symbols-outlined text-[17px] text-outline">villa</span> Villa
-                <span class="material-symbols-outlined text-primary text-[16px] ml-auto dd-check hidden">check</span>
-              </button>
+              <div id="dropdownRating" class="hidden absolute top-full right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-outline-variant/40 overflow-hidden z-[9999]">
+                <button onclick="setSort('rating','Rating Tertinggi',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface dd-active-r">
+                  <span class="material-symbols-outlined text-amber-400">star</span> Rating Tertinggi
+                </button>
+                <button onclick="setSort('cheap','Harga Termurah',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
+                  <span class="material-symbols-outlined">payments</span> Harga Termurah
+                </button>
+                <button onclick="setSort('expensive','Harga Termahal',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
+                  <span class="material-symbols-outlined">diamond</span> Harga Termahal
+                </button>
+                <button onclick="setSort('az','A-Z',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
+                  <span class="material-symbols-outlined">sort_by_alpha</span> A-Z
+                </button>
+                <button onclick="setSort('za','Z-A',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
+                  <span class="material-symbols-outlined">sort_by_alpha</span> Z-A
+                </button>
+              </div>
             </div>
           </div>
-
-          <div class="relative shrink-0" id="dropdownRatingWrap">
-            <button onclick="toggleDropdown('dropdownRating')" class="flex items-center gap-2 h-12 px-4 rounded-xl bg-surface-container-low border border-outline-variant hover:border-primary transition-colors text-sm font-semibold text-on-surface min-w-[150px] justify-between">
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined icon-fill text-amber-400 text-[18px]">star</span>
-                <span id="ratingLabel">Urutkan</span>
-              </div>
-              <span class="material-symbols-outlined text-outline text-[18px]" id="ratingChevron">expand_more</span>
-            </button>
-            <div id="dropdownRating" class="hidden absolute top-full right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-outline-variant/40 overflow-hidden z-[9999]">
-              <button onclick="setSort('rating','Rating Tertinggi',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface dd-active-r">
-                <span class="material-symbols-outlined text-amber-400">star</span> Rating Tertinggi
-              </button>
-              <button onclick="setSort('cheap','Harga Termurah',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
-                <span class="material-symbols-outlined">payments</span> Harga Termurah
-              </button>
-              <button onclick="setSort('expensive','Harga Termahal',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
-                <span class="material-symbols-outlined">diamond</span> Harga Termahal
-              </button>
-              <button onclick="setSort('az','A-Z',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
-                <span class="material-symbols-outlined">sort_by_alpha</span> A-Z
-              </button>
-              <button onclick="setSort('za','Z-A',this)" class="dd-item-r w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-on-surface">
-                <span class="material-symbols-outlined">sort_by_alpha</span> Z-A
-              </button>
-            </div>
-          </div>
-
         </div>
       </div>
+
+      <!-- ── MAP (starts from top, behind the gradient) ──────────── -->
+      <div id="mapSection" class="relative bg-[#d8e8ec] overflow-hidden" style="height:720px;margin-top:-300px;z-index:5;">
+        <div id="accomMap" class="absolute inset-0 w-full h-full z-0"></div>
+
+        <!-- Map Controls overlay -->
+        <div class="absolute top-4 left-4 z-[500] flex flex-col gap-2">
+          <button onclick="accomMap.zoomIn()" class="w-9 h-9 bg-white rounded-lg shadow-md flex items-center justify-center text-on-surface hover:bg-surface-container-low font-bold text-xl leading-none">+</button>
+          <button onclick="accomMap.zoomOut()" class="w-9 h-9 bg-white rounded-lg shadow-md flex items-center justify-center text-on-surface hover:bg-surface-container-low font-bold text-xl leading-none">−</button>
+          <button onclick="recenterMap()" class="w-9 h-9 bg-white rounded-lg shadow-md flex items-center justify-center text-primary hover:bg-surface-container-low">
+            <span class="material-symbols-outlined text-[20px]">my_location</span>
+          </button>
+        </div>
+
+        <!-- Search as I move toggle -->
+        <div class="absolute top-4 right-4 z-[500]">
+          <label class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 shadow-md cursor-pointer text-sm font-semibold text-on-surface select-none">
+            <input type="checkbox" id="searchAsMove" checked class="accent-primary w-4 h-4">
+            Search as I move the map
+          </label>
+        </div>
+
+        <!-- Property Carousel at bottom of map -->
+        <div class="absolute bottom-0 left-0 right-0 z-[400] pointer-events-none">
+          <div class="relative pointer-events-auto" style="padding-left:max(20px, calc((100vw - 1280px)/2 + 20px));padding-right:max(20px, calc((100vw - 1280px)/2 + 20px));padding-bottom:14px;">
+            <div class="flex items-end gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar" id="mapCarousel" style="padding-bottom:6px;overflow-y:visible;">
+              <?php foreach ($hotels as $hi => $hp):
+                $hUrl = $hp['type'] === 'villa' ? 'detail_villa.php?id=' . (int)$hp['id'] : 'detail_hotel.php?id=' . (int)$hp['id'];
+                $isFav2 = auth() ? isFavourited($hp['id']) : false;
+              ?>
+              <div class="map-card snap-start shrink-0 w-56 bg-white overflow-hidden cursor-pointer transition-all hover:-translate-y-1"
+                style="border-radius:12px;border:1px solid rgba(200,215,235,0.6);box-shadow:0 4px 16px rgba(0,30,80,0.12);pointer-events:auto;"
+                onclick="window.location.href='<?= h($hUrl) ?>'"
+                data-lat="<?= h($hp['lat'] ?? '') ?>"
+                data-lng="<?= h($hp['lng'] ?? '') ?>"
+                data-id="<?= $hp['id'] ?>"
+                data-name="<?= strtolower(h($hp['name'] . ' ' . $hp['location'])) ?>"
+                data-type="<?= h($hp['type']) ?>">
+                <div class="relative h-28 overflow-hidden">
+                  <img src="<?= h($hp['image_url']) ?>" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="<?= h($hp['name']) ?>">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/55 backdrop-blur-sm text-white rounded text-[9px] font-bold uppercase tracking-wide flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[11px]"><?= $hp['type'] === 'villa' ? 'villa' : 'hotel' ?></span>
+                    <?= h(strtoupper($hp['type'])) ?>
+                  </div>
+                  <?php if (auth()): ?>
+                  <div class="absolute top-2 right-2 z-10">
+                    <button onclick="event.stopPropagation(); event.preventDefault(); animateAndToggleFav(this, <?= $hp['id'] ?>)"
+                      class="fav-btn <?= $isFav2 ? 'active' : '' ?>" style="width:34px;height:34px;">
+                      <span class="material-symbols-outlined text-white text-[18px] <?= $isFav2 ? 'icon-fill' : '' ?>">favorite</span>
+                    </button>
+                  </div>
+                  <?php endif; ?>
+                  <div class="absolute bottom-2 right-2 flex items-center gap-0.5 bg-black/45 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                    <span class="material-symbols-outlined icon-fill text-amber-400 text-[11px]">star</span>
+                    <span class="text-white text-[10px] font-bold"><?= $hp['rating'] ?></span>
+                  </div>
+                </div>
+                <div class="p-3">
+                  <h3 class="font-extrabold text-on-surface text-xs leading-tight mb-0.5 truncate"><?= h($hp['name']) ?></h3>
+                  <p class="text-on-surface-variant text-[10px] flex items-center gap-0.5 mb-2">
+                    <span class="material-symbols-outlined text-[11px]">location_on</span><?= h($hp['location']) ?>
+                  </p>
+                  <div class="flex items-end justify-between pt-2 border-t border-outline-variant/30">
+                    <div>
+                      <p class="text-[9px] text-outline">Starts from</p>
+                      <div class="flex items-baseline gap-0.5">
+                        <span class="text-primary font-extrabold text-xs"><?= formatRupiah($hp['price_per_night']) ?></span>
+                        <span class="text-outline text-[9px]">/ night</span>
+                      </div>
+                    </div>
+                    <a href="<?= h($hUrl) ?>" onclick="event.stopPropagation()"
+                      class="view-btn px-3 py-1.5 text-white rounded-full text-[9px] font-bold">
+                      View
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <?php endforeach; ?>
+            </div>
+            <!-- Carousel nav arrows -->
+            <button onclick="scrollCarousel(1)" id="carouselNext"
+              class="absolute right-5 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-on-surface hover:bg-primary hover:text-white transition-all z-10">
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+            <button onclick="scrollCarousel(-1)" id="carouselPrev"
+              class="absolute left-5 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-on-surface hover:bg-primary hover:text-white transition-all z-10 hidden">
+              <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+          </div>
+          <!-- Scroll for more hint -->
+          <div class="flex justify-center pb-2 pt-1 pointer-events-none">
+          </div>
+        </div>
+
+        <!-- dead remnant -->
+        <div class="hidden" id="toggleListBtn"></div>
+      </div><!-- /#mapSection -->
+
+      <!-- Glassmorphism scroll hint — floats between map and list -->
+      <div class="flex justify-center" style="margin-top:-36px;position:relative;z-index:50;pointer-events:none;">
+        <div class="flex flex-col items-center justify-center gap-0.5 pointer-events-auto cursor-pointer"
+             style="width:72px;height:72px;border-radius:50%;background:rgba(30,90,200,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);box-shadow:0 4px 20px rgba(0,20,60,0.25);animation:bounceDown 2s ease-in-out infinite;"
+             onclick="document.getElementById('hotelGrid').scrollIntoView({behavior:'smooth'})">
+          <span class="text-white font-bold" style="font-size:7px;letter-spacing:0.1em;text-shadow:0 1px 3px rgba(0,0,0,0.6);line-height:1.3;text-align:center;">SCROLL<br>FOR MORE</span>
+          <span class="material-symbols-outlined text-white" style="font-size:26px;text-shadow:0 1px 3px rgba(0,0,0,0.5);line-height:0.8;margin-top:-2px;">keyboard_arrow_down</span>
+        </div>
+      </div>
+    </div><!-- /.relative wrapper -->
+
+    <!-- List Section — always visible below map -->
+    <main class="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="hotelGrid">
         <?php foreach ($hotels as $i => $p):
@@ -522,7 +658,104 @@
     </main>
     <?= footer() ?>
 
+    <!-- Leaflet CSS + JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      .hide-scrollbar::-webkit-scrollbar { display:none; }
+      .hide-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+      /* City pin marker */
+      .city-pin { position:relative; display:flex; flex-direction:column; align-items:center; cursor:pointer; }
+      .city-pin .pin-bubble {
+        width:52px; height:52px; border-radius:50%; border:3px solid white;
+        overflow:hidden; box-shadow:0 4px 16px rgba(0,76,226,.35);
+        transition:transform .2s;
+      }
+      .city-pin:hover .pin-bubble { transform:scale(1.12); }
+      .city-pin .pin-count {
+        position:absolute; top:-6px; right:-6px;
+        background:#004ce2; color:white; font-size:10px; font-weight:800;
+        border-radius:999px; min-width:20px; height:20px;
+        display:flex; align-items:center; justify-content:center;
+        border:2px solid white; padding:0 4px;
+      }
+      .city-pin .pin-label {
+        margin-top:4px; background:white; border-radius:8px;
+        padding:2px 7px; font-size:11px; font-weight:700;
+        color:#111c2d; box-shadow:0 2px 8px rgba(0,0,0,.18);
+        white-space:nowrap;
+      }
+      /* Active carousel card */
+      .map-card.active-card { box-shadow:0 0 0 3px #004ce2, 0 8px 32px rgba(0,76,226,.25); }
+    </style>
+
     <script>
+      // ── MAP SETUP ──────────────────────────────────────────────────
+      const accomMap = L.map('accomMap', { zoomControl: false, attributionControl: false }).setView([-8.55, 115.2], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: '© OpenStreetMap contributors'
+      }).addTo(accomMap);
+      L.control.attribution({ prefix: false, position: 'bottomleft' }).addTo(accomMap);
+
+      // Individual hotel markers from PHP data
+      const hotelMarkers = {};
+      <?php foreach ($hotels as $hm): if (empty($hm['lat']) || empty($hm['lng'])) continue; ?>
+      (function(){
+        const id   = <?= (int)$hm['id'] ?>;
+        const name = <?= json_encode($hm['name']) ?>;
+        const img  = <?= json_encode($hm['image_url']) ?>;
+        const lat  = <?= (float)$hm['lat'] ?>;
+        const lng  = <?= (float)$hm['lng'] ?>;
+        const type = <?= json_encode($hm['type']) ?>;
+
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="city-pin" title="${name}">
+            <div class="pin-bubble"><img src="${img}" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>
+            <div class="pin-label">${name.split(' ').slice(0,3).join(' ')}</div>
+          </div>`,
+          iconSize: [56, 76], iconAnchor: [28, 76]
+        });
+
+        const m = L.marker([lat, lng], { icon }).addTo(accomMap);
+        m.on('click', () => {
+          accomMap.flyTo([lat, lng], 14, { duration: 1 });
+          // Highlight matching carousel card
+          const carousel = document.getElementById('mapCarousel');
+          const cards = Array.from(carousel.querySelectorAll('.map-card'));
+          cards.forEach(c => c.classList.remove('active-card'));
+          const target = cards.find(c => parseInt(c.dataset.id) === id);
+          if (target) {
+            target.classList.add('active-card');
+            carousel.scrollTo({ left: target.offsetLeft - 20, behavior: 'smooth' });
+          }
+        });
+        hotelMarkers[id] = { marker: m, lat, lng, name };
+      })();
+      <?php endforeach; ?>
+
+      function recenterMap() {
+        accomMap.setView([-8.55, 115.2], 10, { animate: true });
+      }
+
+      // Carousel scroll logic
+      function scrollCarousel(dir) {
+        const c = document.getElementById('mapCarousel');
+        c.scrollBy({ left: dir * 300, behavior: 'smooth' });
+        setTimeout(updateCarouselArrows, 350);
+      }
+      function updateCarouselArrows() {
+        const c = document.getElementById('mapCarousel');
+        document.getElementById('carouselPrev').classList.toggle('hidden', c.scrollLeft < 10);
+        document.getElementById('carouselNext').classList.toggle('hidden', c.scrollLeft + c.clientWidth >= c.scrollWidth - 10);
+      }
+      document.getElementById('mapCarousel').addEventListener('scroll', updateCarouselArrows);
+      updateCarouselArrows();
+
+      // Fix map size after page load
+      window.addEventListener('load', () => { accomMap.invalidateSize(); });
+
+      // ── FILTER / SORT ──────────────────────────────────────────────
       let currentType = 'all';
       let currentSort = 'rating';
 
@@ -606,8 +839,19 @@
         applyFilters();
       }
 
+      // Search: Enter key flies map to first match
+      document.getElementById('accomSearch').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          const q = this.value.toLowerCase().trim();
+          if (!q) return;
+          const match = Object.values(hotelMarkers).find(h => h.name.toLowerCase().includes(q));
+          if (match) accomMap.flyTo([match.lat, match.lng], 14, { duration: 1.2 });
+        }
+      });
+
       function applyFilters() {
-        const q = document.getElementById('accomSearch').value.toLowerCase();
+        const q = document.getElementById('accomSearch').value.toLowerCase().trim();
+        // Filter grid cards
         const grid = document.getElementById('hotelGrid');
         let cards = Array.from(grid.querySelectorAll('.prop-card'));
         cards.forEach(card => {
@@ -625,6 +869,30 @@
           return 0;
         });
         visible.forEach(c => grid.appendChild(c));
+
+        // Filter carousel cards + fly map to first match
+        const carousel = document.getElementById('mapCarousel');
+        const mapCards = Array.from(carousel.querySelectorAll('.map-card'));
+        let firstMatch = null;
+        mapCards.forEach(card => {
+          const matchName = card.dataset.name.includes(q);
+          const matchType = (currentType === 'all' || card.dataset.type === currentType);
+          const show = matchName && matchType;
+          card.style.display = show ? '' : 'none';
+          if (show && !firstMatch) firstMatch = card;
+        });
+
+        if (q && firstMatch) {
+          const id = parseInt(firstMatch.dataset.id);
+          const hm = hotelMarkers[id];
+          if (hm) accomMap.flyTo([hm.lat, hm.lng], 14, { duration: 1.2 });
+          mapCards.forEach(c => c.classList.remove('active-card'));
+          firstMatch.classList.add('active-card');
+          carousel.scrollTo({ left: firstMatch.offsetLeft - 20, behavior: 'smooth' });
+        } else if (!q) {
+          mapCards.forEach(c => { c.style.display = ''; c.classList.remove('active-card'); });
+          recenterMap();
+        }
       }
     </script>
   </body>

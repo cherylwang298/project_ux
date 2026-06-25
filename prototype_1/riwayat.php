@@ -45,6 +45,51 @@ echo htmlHead(
 .bk-card{background:rgba(255,255,255,.78);backdrop-filter:blur(24px);border:1.5px solid rgba(195,197,216,.5);box-shadow:0 4px 20px rgba(0,76,226,.05);transition:all .3s ease}
 .bk-card:hover{border-color:rgba(0,76,226,.2);box-shadow:0 12px 40px rgba(0,76,226,.09);transform:translateY(-2px)}
 .tab-b.active{background:#004ce2;color:white;box-shadow:0 4px 10px rgba(0,76,226,.25)}
+
+/* FIX: Fading dibuat sampai 'transparent' agar memudar halus tanpa garis potong */
+.flight-hero{
+    background: linear-gradient(
+        180deg,
+        #eef6ff 0%,
+        #f3f8ff 40%,
+        #f9fbff 72%,
+        rgba(249,251,255,.65) 88%,
+        transparent 100%
+    );
+    padding-top:112px;
+    padding-bottom:80px; /* diperpanjang supaya gradien lebih halus */
+    position:relative;
+    overflow:hidden;
+}
+
+/* Glow biru */
+.flight-hero::before{
+    content:"";
+    position:absolute;
+    inset:auto -10% -60% auto;
+    width:55vw;
+    height:55vw;
+    border-radius:999px;
+    background:rgba(0,196,232,.14);
+    filter:blur(80px);
+}
+
+/* Fade ke section bawah */
+.flight-hero::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-100px;
+    height:180px;
+    background:linear-gradient(
+        to top,
+        rgba(249,251,255,.9) 0%,
+        rgba(249,251,255,.4) 45%,
+        transparent 100%
+    );
+    pointer-events:none;
+}
 CSS
 );
 ?>
@@ -56,15 +101,14 @@ CSS
   </script>
   <?= navbar('riwayat.php') ?><?= renderFlash() ?>
 
-  <div class="bg-gradient-to-br from-[#111c2d] to-[#004ce2] pt-28 pb-12 px-5 md:px-16">
-    <div class="max-w-[1280px] mx-auto">
-      <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">My Bookings</h1>
-      <p class="text-white/75">Manage all your bookings in one place.</p>
+  <div class="flight-hero px-5 md:px-16 text-center">
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">My Bookings</h1>
+      <p class="text-slate-600 font-medium">Manage all your bookings in one place.</p>
     </div>
   </div>
 
   <main class="max-w-[1280px] mx-auto px-5 md:px-16 py-12">
-    <!-- Filter Tabs -->
     <div class="flex flex-wrap gap-2 mb-8 anim-fade-up">
       <?php foreach (
         [
@@ -110,32 +154,28 @@ CSS
           if ($bt === 'flight') {
             $fi = $b['_item'] ?? getFlight($b['flight_id']);
             $iName = $fi ? $fi['airline'] . ' (' . $fi['from_code'] . '→' . $fi['to_code'] . ')' : 'Flight';
-            $iImage = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80'; // Gambar default pesawat
+            $iImage = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&&q=80';
           } else {
             $pi = $b['_item'] ?? getProperty($b['property_id']);
             $iName = $pi ? $pi['name'] : ucfirst($bt);
-            $iImage = $pi ? $pi['image_url'] : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80'; // Fallback hotel/villa
+            $iImage = $pi ? $pi['image_url'] : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80';
           }
         ?>
           <div class="bk-card rounded-2xl p-5 md:p-6 anim-fade-up delay-<?= min(400, $i * 60) ?>">
             <div class="flex flex-col md:flex-row gap-5 md:items-center">
 
-              <!-- Thumbnail Image (Rounded diperbaiki ke 16px) -->
               <div class="w-full md:w-40 h-32 md:h-28 rounded-[16px] shrink-0 overflow-hidden relative shadow-sm">
                 <img src="<?= h($iImage) ?>" class="w-full h-full object-cover" alt="<?= h($iName) ?>">
-                <!-- Label Overlay -->
                 <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/60 backdrop-blur-sm text-white rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
                   <span class="material-symbols-outlined text-[13px]"><?= $icon ?></span>
                   <?= $bt ?>
                 </div>
               </div>
 
-              <!-- Info Details -->
               <div class="flex-1 min-w-0">
                 <div class="flex flex-col mb-2">
                   <div class="flex items-center gap-3 flex-wrap">
                     <p class="font-extrabold text-on-surface text-lg leading-tight"><?= h($iName) ?></p>
-                    <!-- Badge Status ditaruh di sebelah Judul -->
                     <span class="px-2.5 py-1 rounded-full border text-[11px] font-bold <?= $stxt . ' ' . $sbg . ' ' . $sborder ?> flex items-center gap-1 w-max">
                       <span class="material-symbols-outlined text-[13px] icon-fill"><?= $b['status'] === 'confirmed' ? 'check_circle' : ($b['status'] === 'cancelled' ? 'cancel' : 'task_alt') ?></span>
                       <?= ucfirst($b['status']) ?>
@@ -158,7 +198,6 @@ CSS
                 </div>
               </div>
 
-              <!-- Amount + Actions -->
               <div class="flex flex-col md:items-end justify-between gap-3 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-outline-variant/30 md:pl-5 md:border-l">
                 <div class="text-left md:text-right">
                   <p class="text-xs text-outline font-semibold">Total Payment</p>
@@ -184,7 +223,6 @@ CSS
     <?php endif; ?>
   </main>
 
-  <!-- Cancel Modal -->
   <div id="cancelModal" class="fixed inset-0 z-[998] hidden" style="background:rgba(0,0,0,.5)">
     <div class="flex items-center justify-center min-h-screen p-5">
       <div class="glass rounded-3xl p-8 max-w-sm w-full anim-scale">

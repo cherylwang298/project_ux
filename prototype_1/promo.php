@@ -12,7 +12,9 @@ CSS
 <?= navbar('promo.php') ?><?= renderFlash() ?>
 
 <!-- Hero -->
-<div class="bg-gradient-to-br from-[#004ce2] via-[#3267ff] to-[#00677f] pt-28 pb-20 px-5 md:px-16 relative overflow-hidden">
+<div class="pt-28 pb-20 px-5 md:px-16 relative overflow-hidden" 
+     style="background: linear-gradient(to bottom, #0545c6 0%, #07629f 55%, transparent 100%);">
+  
   <div class="absolute inset-0 overflow-hidden opacity-10 flex flex-wrap gap-8 content-start pt-8 text-4xl">
     <?php for($i=0;$i<30;$i++) echo '🏷️ '; ?>
   </div>

@@ -22,6 +22,7 @@ $PROPERTIES = [
         'type' => 'hotel',
         'name' => 'The Azure Grand Hotel',
         'location' => 'Seminyak, Bali',
+        'lat' => -8.6897, 'lng' => 115.1647,
         'description' => 'An iconic oceanfront hotel offering unparalleled luxury with panoramic views of the Indian Ocean. Each suite is meticulously designed to blend contemporary elegance with Balinese heritage.',
         'price_per_night' => 2850000,
         'rating' => 4.9,
@@ -47,6 +48,7 @@ $PROPERTIES = [
         'type' => 'villa',
         'name' => 'Ubud Rainforest Villa',
         'location' => 'Ubud, Bali',
+        'lat' => -8.5069, 'lng' => 115.2625,
         'description' => 'Hidden within the emerald rainforest, this private villa retreat offers complete seclusion with a private infinity pool overlooking the sacred Ayung River gorge.',
         'price_per_night' => 4200000,
         'rating' => 4.8,
@@ -66,6 +68,7 @@ $PROPERTIES = [
         'type' => 'hotel',
         'name' => 'The Samara Beach Club',
         'location' => 'Canggu, Bali',
+        'lat' => -8.6527, 'lng' => 115.1327,
         'description' => 'A chic beachfront retreat steps from Berawa Beach. Enjoy the perfect blend of surf culture and refined luxury with breathtaking ocean sunsets from your balcony.',
         'price_per_night' => 1950000,
         'rating' => 4.7,
@@ -90,6 +93,7 @@ $PROPERTIES = [
         'type' => 'villa',
         'name' => 'Nusa Penida Cliffside Villa',
         'location' => 'Nusa Penida, Bali',
+        'lat' => -8.7278, 'lng' => 115.5444,
         'description' => 'Perched dramatically on the cliffs of Nusa Penida with breathtaking panoramic views of Crystal Bay. An once-in-a-lifetime experience for the discerning traveler.',
         'price_per_night' => 5600000,
         'rating' => 4.9,
@@ -108,6 +112,7 @@ $PROPERTIES = [
         'type' => 'hotel',
         'name' => 'Seminyak Boutique Inn',
         'location' => 'Seminyak, Bali',
+        'lat' => -8.6923, 'lng' => 115.1601,
         'description' => 'A stylish boutique hotel in the heart of Seminyak, walking distance to world-class restaurants and beach clubs. Perfect for the fashion-forward explorer.',
         'price_per_night' => 1200000,
         'rating' => 4.5,
@@ -126,6 +131,7 @@ $PROPERTIES = [
         'type' => 'villa',
         'name' => 'Tegallalang Rice Terrace Villa',
         'location' => 'Tegallalang, Bali',
+        'lat' => -8.4312, 'lng' => 115.2786,
         'description' => 'Wake up to the iconic UNESCO-listed Tegallalang rice terraces from your own private pool. An immersive cultural stay surrounded by emerald green paddies.',
         'price_per_night' => 3100000,
         'rating' => 4.8,
@@ -374,4 +380,3 @@ $DEMO_FAVOURITES = [
 ];
 
 $BOOKINGS = [];
-
