@@ -149,11 +149,11 @@ CSS
                 <div>
                   <label class="block text-xs font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Guests</label>
                   <div class="h-11 px-3 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-between">
-                    <button type="button" onclick="changeGuests(-1)" class="w-8 h-8 rounded-full bg-white/80 border border-outline-variant/40 font-bold text-lg text-on-surface hover:bg-secondary hover:text-white transition-all">−</button>
+                    <button type="button" onclick="changeGuests(-1)" class="w-8 h-8 rounded-full bg-white/80 border border-outline-variant/40 font-bold text-lg text-on-surface hover:bg-secondary hover:text-white transition-all flex items-center justify-center leading-none">−</button>
                     <div class="text-center">
                       <input id="guests" value="1" readonly class="w-10 bg-transparent border-0 shadow-none outline-none text-center text-sm font-extrabold text-on-surface p-0">
                     </div>
-                    <button type="button" onclick="changeGuests(1)" class="w-8 h-8 rounded-full bg-white/80 border border-outline-variant/40 font-bold text-lg text-on-surface hover:bg-secondary hover:text-white transition-all">+</button>
+                    <button type="button" onclick="changeGuests(1)" class="w-8 h-8 rounded-full bg-white/80 border border-outline-variant/40 font-bold text-lg text-on-surface hover:bg-secondary hover:text-white transition-all flex items-center justify-center leading-none">+</button>
                   </div>
                   <p class="text-xs text-outline mt-1">Max <?= $p['max_guests'] ?> guests</p>
                 </div>

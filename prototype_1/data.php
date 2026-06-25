@@ -144,24 +144,161 @@ $PROPERTIES = [
 // ── FLIGHTS ──────────────────────────────────────────────────────
 $today = date('Y-m-d');
 $FLIGHTS = [
-    1  => ['id' => 1, 'airline' => 'Garuda Indonesia', 'airline_code' => 'GA', 'from_city' => 'Surabaya', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '06:00', 'arrival_time' => '08:05', 'duration' => '2j 05m', 'price_economy' => 890000, 'price_business' => 2800000, 'seats_available' => 45, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    2  => ['id' => 2, 'airline' => 'Lion Air', 'airline_code' => 'JT', 'from_city' => 'Surabaya', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '07:30', 'arrival_time' => '09:35', 'duration' => '2j 05m', 'price_economy' => 520000, 'price_business' => 1500000, 'seats_available' => 32, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    3  => ['id' => 3, 'airline' => 'Citilink', 'airline_code' => 'QG', 'from_city' => 'Surabaya', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '09:00', 'arrival_time' => '11:05', 'duration' => '2j 05m', 'price_economy' => 480000, 'price_business' => 1200000, 'seats_available' => 28, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    4  => ['id' => 4, 'airline' => 'Batik Air', 'airline_code' => 'ID', 'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '11:15', 'arrival_time' => '13:20', 'duration' => '2j 05m', 'price_economy' => 650000, 'price_business' => 1800000, 'seats_available' => 55, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    5  => ['id' => 5, 'airline' => 'AirAsia', 'airline_code' => 'QZ', 'from_city' => 'Surabaya', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '14:00', 'arrival_time' => '16:05', 'duration' => '2j 05m', 'price_economy' => 420000, 'price_business' => 1100000, 'seats_available' => 18, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    6  => ['id' => 6, 'airline' => 'Garuda Indonesia', 'airline_code' => 'GA', 'from_city' => 'Surabaya', 'from_code' => 'SUB', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '07:00', 'arrival_time' => '07:55', 'duration' => '0j 55m', 'price_economy' => 650000, 'price_business' => 2100000, 'seats_available' => 40, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    7  => ['id' => 7, 'airline' => 'Lion Air', 'airline_code' => 'JT', 'from_city' => 'Surabaya', 'from_code' => 'SUB', 'to_city' => 'Bali', 'to_code' => 'DPS', 'departure_time' => '09:30', 'arrival_time' => '10:25', 'duration' => '0j 55m', 'price_economy' => 380000, 'price_business' => 1100000, 'seats_available' => 22, 'flight_date' => date('Y-m-d', strtotime('+3 days'))],
-    8  => ['id' => 8, 'airline' => 'Garuda Indonesia', 'airline_code' => 'GA', 'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Lombok', 'to_code' => 'LOP', 'departure_time' => '08:00', 'arrival_time' => '10:20', 'duration' => '2j 20m', 'price_economy' => 780000, 'price_business' => 2400000, 'seats_available' => 35, 'flight_date' => date('Y-m-d', strtotime('+5 days'))],
-    9  => ['id' => 9, 'airline' => 'Garuda Indonesia', 'airline_code' => 'GA', 'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK', 'departure_time' => '16:00', 'arrival_time' => '18:05', 'duration' => '2j 05m', 'price_economy' => 890000, 'price_business' => 2800000, 'seats_available' => 30, 'flight_date' => date('Y-m-d', strtotime('+7 days'))],
-    10 => ['id' => 10, 'airline' => 'Lion Air', 'airline_code' => 'JT', 'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK', 'departure_time' => '18:30', 'arrival_time' => '20:35', 'duration' => '2j 05m', 'price_economy' => 520000, 'price_business' => 1500000, 'seats_available' => 42, 'flight_date' => date('Y-m-d', strtotime('+7 days'))],
+    1 => [
+        'id' => 1, 'airline' => 'Garuda Indonesia', 'logo' => 'https://www.garuda-indonesia.com/content/dam/garuda_home_revamp/images/logo/garuda_indonesia_logo.png',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS',
+        'dep_time' => '06:30', 'arr_time' => '09:20', 'duration' => '1h 50m',
+        'price_economy' => 1450000, 'price_business' => 3200000
+    ],
+    2 => [
+        'id' => 2, 'airline' => 'Batik Air', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Batik_Air_Logo.svg',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS',
+        'dep_time' => '08:00', 'arr_time' => '10:55', 'duration' => '1h 55m',
+        'price_economy' => 1100000, 'price_business' => 2400000
+    ],
+    3 => [
+        'id' => 3, 'airline' => 'Citilink', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Citilink_logo.svg',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS',
+        'dep_time' => '11:15', 'arr_time' => '14:10', 'duration' => '1h 55m',
+        'price_economy' => 890000, 'price_business' => 1800000
+    ],
+    4 => [
+        'id' => 4, 'airline' => 'AirAsia', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/f/f5/AirAsia_Logo.svg',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS',
+        'dep_time' => '14:45', 'arr_time' => '17:35', 'duration' => '1h 50m',
+        'price_economy' => 750000, 'price_business' => 1500000
+    ],
+    5 => [
+        'id' => 5, 'airline' => 'Lion Air', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Lion_Air_logo.svg',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Bali', 'to_code' => 'DPS',
+        'dep_time' => '18:20', 'arr_time' => '21:15', 'duration' => '1h 55m',
+        'price_economy' => 790000, 'price_business' => 1600000
+    ],
+    6 => [
+        'id' => 6, 'airline' => 'Garuda Indonesia', 'logo' => 'https://www.garuda-indonesia.com/content/dam/garuda_home_revamp/images/logo/garuda_indonesia_logo.png',
+        'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '10:30', 'arr_time' => '11:20', 'duration' => '1h 50m',
+        'price_economy' => 1500000, 'price_business' => 3400000
+    ],
+    7 => [
+        'id' => 7, 'airline' => 'Batik Air', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Batik_Air_Logo.svg',
+        'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '13:00', 'arr_time' => '13:55', 'duration' => '1h 55m',
+        'price_economy' => 1150000, 'price_business' => 2500000
+    ],
+    8 => [
+        'id' => 8, 'airline' => 'Citilink', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Citilink_logo.svg',
+        'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '16:00', 'arr_time' => '16:55', 'duration' => '1h 55m',
+        'price_economy' => 920000, 'price_business' => 1900000
+    ],
+    9 => [
+        'id' => 9, 'airline' => 'AirAsia', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/f/f5/AirAsia_Logo.svg',
+        'from_city' => 'Bali', 'from_code' => 'DPS', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '19:15', 'arr_time' => '20:05', 'duration' => '1h 50m',
+        'price_economy' => 780000, 'price_business' => 1550000
+    ],
+    10 => [
+        'id' => 10, 'airline' => 'Garuda Indonesia', 'logo' => 'https://www.garuda-indonesia.com/content/dam/garuda_home_revamp/images/logo/garuda_indonesia_logo.png',
+        'from_city' => 'Surabaya', 'from_code' => 'SUB', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '06:00', 'arr_time' => '07:30', 'duration' => '1h 30m',
+        'price_economy' => 1200000, 'price_business' => 2800000
+    ],
+    11 => [
+        'id' => 11, 'airline' => 'Citilink', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Citilink_logo.svg',
+        'from_city' => 'Surabaya', 'from_code' => 'SUB', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '09:30', 'arr_time' => '11:00', 'duration' => '1h 30m',
+        'price_economy' => 750000, 'price_business' => 1600000
+    ],
+    12 => [
+        'id' => 12, 'airline' => 'Lion Air', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Lion_Air_logo.svg',
+        'from_city' => 'Surabaya', 'from_code' => 'SUB', 'to_city' => 'Jakarta', 'to_code' => 'CGK',
+        'dep_time' => '13:15', 'arr_time' => '14:45', 'duration' => '1h 30m',
+        'price_economy' => 680000, 'price_business' => 1400000
+    ],
+    13 => [
+        'id' => 13, 'airline' => 'Garuda Indonesia', 'logo' => 'https://www.garuda-indonesia.com/content/dam/garuda_home_revamp/images/logo/garuda_indonesia_logo.png',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Surabaya', 'to_code' => 'SUB',
+        'dep_time' => '08:30', 'arr_time' => '10:00', 'duration' => '1h 30m',
+        'price_economy' => 1250000, 'price_business' => 2950000
+    ],
+    14 => [
+        'id' => 14, 'airline' => 'Citilink', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Citilink_logo.svg',
+        'from_city' => 'Jakarta', 'from_code' => 'CGK', 'to_city' => 'Surabaya', 'to_code' => 'SUB',
+        'dep_time' => '12:00', 'arr_time' => '13:30', 'duration' => '1h 30m',
+        'price_economy' => 770000, 'price_business' => 1650000
+    ]
 ];
 
 // ── PROMOS ───────────────────────────────────────────────────────
 $PROMOS = [
-    'STAYGO25' => ['id' => 1, 'code' => 'STAYGO25', 'title' => 'Weekend Getaway Special', 'description' => 'Dapatkan 25% off untuk semua booking hotel di akhir pekan. Cocok untuk liburan spontan!', 'discount_type' => 'percent', 'discount_value' => 25, 'min_spend' => 1000000, 'max_uses' => 100, 'used_count' => 34, 'valid_from' => date('Y-m-d'), 'valid_until' => date('Y-m-d', strtotime('+30 days')), 'active' => 1, 'image_url' => 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=70'],
-    'VILLA50'  => ['id' => 2, 'code' => 'VILLA50', 'title' => 'Villa Luxury Flash Sale', 'description' => 'Diskon Rp500.000 untuk semua booking villa. Penawaran terbatas, segera pesan!', 'discount_type' => 'fixed', 'discount_value' => 500000, 'min_spend' => 2000000, 'max_uses' => 50, 'used_count' => 28, 'valid_from' => date('Y-m-d'), 'valid_until' => date('Y-m-d', strtotime('+14 days')), 'active' => 1, 'image_url' => 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&q=70'],
-    'FLY20'    => ['id' => 3, 'code' => 'FLY20', 'title' => 'Flight Discount Express', 'description' => 'Hemat 20% untuk semua booking penerbangan. Jelajahi destinasi baru dengan harga lebih murah!', 'discount_type' => 'percent', 'discount_value' => 20, 'min_spend' => 500000, 'max_uses' => 200, 'used_count' => 87, 'valid_from' => date('Y-m-d'), 'valid_until' => date('Y-m-d', strtotime('+21 days')), 'active' => 1, 'image_url' => 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=70'],
-    'NEWUSER'  => ['id' => 4, 'code' => 'NEWUSER', 'title' => 'First Trip Bonus', 'description' => 'Users baru dapat Rp200.000 off untuk booking pertama. Selamat bergabung di StayGo!', 'discount_type' => 'fixed', 'discount_value' => 200000, 'min_spend' => 500000, 'max_uses' => 999, 'used_count' => 142, 'valid_from' => date('Y-m-d'), 'valid_until' => date('Y-m-d', strtotime('+60 days')), 'active' => 1, 'image_url' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=70'],
+    'STAYGO25' => [
+        'id' => 1,
+        'code' => 'STAYGO25',
+        'title' => 'Weekend Getaway Special',
+        'category' => 'hotel',
+        'color'=>'#0D6EFD',
+        'description' => 'Dapatkan 25% off untuk semua booking hotel di akhir pekan.',
+        'discount_type' => 'percent',
+        'discount_value' => 25,
+        'min_spend' => 1000000,
+        'max_uses' => 100,
+        'used_count' => 34,
+        'valid_from' => date('Y-m-d'),
+        'valid_until' => date('Y-m-d', strtotime('+30 days')),
+        'active' => 1,
+        'image_url' => '...'
+    ],
+    'VILLA50' => [
+        'id' => 2,
+        'code' => 'VILLA50',
+        'title' => 'Villa Luxury Flash Sale',
+        'category' => 'villa',
+        'color'=>'#A855F7',
+        'description' => 'Diskon Rp500.000 untuk booking villa.',
+        'discount_type' => 'fixed',
+        'discount_value' => 500000,
+        'min_spend' => 2000000,
+        'max_uses' => 50,
+        'used_count' => 28,
+        'valid_from' => date('Y-m-d'),
+        'valid_until' => date('Y-m-d', strtotime('+14 days')),
+        'active' => 1,
+        'image_url' => '...'
+    ],
+    'FLY20' => [
+        'id' => 3,
+        'code' => 'FLY20',
+        'title' => 'Flight Discount Express',
+        'category' => 'flight',
+        'color'=>'#00B894', 
+        'description' => 'Hemat 20% untuk semua booking penerbangan.',
+        'discount_type' => 'percent',
+        'discount_value' => 20,
+        'min_spend' => 500000,
+        'max_uses' => 200,
+        'used_count' => 87,
+        'valid_from' => date('Y-m-d'),
+        'valid_until' => date('Y-m-d', strtotime('+21 days')),
+        'active' => 1,
+        'image_url' => '...'
+    ],
+    'NEWUSER' => [
+        'id' => 4,
+        'code' => 'NEWUSER',
+        'title' => 'First Trip Bonus',
+        'category' => 'all',
+        'description' => 'Users baru dapat Rp200.000 off.',
+        'discount_type' => 'fixed',
+        'discount_value' => 200000,
+        'min_spend' => 500000,
+        'max_uses' => 999,
+        'used_count' => 142,
+        'valid_from' => date('Y-m-d'),
+        'valid_until' => date('Y-m-d', strtotime('+60 days')),
+        'active' => 1,
+        'image_url' => '...'
+    ]
 ];
 
 // ── DEMO BOOKINGS (pre-seeded for Sarah's account) ───────────────
@@ -235,3 +372,6 @@ $DEMO_BOOKINGS = [
 $DEMO_FAVOURITES = [
     2 => [1, 4],  // Sarah likes property 1 and 4
 ];
+
+$BOOKINGS = [];
+

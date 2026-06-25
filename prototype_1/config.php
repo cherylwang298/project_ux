@@ -292,6 +292,8 @@ function navbar(string $active=''): string {
     $user  = auth();
     $uName = $user ? h($user['name']) : '';
     $links = '';
+    
+    // Menu utama di tengah
     foreach ([
         ['home.php','Home','home'],
         ['detail_hotel.php','Accommodations','hotel'],
@@ -299,9 +301,23 @@ function navbar(string $active=''): string {
         ['promo.php','Deals','local_offer'],
         ['riwayat.php','My Bookings','book_online'],
     ] as [$href,$label,$icon]) {
-        $cls = ($active===$href) ? 'text-primary font-semibold' : 'text-on-surface-variant hover:text-primary';
-        $links .= "<a href='{$href}' class='flex items-center gap-1.5 text-sm {$cls} transition-colors'>{$label}</a>";
+        if ($active===$href) {
+            $cls = "text-primary font-bold px-3 py-1.5 rounded-full text-sm transition-all";
+            $style = "style=\"background:rgba(0,76,226,.08);border:1.5px solid rgba(0,76,226,.15);\"";
+        } else {
+            $cls = "text-on-surface-variant hover:text-primary text-sm px-3 py-1.5 rounded-full transition-all hover:bg-white/50";
+            $style = "style=\"\"";
+        }
+        $links .= "<a href='{$href}' {$style} class='flex items-center gap-1.5 {$cls}'>{$label}</a>";
     }
+
+    // Kondisional style untuk tombol Favourites di sebelah kanan
+    if ($active === 'favourites.php') {
+        $favClass = "text-primary font-bold bg-[rgba(0,76,226,.08)] border border-[rgba(0,76,226,.15)]";
+    } else {
+        $favClass = "text-on-surface-variant hover:text-primary hover:bg-white/50";
+    }
+
     $mobileAuthHtml = $user
         ? "<a href='logout.php' class='flex items-center gap-2 text-sm text-error py-2'>Sign Out</a>"
         : "<a href='login.php' class='flex items-center gap-2 text-sm text-primary py-2 font-bold'>Sign In</a>";
@@ -329,6 +345,7 @@ function navbar(string $active=''): string {
                <a href='login.php' class='text-sm font-bold text-primary hover:opacity-80 transition-opacity'>Sign In</a>
                <a href='daftar_akun.php' class='px-4 py-2 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary/90 transition-colors'>Sign Up</a>
            </div>";
+
     return <<<HTML
 <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300" style="background:rgba(249,249,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(195,197,216,.3)">
   <div class="max-w-[1280px] mx-auto px-5 md:px-16 flex justify-between items-center h-20">
@@ -338,8 +355,9 @@ function navbar(string $active=''): string {
     </a>
     <div class="hidden md:flex items-center gap-6">{$links}</div>
     <div class="flex items-center gap-2">
-      <a href="favourites.php" class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container rounded-full transition-all">
-        <span class="material-symbols-outlined text-[22px]">favorite</span>
+      <a href="favourites.php" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-sm font-semibold {$favClass}">
+        <span class="material-symbols-outlined" style="font-size:18px;line-height:1;position:relative;top:1px">favorite</span>
+        <span class="hidden md:inline" style="position:relative;top:0px">Favourites</span>
       </a>
       {$authHtml}
       <button id="mobileBtn" class="md:hidden w-10 h-10 flex items-center justify-center text-on-surface-variant rounded-full">

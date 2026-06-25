@@ -35,7 +35,7 @@ $customCSS = "
 .room-chip{background:rgba(228,232,255,.72);border:1px solid rgba(195,197,216,.36)}
 .date-input{height:48px;border-radius:14px;background:rgba(240,243,255,.72);border:1.5px solid rgba(195,197,216,.8);padding:0 14px;outline:none}
 .guest-stepper{height:48px;border-radius:999px;background:rgba(240,243,255,.72);border:1.5px solid rgba(195,197,216,.8);display:flex;align-items:center;justify-content:space-between;padding:0 10px}
-.step-btn{width:34px;height:34px;border-radius:999px;background:white;font-weight:800;color:#111c2d}
+.step-btn{width:34px;height:34px;border-radius:999px;background:white;font-weight:800;color:#111c2d;display:flex;align-items:center;justify-content:center;line-height:1;font-size:20px;padding:0;margin:0;border:none;cursor:pointer;flex-shrink:0}
 .photo-thumb:hover img{transform:scale(1.08)}
 .prop-card{background:rgba(255,255,255,.78);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.45);box-shadow:0 8px 28px rgba(0,76,226,.06);transition:all .35s cubic-bezier(.22,1,.36,1)}
 .prop-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,76,226,.12);border-color:rgba(0,76,226,.12)}
@@ -181,9 +181,9 @@ if ($id) {
               <div>
                 <label class="text-xs font-extrabold text-outline uppercase">Guests</label>
                 <div class="guest-stepper mt-1">
-                  <button class="step-btn" type="button" onclick="changeGuest(-1)">-</button>
+                  <button class="step-btn" type="button" onclick="changeGuest(-1)"><span style="display:block;line-height:1;margin-top:-2px">−</span></button>
                   <input id="guestInput" name="guests" value="<?= $guests ?>" readonly class="w-10 text-center bg-transparent border-0 font-extrabold">
-                  <button class="step-btn" type="button" onclick="changeGuest(1)">+</button>
+                  <button class="step-btn" type="button" onclick="changeGuest(1)"><span style="display:block;line-height:1;margin-top:-2px">+</span></button>
                 </div>
               </div>
               <button class="h-12 mt-5 md:mt-6 rounded-2xl bg-primary text-white font-bold" type="submit">Check Rooms</button>
